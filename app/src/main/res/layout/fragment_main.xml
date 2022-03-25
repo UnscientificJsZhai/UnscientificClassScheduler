@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/MainActivity_RootView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/MainActivity_RecyclerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        tools:context=".ui.main.MainActivity">
+
+        <ProgressBar
+            android:id="@+id/MainActivity_ProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/MainActivity_EmptyScreenTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_CourseList_EmptyList1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/MainActivity_RootRecyclerView"
+            app:layout_constraintStart_toStartOf="@+id/MainActivity_RootRecyclerView"
+            app:layout_constraintTop_toTopOf="@+id/MainActivity_RootRecyclerView" />
+
+        <cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
+            android:id="@+id/MainActivity_RootRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0">
+
+        </cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/MainActivity_FloatingActionButton"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:clickable="true"
+        android:contentDescription="@string/activity_Main_AddButtonDescription"
+        android:src="@drawable/outline_add_24"
+        android:theme="@style/Theme.TimeManager.Widget.FloatingButton"
+        android:tint="@color/white"
+        app:layout_anchor="@+id/MainActivity_RecyclerLayout"
+        app:layout_anchorGravity="end|bottom"
+        app:layout_behavior=".ui.others.CustomFloatingActionButtonBehavior"
+        tools:ignore="ContentDescription" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

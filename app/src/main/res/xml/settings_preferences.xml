@@ -1,0 +1,118 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/activity_Settings_CurrentCourseListTable">
+
+        <Preference
+            app:icon="@drawable/outline_description_24"
+            app:key="current"
+            app:title="@string/activity_Settings_CurrentCourseListTable">
+            <intent
+                android:targetClass="cn.unscientificjszhai.timemanager.ui.settings.CurrentTableSelectorActivity"
+                android:targetPackage="cn.unscientificjszhai.timemanager" />
+        </Preference>
+
+        <EditTextPreference
+            app:key="weeks"
+            app:title="@string/preferences_CurrentTable_HowManyWeeks" />
+
+        <EditTextPreference
+            app:key="classesPerDay"
+            app:title="@string/preferences_CurrentTable_ClassesPerDay" />
+
+        <Preference
+            android:icon="@drawable/outline_schedule_24"
+            app:key="time"
+            app:title="@string/preferences_CurrentTable_TimeTable">
+            <intent
+                android:targetClass="cn.unscientificjszhai.timemanager.ui.settings.TimeTableEditorActivity"
+                android:targetPackage="cn.unscientificjszhai.timemanager" />
+        </Preference>
+
+        <Preference
+            app:key="startDate"
+            app:title="@string/preferences_CurrentTable_StartDate" />
+
+        <ListPreference
+            android:entries="@array/preferences_WeekStart_Entries"
+            android:entryValues="@array/preferences_WeekStart_EntryValues"
+            android:title="@string/preferences_WeekStart"
+            app:key="weekStart"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/preferences_CalendarOption_CategoryTitle">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:title="@string/preferences_CalendarOption_UseCalendar"
+            app:key="useCalendar"
+            app:summary="@string/preferences_CalendarOption_UseCalendar_Summary" />
+
+        <Preference
+            android:icon="@drawable/outline_update_24"
+            android:title="@string/preferences_CalendarOption_UpdateCalendar"
+            app:key="createCalendar"
+            app:summary="@string/preferences_CalendarOption_UpdateCalendar_Summary" />
+
+        <ListPreference
+            android:defaultValue="-1409017"
+            android:entries="@array/preferences_CalendarColor_Entries"
+            android:entryValues="@array/preferences_CalendarColor_EntryValues"
+            android:icon="@drawable/outline_palette_24"
+            android:title="@string/preferences_CalendarColor_Title"
+            app:key="calendarColor"
+            app:summary="@string/preferences_CalendarColor_Summary" />
+
+        <ListPreference
+            android:defaultValue="15"
+            android:entries="@array/preferences_RemindTime_Entries"
+            android:entryValues="@array/preferences_RemindTime_EntryValues"
+            app:key="remindTime"
+            app:title="@string/preferences_RemindTime_Title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/preferences_DisplayOption_CategoryTitle">
+
+        <ListPreference
+            android:defaultValue="title"
+            android:entries="@array/preferences_ShowOnMainActivity_Entries"
+            android:entryValues="@array/preferences_ShowOnMainActivity_EntryValues"
+            android:title="@string/preferences_ShowOnMainActivity_Title"
+            app:defaultValue="table"
+            app:key="showOnMainActivity"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/preferences_Backup_CategoryTitle">
+
+        <Preference
+            android:icon="@drawable/outline_backup_table_24"
+            app:key="backup"
+            app:summary="@string/preferences_Backup_Summary"
+            app:title="@string/preferences_Backup_Title" />
+
+        <Preference
+            android:icon="@drawable/outline_settings_backup_restore_24"
+            android:key="import"
+            app:summary="@string/preferences_Import_Summary"
+            app:title="@string/preferences_Import_Title" />
+
+        <Preference
+            app:key="ics"
+            app:summary="@string/preferences_ExportsICS_Summary"
+            app:title="@string/preferences_ExportICS_Title" />
+
+        <Preference
+            app:key="parse"
+            app:title="@string/activity_ParseCourseActivity_Label">
+            <intent
+                android:targetClass="cn.unscientificjszhai.timemanager.ui.parse.ParseCourseActivity"
+                android:targetPackage="cn.unscientificjszhai.timemanager" />
+        </Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

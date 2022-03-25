@@ -1,0 +1,211 @@
+<resources>
+    <!-- 基础 -->
+    <string name="app_name">时间管理大师</string>
+
+    <string name="common_confirm">确定</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_settings">设置</string>
+    <string name="common_undo">撤销</string>
+
+    <string name="common_time_noon">上午</string>
+    <string name="common_time_afternoon">下午</string>
+
+    <string name="dialog_ProgressDialog_Message">处理中</string>
+
+    <!-- 颜色 -->
+    <string name="color_Tomato">番茄红</string>
+    <string name="color_Tangerine">橘红</string>
+    <string name="color_Pumpkin">南瓜色</string>
+    <string name="color_Mango">芒果黄</string>
+    <string name="color_Banana">香蕉黄</string>
+    <string name="color_Citron">香橼黄</string>
+    <string name="color_Avocado">牛油果色</string>
+    <string name="color_Pistachio">开心果绿</string>
+    <string name="color_Basil">罗勒绿</string>
+    <string name="color_Eucalyptus">桉树绿</string>
+    <string name="color_Sage">鼠尾草绿</string>
+    <string name="color_Peacock">孔雀蓝</string>
+    <string name="color_Cobalt">钴蓝</string>
+    <string name="color_Blueberry">蓝莓色</string>
+    <string name="color_Lavender">薰衣草色</string>
+    <string name="color_Wisteria">紫藤色</string>
+    <string name="color_Amethyst">水晶紫</string>
+    <string name="color_Grape">葡萄紫</string>
+    <string name="color_Radicchio">菊苣红</string>
+    <string name="color_CherryBlossom">樱花粉红</string>
+    <string name="color_Flamingo">红鹤色</string>
+    <string name="color_Cocoa">可可棕</string>
+    <string name="color_Graphite">石墨黑</string>
+    <string name="color_Birch">桦木灰</string>
+
+    <!-- 权限申请 -->
+    <string name="activity_WelcomeActivity_AskPermissionTitle">需要权限</string>
+    <string name="activity_WelcomeActivity_AskPermissionText">本App是将课程表直接导入到日历中，以系统日历事件的形式通知您上课信息的。请授予日历权限以使用本App。</string>
+    <string name="activity_WelcomeActivity_SettingsPermissionText">将跳转到系统设置来请求权限。</string>
+    <string name="activity_WelcomeActivity_FailToJumpToSettings">跳转设置失败</string>
+
+    <!-- 包ui.main使用 -->
+    <string name="activity_CourseDetail_LoadingErrorToast">数据异常</string>
+    <string name="activity_CourseDetail_Edit">编辑</string>
+    <string name="activity_CourseDetail_Delete">删除</string>
+    <string name="activity_CourseDetail_DeleteConfirm">确认删除？</string>
+    <string name="activity_CourseDetail_AskPermissionText">需要授予日历访问权限才能删除，是否授予权限？如果同意，将跳转到应用详情页，请在那里授予此应用读写日历权限。</string>
+    <string name="activity_CourseDetail_DataError">数据异常，请重新尝试</string>
+    <string name="activity_CourseDetail_WeekFormatText">从%d到%d周</string>
+    <string name="activity_CourseDetail_LessonNumberFormatText">%s节课</string>
+    <string name="activity_CourseDetail_Label">课程详情</string>
+    <string name="activity_Welcome">欢迎使用</string>
+    <string name="activity_Welcome_StartButton">开始</string>
+    <string name="activity_Welcome_PromptText">输入课程表的名称</string>
+    <string name="activity_Welcome_EditTextHint">课程表</string>
+    <string name="activity_Main_NoTableFound">找不到课程表</string>
+    <string name="activity_Main_ShowTodayOnly">仅显示今天</string>
+    <string name="activity_Main_JumpToCalendar">跳转到日历</string>
+    <string name="activity_Main_TodayOnlyMode_DataError">数据错误，无法显示详情</string>
+    <string name="activity_Main_NotStartYet">学期尚未开始</string>
+    <string name="activity_Main_TodayOnlyMode_Next">即将上课</string>
+    <string name="activity_Main_TodayOnlyMode_During">正在上课</string>
+    <string name="activity_Main_TodayOnlyMode_Finished">已结束</string>
+    <string name="activity_Main_ActionBarLabel_TodayOnly">今天的课程</string>
+    <string name="activity_Main_ActionBarLabel_All">所有课程</string>
+    <string name="activity_Main_GuideToast">点击加号添加课程\n点击右上角查看更多</string>
+    <string name="activity_Main_DeletedMessage">已删除</string>
+
+    <string name="activity_Main_AddButtonDescription">添加课程</string>
+
+    <string name="fragment_CourseList_EmptyList1">本来无一物，何处染尘埃</string>
+    <string name="fragment_CourseList_EmptyList2">人生难得是清闲</string>
+    <string name="fragment_CourseList_EmptyList3">生命在于运动</string>
+    <string name="fragment_CourseList_EmptyList4">你这个年龄是怎么睡得着觉的</string>
+    <string name="fragment_CourseList_EmptyList5">作业写完了吗</string>
+    <string name="fragment_CourseList_EmptyList6">开门，反卷队查水表</string>
+    <string name="fragment_CourseList_EmptyList7">人闲桂花落，夜静春山空</string>
+
+    <!-- 包ui.editor使用 -->
+    <string name="activity_EditCourse_Label">编辑</string>
+    <string name="activity_EditCourse_CourseTitle">课程名</string>
+    <string name="activity_EditCourse_Credit">学分</string>
+    <string name="activity_EditCourse_Description">备注</string>
+    <string name="activity_EditCourse_NoMoreClassTimeObjectToast">不能删除最后一个</string>
+    <string name="activity_EditCourse_Done">完成</string>
+    <string name="activity_EditCourse_DataError">数据错误</string>
+    <string name="activity_EditCourse_UnsavedAlertTitle">数据可能尚未保存，是否退出？</string>
+    <string name="activity_EditCourse_AskPermissionText">需要授予日历访问权限才能保存编辑，是否授予权限？</string>
+    <string name="activity_EditCourse_CopyFromPrevious_True">新添加的上课时间将从列表的最后一项复制内容以便编辑</string>
+    <string name="activity_EditCourse_CopyFromPrevious_False">新添加的上课时间将不再从最后一项复制\n长按添加按钮以取消</string>
+    <string name="view_ClassTimeEdit_Title">时间段</string>
+    <string name="view_ClassTimeEdit_TeacherName">教师姓名</string>
+    <string name="view_ClassTimeEdit_Location">地点</string>
+    <string name="view_ClassTimeEdit_From">从</string>
+    <string name="view_ClassTimeEdit_To">到</string>
+    <string name="view_ClassTimeEdit_End">节课</string>
+    <string name="view_ClassTimeEdit_WeekChooseDialogTitle">选择周数</string>
+
+    <string name="view_ClassTimeEdit_WeekItem_ForKotlin">第%d周</string>
+    <string name="view_ClassTimeEdit_WeekDescription">第%s周</string>
+    <string name='view_ClassTimeEdit_WeekDescriptionWhenEmpty'>选择上课周数</string>
+    <string name="view_ClassTimeEdit_WeekChooseDialogHeader">长按可以向前连续选中直到最近一个已选中项</string>
+
+    <string name="view_ClassTimeEdit_ContentDescription">时间段，第%d个，共%d个</string>
+    <string name="view_ClassTimeEdit_DeleteButtonDescription">删除按钮，删除这个时间段</string>
+    <string name="view_ClassTimeEdit_SeekBarDescription">周数选择条，当前选中%s</string>
+    <string name="view_ClassTimeEdit_FromEditTextDescription">从第%d节课开始</string>
+    <string name="view_ClassTimeEdit_ToEditTextDescription">到第%d节课为止</string>
+    <string name="activity_EditCourse_AddButtonDescription">添加上课时间段</string>
+
+    <string name="data_Week0">周日</string>
+    <string name="data_Week1">周一</string>
+    <string name="data_Week2">周二</string>
+    <string name="data_Week3">周三</string>
+    <string name="data_Week4">周四</string>
+    <string name="data_Week5">周五</string>
+    <string name="data_Week6">周六</string>
+
+    <!-- 包ui.settings使用 -->
+    <string name="activity_Settings_CurrentCourseListTable">当前课程表</string>
+    <string name="activity_Settings_FailToBackup">导出失败</string>
+    <string name="activity_Settings_ImportError">导入失败，文件可能损坏</string>
+    <string name="activity_Settings_Info">关于</string>
+    <string name="preferences_CurrentTable_HowManyWeeks">学期上课周数</string>
+    <string name="preferences_CurrentTable_MaxWeeksSummary">周</string>
+    <string name="preferences_CurrentTable_ClassesPerDay">每日上课节数</string>
+    <string name="preferences_CurrentTable_ClassesPerDaySummary">节</string>
+    <string name="preferences_CurrentTable_TimeTable">上课时间</string>
+    <string name="preferences_CurrentTable_StartDate">学期开始日</string>
+    <string name="preferences_WeekStart">教学周开始日</string>
+    <string name="preferences_CurrentTable_StartDateSummary">%d年%d月%d日</string>
+    <string name="preferences_CalendarOption_CategoryTitle">日历选项</string>
+    <string name="preferences_CalendarOption_UseCalendar">使用日历</string>
+    <string name="preferences_CalendarOption_UseCalendar_Summary">打开此开关以自动更新课表到日历</string>
+    <string name="preferences_CalendarOption_UseCalendar_TurnedOff">未获得授权，日历功能将被关闭\n可以前往应用设置重新开启</string>
+    <string name="preferences_CalendarOption_UseCalendar_NotGranted">未获得日历授权，开启失败\n可以前往应用设置重新开启</string>
+    <string name="preferences_CalendarOption_UpdateCalendar">更新日历</string>
+    <string name="preferences_CalendarOption_UpdateCalendar_Summary">将当前选中的课程表的内容更新到系统日历</string>
+    <string name="preferences_UpdateCalendar_DialogTitle">更新日历</string>
+    <string name="preferences_UpdateCalendar_DialogMessage">进行此操作将删除当前课程表的日历并重新创建，是否继续？</string>
+    <string name="preferences_UpdateCalendar_Processing">更新中……</string>
+    <string name="preferences_UpdateCalendar_Complete">更新完成</string>
+    <string name="preferences_CalendarColor_Title">日历颜色</string>
+    <string name="preferences_CalendarColor_Summary">日历表在系统日历中的颜色</string>
+    <string name="preferences_RemindTime_Title">上课前提醒时间</string>
+    <string name="preferences_RemindTime_10Min">10分钟</string>
+    <string name="preferences_RemindTime_15Min">15分钟</string>
+    <string name="preferences_RemindTime_20Min">20分钟</string>
+    <string name="preferences_RemindTime_30Min">30分钟</string>
+    <string name="preferences_DisplayOption_CategoryTitle">界面显示设置</string>
+    <string name="preferences_ShowOnMainActivity_Title">首页标题显示内容</string>
+    <string name="preferences_ShowOnMainActivity_TableNameOnly">显示课程表标题</string>
+    <string name="preferences_ShowOnMainActivity_Today">显示今天的情况</string>
+    <string name="preferences_Backup_CategoryTitle">备份和导入导出</string>
+    <string name="preferences_Backup_Title">导出备份</string>
+    <string name="preferences_Backup_Summary">导出当前课程表的数据。</string>
+    <string name="preferences_Import_Title">导入备份</string>
+    <string name="preferences_Import_Summary">导入的数据将创建一个新的课程表，无法与现有课程表合并。</string>
+    <string name="preferences_ExportICS_Title">导出为ICS文件</string>
+    <string name="preferences_ExportsICS_Summary">ICS文件可以导入到日历中。</string>
+
+    <string name="activity_CurrentTableSelector_TableNotFound">错误：找不到指定课程表</string>
+    <string name="activity_CurrentTableSelector_AddTable">添加</string>
+    <string name="activity_CurrentTableSelector_AddTableDialogTitle">添加课程表</string>
+    <string name="activity_CurrentTableSelector_DeletingCurrentTableToast">请先选中其它课程表再删除当前课程表</string>
+    <string name="activity_CurrentTableSelector_DeletingTableDialogTitle">确认删除？</string>
+    <string name="activity_CurrentTableSelector_ContextMenu_Edit">重命名</string>
+    <string name="activity_CurrentTableSelector_ContextMenu_Delete">删除</string>
+    <string name="activity_CurrentTableSelector_PermissionDeniedDialogMessage">没有授予日历写入权限，无法进行更改。</string>
+    <string name="activity_CurrentTableSelector_CopyTimeTableCheckBox">从当前课程表复制上课时间</string>
+    <string name="activity_CurrentTableSelector_SelectedDescription">当前已经选中</string>
+    <string name="activity_TimeTableEditor_RecyclerItemTitle">第%d节课</string>
+    <string name="activity_TimeTableEditor_HeaderItemTitle">每节课时长%d分钟</string>
+    <string name="activity_TimeTableEditor_HeaderSubtitle">长按可以手动设置下课时间</string>
+    <string name="activity_TimeTableEditor_HeaderEditDialogTitle">每节课长度</string>
+    <string name="activity_TimeTableEditor_HeaderEditDialogHint">分钟</string>
+    <string name="activity_TimeTableEditor_StartTime">开始时间</string>
+    <string name="activity_TimeTableEditor_EndTime">结束时间</string>
+
+    <!-- Info -->
+    <string name="info_Author">不科学的Js宅 作品</string>
+    <string name="info_Button_Github" translatable="false">GitHub</string>
+    <string name="info_Button_Bilibili">哔哩哔哩</string>
+    <string name="info_Button_Mail">电子邮件</string>
+    <string name="info_Button_CoolApk">酷安</string>
+    <string name="info_LogoDesigner">图标设计 李宇轩</string>
+    <string name="info_UnableToSendEmail">请安装邮箱客户端来发送邮件\n长按可以显示邮箱</string>
+    <string name="info_CourseParseTitle">教务系统解析库</string>
+    <string name="info_CourseParseInfo" translatable="false">UnscientificCourseParser</string>
+
+    <string name="info_Description">本应用是一个以系统日历功能为核心的课程表App。\n在本应用中添加的所有课程，会自动保存为日历事件，插入到系统日历中。这样就可以用系统级的通知提醒您上课。因此本应用不需要发送通知和后台运行，但是相对的，使用本App的时候必须授予日历访问权限。\n如果您对本应用有什么建议，欢迎给我发邮件。\n\n当您卸载本应用的时候，已经添加的课程的日历事件也会被自动清除。虽然您可以使用备份功能和导出ICS功能保存您的课程表，但是我还是建议您不要卸载本应用。当您清除本应用的数据时，日历事件不会被删除。要想清理这些日历事件，只需重新打开本应用即可。</string>
+
+    <!-- 导入 -->
+    <string name="activity_ParseCourseActivity_Label">从教务系统导入</string>
+    <string name="activity_ParseCourseActivity_HelpToast">当网页显示出课程表并加载完成后点击完成按钮来解析</string>
+    <string name="fragment_ParserListFragment_ParserListInfo">关于教务系统解析</string>
+    <string name="fragment_ParserListFragment_ParserListMessage">本应用教务系统解析器基于该开源项目：\nUnscientificCourseParser\n如有问题，可到GitHub提交问题。\n当前适配器版本：\n1.0.0</string>
+    <string name="fragment_ParserListFragment_DialogNegativeButton">关闭</string>
+    <string name="fragment_ParserListFragment_DialogPositiveButton">前往GitHub</string>
+    <string name="fragment_CourseListFragment_ClassTimeDescription">包含%d个上课时间段</string>
+    <string name="fragment_CourseListFragment_Dialog_CompleteTitle">导入成功</string>
+    <string name="fragment_CourseListFragment_Dialog_FailTitle">导入失败</string>
+    <string name="fragment_CourseListFragment_Dialog_CompleteMessage">但是以下课程因为数据不合法无法导入，请尝试手动导入：</string>
+    <string name="fragment_CourseListFragment_Dialog_FailMessage">没有解析到数据，请重新尝试</string>
+
+</resources>

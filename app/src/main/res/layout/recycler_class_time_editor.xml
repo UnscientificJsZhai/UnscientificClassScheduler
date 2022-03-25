@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="12dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginBottom="6dp"
+    android:background="@color/CardView_BackgroundColor"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardMaxElevation="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/view_ClassTimeEdit_Title"
+            android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/ClassTimeEditView_Cancel"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:adjustViewBounds="false"
+            android:background="?attr/selectableItemBackground"
+            android:contentDescription="@string/view_ClassTimeEdit_DeleteButtonDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/baseline_remove_24" />
+
+        <ImageView
+            android:id="@+id/WeekImage"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Title"
+            app:srcCompat="@drawable/baseline_calendar_view_month_20"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/ClassTimeEditView_WeekText"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical|start"
+            android:textSize="20sp"
+            android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
+            app:layout_constraintBottom_toBottomOf="@+id/WeekImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/WeekImage"
+            app:layout_constraintTop_toTopOf="@+id/WeekImage" />
+
+        <ImageView
+            android:id="@+id/CalenderImage"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/WeekImage"
+            app:srcCompat="@drawable/baseline_event_note_18"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/ClassTimeEditView_DayText"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="@string/data_Week0"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
+            app:layout_constraintBottom_toBottomOf="@+id/CalenderImage"
+            app:layout_constraintStart_toEndOf="@+id/CalenderImage"
+            app:layout_constraintTop_toTopOf="@+id/CalenderImage" />
+
+        <SeekBar
+            android:id="@+id/ClassTimeEditView_DaySeekBar"
+            android:layout_width="0dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="16dp"
+            android:max="6"
+            android:min="0"
+            app:layout_constraintBottom_toBottomOf="@+id/CalenderImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ClassTimeEditView_DayText"
+            app:layout_constraintTop_toTopOf="@+id/CalenderImage" />
+
+        <ImageView
+            android:id="@+id/DayImage"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/CalenderImage"
+            app:srcCompat="@drawable/baseline_calendar_view_day_24"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/Text_From"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="@string/view_ClassTimeEdit_From"
+            android:textSize="20sp"
+            android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
+            app:layout_constraintBottom_toBottomOf="@+id/DayImage"
+            app:layout_constraintStart_toEndOf="@+id/DayImage"
+            app:layout_constraintTop_toTopOf="@+id/DayImage" />
+
+        <cn.unscientificjszhai.timemanager.ui.others.ContentDescriptionEditText
+            android:id="@+id/ClassTimeEditView_FromEditText"
+            android:layout_width="36dp"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            app:layout_constraintBottom_toBottomOf="@+id/DayImage"
+            app:layout_constraintStart_toEndOf="@+id/Text_From"
+            app:layout_constraintTop_toTopOf="@+id/DayImage"
+            tools:ignore="Autofill,LabelFor" />
+
+        <TextView
+            android:id="@+id/Text_To"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_ClassTimeEdit_To"
+            android:textSize="20sp"
+            android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
+            app:layout_constraintBottom_toBottomOf="@+id/DayImage"
+            app:layout_constraintStart_toEndOf="@+id/ClassTimeEditView_FromEditText"
+            app:layout_constraintTop_toTopOf="@+id/DayImage" />
+
+        <cn.unscientificjszhai.timemanager.ui.others.ContentDescriptionEditText
+            android:id="@+id/ClassTimeEditView_ToEditText"
+            android:layout_width="36dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            app:layout_constraintBottom_toBottomOf="@+id/DayImage"
+            app:layout_constraintStart_toEndOf="@+id/Text_To"
+            app:layout_constraintTop_toTopOf="@+id/DayImage"
+            tools:ignore="Autofill,LabelFor" />
+
+        <TextView
+            android:id="@+id/Text_End"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_ClassTimeEdit_End"
+            android:textSize="20sp"
+            android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
+            app:layout_constraintBottom_toBottomOf="@+id/DayImage"
+            app:layout_constraintStart_toEndOf="@+id/ClassTimeEditView_ToEditText"
+            app:layout_constraintTop_toTopOf="@+id/DayImage" />
+
+        <ImageView
+            android:id="@+id/TeacherImage"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="36dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/DayImage"
+            app:srcCompat="@drawable/baseline_school_24"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ClassTimeEditView_TeacherNameTextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/view_ClassTimeEdit_TeacherName"
+            app:layout_constraintBottom_toBottomOf="@+id/TeacherImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/TeacherImage"
+            app:layout_constraintTop_toTopOf="@+id/TeacherImage"
+            app:layout_constraintVertical_bias="0.45">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ClassTimeEditView_TeacherNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/TextInputEditText_BackgroundColor"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/ImageLocation"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/TeacherImage"
+            app:srcCompat="@drawable/baseline_location_on_24"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ClassTimeEditView_LocationTextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="@string/view_ClassTimeEdit_Location"
+            app:layout_constraintBottom_toBottomOf="@+id/ImageLocation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ImageLocation"
+            app:layout_constraintTop_toTopOf="@+id/ImageLocation"
+            app:layout_constraintVertical_bias="0.45">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ClassTimeEditView_LocationEditText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/TextInputEditText_BackgroundColor"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:textSize="16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

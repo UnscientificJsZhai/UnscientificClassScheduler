@@ -1,0 +1,53 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.TimeManager" parent="Theme.MaterialComponents.DayNight">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/skyBlue</item>
+        <item name="colorPrimaryVariant">@color/primary_deep</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="actionBarStyle">@style/Theme.TimeManager.ActionBar</item>
+        <item name="android:navigationBarColor">@color/white</item>
+    </style>
+
+    <style name="Theme.TimeManager.ActionBar" parent="Widget.AppCompat.ActionBar">
+        <item name="background">@color/white</item>
+    </style>
+
+    <style name="Theme.TimeManager.Widget.FloatingButton" parent="Theme.TimeManager">
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondary">@color/skyBlue</item>
+    </style>
+
+    <style name="Theme.TimeManager.CourseDetail" parent="Theme.TimeManager">
+        <item name="android:windowActivityTransitions">true</item>
+
+        <item name="android:windowSharedElementEnterTransition">@transition/course_detail_transition</item>
+    </style>
+
+    <style name="Theme.TimeManager.AlertDialog" parent="Theme.AppCompat.Light.Dialog.Alert" />
+
+    <style name="Theme.TimeManager.Widget.TextView.HeadLine" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Theme.TimeManager.Widget.TextView.SubText" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="Theme.TimeManager.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.TimeManager.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.TimeManager.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+</resources>

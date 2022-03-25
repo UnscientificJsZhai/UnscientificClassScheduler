@@ -1,0 +1,58 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.TimeManager" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryVariant">@color/gray</item>
+        <item name="colorOnPrimary">@color/background_gray</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200_dark</item>
+        <item name="colorSecondaryVariant">@color/teal_200_dark</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/gray_deeper_status</item>
+        <!-- Customize your theme here. -->
+        <item name="actionBarStyle">@style/Theme.TimeManager.ActionBar</item>
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:colorBackground">@color/gray_middle</item>
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="editTextStyle">@style/Theme.TimeManager.Widget.EditText</item>
+    </style>
+
+    <style name="Theme.TimeManager.ActionBar" parent="Widget.AppCompat.ActionBar">
+        <item name="background">@color/gray_deeper</item>
+    </style>
+
+    <style name="Theme.TimeManager.Widget.FloatingButton" parent="Theme.TimeManager">
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondary">@color/skyBlue</item>
+    </style>
+
+    <style name="Theme.TimeManager.FloatingActivity" parent="Theme.AppCompat.Dialog">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:background">@color/gray_middle</item>
+        <item name="buttonStyle">@style/Theme.TimeManager.Widget.Button</item>
+    </style>
+
+    <style name="Theme.TimeManager.AlertDialog" parent="Theme.AppCompat.DayNight.Dialog.Alert"/>
+
+    <style name="Theme.TimeManager.Widget.TextView.HeadLine" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Theme.TimeManager.Widget.TextView.SubText" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/gray_light</item>
+    </style>
+
+    <!-- 深色模式特有主题 -->
+    <style name="Theme.TimeManager.Widget.Button" parent="Widget.AppCompat.Button">
+        <item name="backgroundTint">@color/gray_light</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Theme.TimeManager.Widget.EditText" parent="Widget.AppCompat.EditText">
+        <item name="editTextColor">@color/gray</item>
+    </style>
+</resources>

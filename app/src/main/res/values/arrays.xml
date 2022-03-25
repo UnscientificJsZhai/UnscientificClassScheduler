@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="preferences_WeekStart_Entries">
+        <item>@string/data_Week0</item>
+        <item>@string/data_Week1</item>
+    </string-array>
+
+    <string-array name="preferences_WeekStart_EntryValues">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="preferences_CalendarColor_Entries">
+        <item>@string/color_Tomato</item>
+        <item>@string/color_Tangerine</item>
+        <item>@string/color_Pumpkin</item>
+        <item>@string/color_Mango</item>
+        <item>@string/color_Banana</item>
+        <item>@string/color_Citron</item>
+        <item>@string/color_Avocado</item>
+        <item>@string/color_Pistachio</item>
+        <item>@string/color_Basil</item>
+        <item>@string/color_Eucalyptus</item>
+        <item>@string/color_Sage</item>
+        <item>@string/color_Peacock</item>
+        <item>@string/color_Cobalt</item>
+        <item>@string/color_Blueberry</item>
+        <item>@string/color_Lavender</item>
+        <item>@string/color_Wisteria</item>
+        <item>@string/color_Amethyst</item>
+        <item>@string/color_Grape</item>
+        <item>@string/color_Radicchio</item>
+        <item>@string/color_CherryBlossom</item>
+        <item>@string/color_Flamingo</item>
+        <item>@string/color_Cocoa</item>
+        <item>@string/color_Graphite</item>
+        <item>@string/color_Birch</item>
+    </string-array>
+
+    <string-array name="preferences_CalendarColor_EntryValues">
+        <item>-3670010</item>
+        <item>-1165032</item>
+        <item>-1485307</item>
+        <item>-1409017</item>
+        <item>-871650</item>
+        <item>-2901709</item>
+        <item>-4996568</item>
+        <item>-9721805</item>
+        <item>-15569101</item>
+        <item>-15628689</item>
+        <item>-13849754</item>
+        <item>-15562530</item>
+        <item>-13341456</item>
+        <item>-13550938</item>
+        <item>-10129217</item>
+        <item>-6059821</item>
+        <item>-7646817</item>
+        <item>-8781671</item>
+        <item>-6619066</item>
+        <item>-3407794</item>
+        <item>-2202272</item>
+        <item>-10141128</item>
+        <item>-11645362</item>
+        <item>-6911621</item>
+    </string-array>
+
+    <string-array name="preferences_RemindTime_Entries">
+        <item>@string/preferences_RemindTime_10Min</item>
+        <item>@string/preferences_RemindTime_15Min</item>
+        <item>@string/preferences_RemindTime_20Min</item>
+        <item>@string/preferences_RemindTime_30Min</item>
+    </string-array>
+
+    <string-array name="preferences_RemindTime_EntryValues">
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>30</item>
+    </string-array>
+
+    <string-array name="preferences_ShowOnMainActivity_Entries">
+        <item>@string/preferences_ShowOnMainActivity_TableNameOnly</item>
+        <item>@string/preferences_ShowOnMainActivity_Today</item>
+    </string-array>
+
+    <string-array name="preferences_ShowOnMainActivity_EntryValues">
+        <item>table</item>
+        <item>today</item>
+    </string-array>
+
+    <string-array name="fragment_CourseList_Empty">
+        <item>@string/fragment_CourseList_EmptyList1</item>
+        <item>@string/fragment_CourseList_EmptyList2</item>
+        <item>@string/fragment_CourseList_EmptyList3</item>
+        <item>@string/fragment_CourseList_EmptyList4</item>
+        <item>@string/fragment_CourseList_EmptyList5</item>
+        <item>@string/fragment_CourseList_EmptyList6</item>
+        <item>@string/fragment_CourseList_EmptyList7</item>
+    </string-array>
+</resources>

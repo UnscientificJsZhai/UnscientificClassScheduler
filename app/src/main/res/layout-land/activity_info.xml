@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".ui.settings.InfoActivity">
+
+        <ImageView
+            android:id="@+id/InfoActivity_Logo"
+            android:layout_width="104dp"
+            android:layout_height="104dp"
+            android:layout_marginTop="36dp"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintEnd_toStartOf="@+id/InfoActivity_Title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/ic_launcher"
+            tools:ignore="ImageContrastCheck" />
+
+        <TextView
+            android:id="@+id/InfoActivity_Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="28sp"
+            android:theme="@style/Theme.TimeManager.Widget.TextView.HeadLine"
+            app:layout_constraintBottom_toTopOf="@+id/InfoActivity_Author"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/InfoActivity_Logo"
+            app:layout_constraintTop_toTopOf="@+id/InfoActivity_Logo" />
+
+        <TextView
+            android:id="@+id/InfoActivity_Author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/info_Author"
+            android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
+            app:layout_constraintBottom_toBottomOf="@+id/InfoActivity_Logo"
+            app:layout_constraintEnd_toEndOf="@+id/InfoActivity_Title"
+            app:layout_constraintStart_toStartOf="@+id/InfoActivity_Title"
+            app:layout_constraintTop_toBottomOf="@+id/InfoActivity_Title" />
+
+        <Button
+            android:id="@+id/InfoActivity_GitHubButton"
+            android:layout_width="96dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:backgroundTint="@color/github_gray"
+            android:text="@string/info_Button_Github"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/InfoActivity_BilibiliButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/InfoActivity_Logo" />
+
+        <Button
+            android:id="@+id/InfoActivity_BilibiliButton"
+            android:layout_width="96dp"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/bilibili_pink"
+            android:text="@string/info_Button_Bilibili"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/InfoActivity_MailButton"
+            app:layout_constraintStart_toEndOf="@+id/InfoActivity_GitHubButton"
+            app:layout_constraintTop_toTopOf="@+id/InfoActivity_GitHubButton"
+            tools:ignore="TextContrastCheck" />
+
+        <Button
+            android:id="@+id/InfoActivity_MailButton"
+            android:layout_width="96dp"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/skyBlue"
+            android:text="@string/info_Button_Mail"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/InfoActivity_CoolApkButton"
+            app:layout_constraintStart_toEndOf="@+id/InfoActivity_BilibiliButton"
+            app:layout_constraintTop_toTopOf="@+id/InfoActivity_BilibiliButton"
+            tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
+
+        <Button
+            android:id="@+id/InfoActivity_CoolApkButton"
+            android:layout_width="96dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="24dp"
+            android:backgroundTint="@color/coolapk_green"
+            android:text="@string/info_Button_CoolApk"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/InfoActivity_MailButton"
+            app:layout_constraintTop_toTopOf="@+id/InfoActivity_MailButton"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/InfoActivity_LogoDesigner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/info_LogoDesigner"
+            android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/InfoActivity_MailButton" />
+
+        <Button
+            android:id="@+id/InfoActivity_DesignerMailButton"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:backgroundTint="@color/skyBlue"
+            android:text="@string/info_Button_Mail"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/InfoActivity_LogoDesigner"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/InfoActivity_ParseLibraryTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/info_CourseParseTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/InfoActivity_DesignerMailButton" />
+
+        <TextView
+            android:id="@+id/InfoActivity_ParseLibraryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/info_CourseParseInfo"
+            android:textSize="20sp"
+            android:theme="@style/Theme.TimeManager.Widget.TextView.HeadLine"
+            app:layout_constraintEnd_toStartOf="@+id/InfoActivity_ParserGitHubButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/InfoActivity_ParseLibraryTitle" />
+
+        <Button
+            android:id="@+id/InfoActivity_ParserGitHubButton"
+            android:layout_width="96dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="24dp"
+            android:backgroundTint="@color/github_gray"
+            android:text="@string/info_Button_Github"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/InfoActivity_ParseLibraryText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/InfoActivity_ParseLibraryText"
+            app:layout_constraintTop_toTopOf="@+id/InfoActivity_ParseLibraryText" />
+
+        <TextView
+            android:id="@+id/InfoActivity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/info_Description"
+            android:textSize="20sp"
+            android:theme="@style/Theme.TimeManager.Widget.TextView.SubText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/InfoActivity_ParseLibraryText" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

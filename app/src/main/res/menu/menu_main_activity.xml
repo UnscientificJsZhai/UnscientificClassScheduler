@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/MainActivity_JumpToCalendar"
+        android:icon="@drawable/baseline_event_note_18"
+        android:title="@string/activity_Main_JumpToCalendar"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/MainActivity_ShowTodayOnly"
+        android:checkable="true"
+        android:title="@string/activity_Main_ShowTodayOnly"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/MainActivity_Parse"
+        android:title="@string/activity_ParseCourseActivity_Label"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/MainActivity_Settings"
+        android:icon="@drawable/outline_settings_24"
+        android:title="@string/common_settings"
+        app:showAsAction="never" />
+</menu>

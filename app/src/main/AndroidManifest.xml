@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.github.unscientificjszhai.unscientficclassscheduler">
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".TimeManagerApplication"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.TimeManager"
+        android:usesCleartextTraffic="true"
+        tools:ignore="AllowBackup">
+        <activity
+            android:name=".ui.WelcomeActivity"
+            android:exported="true"
+            tools:ignore="IntentFilterExportedReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- main包 -->
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.CourseDetailActivity"
+            android:label="@string/activity_CourseDetail_Label"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:theme="@style/Theme.TimeManager.CourseDetail"/> <!-- editor包 -->
+        <activity
+            android:name=".ui.editor.EditCourseActivity"
+            android:exported="false"
+            android:label="@string/activity_EditCourse_Label"
+            android:parentActivityName=".ui.main.MainActivity" /> <!-- settings包 -->
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:exported="true"
+            android:label="@string/common_settings"
+            android:parentActivityName=".ui.main.MainActivity" />
+        <activity
+            android:name=".ui.settings.CurrentTableSelectorActivity"
+            android:exported="false"
+            android:label="@string/activity_Settings_CurrentCourseListTable"
+            android:parentActivityName=".ui.settings.SettingsActivity" />
+        <activity
+            android:name=".ui.settings.TimeTableEditorActivity"
+            android:exported="false"
+            android:label="@string/preferences_CurrentTable_TimeTable"
+            android:parentActivityName=".ui.settings.SettingsActivity" />
+        <activity
+            android:name=".ui.settings.InfoActivity"
+            android:exported="false"
+            android:label="@string/activity_Settings_Info"
+            android:parentActivityName=".ui.settings.SettingsActivity" /> <!-- parse包 -->
+        <activity
+            android:name=".ui.parse.ParseCourseActivity"
+            android:exported="false"
+            android:label="@string/activity_ParseCourseActivity_Label"
+            android:parentActivityName=".ui.settings.SettingsActivity" />
+
+        <service
+            android:name=".features.calendar.AuthenticatorService"
+            android:exported="true"
+            tools:ignore="ExportedService,IntentFilterExportedReceiver">
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+    </application>
+
+</manifest>

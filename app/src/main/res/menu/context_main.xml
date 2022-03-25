@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/MainActivity_Edit"
+        android:title="@string/activity_CourseDetail_Edit" />
+
+    <item
+        android:id="@+id/MainActivity_Delete"
+        android:title="@string/activity_CourseDetail_Delete" />
+</menu>

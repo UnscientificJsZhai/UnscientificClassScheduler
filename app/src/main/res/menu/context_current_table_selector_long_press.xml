@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/CurrentTableSelector_RenameTable"
+        android:title="@string/activity_CurrentTableSelector_ContextMenu_Edit" />
+
+    <item
+        android:id="@+id/CurrentTableSelector_DeleteTable"
+        android:title="@string/activity_CurrentTableSelector_ContextMenu_Delete" />
+</menu>

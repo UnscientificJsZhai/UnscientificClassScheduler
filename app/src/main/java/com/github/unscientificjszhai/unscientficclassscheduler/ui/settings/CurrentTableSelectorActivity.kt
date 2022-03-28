@@ -2,7 +2,10 @@ package com.github.unscientificjszhai.unscientficclassscheduler.ui.settings
 
 import android.Manifest
 import android.os.Bundle
-import android.view.*
+import android.view.ContextMenu
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.CheckBox
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -13,9 +16,10 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.unscientificjszhai.unscientficclassscheduler.R
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.CourseTable
-import com.github.unscientificjszhai.unscientficclassscheduler.ui.others.*
+import com.github.unscientificjszhai.unscientficclassscheduler.ui.others.CalendarOperatorActivity
+import com.github.unscientificjszhai.unscientficclassscheduler.ui.others.RecyclerViewWithContextMenu
 import com.github.unscientificjszhai.unscientficclassscheduler.util.runIfPermissionGranted
 import com.github.unscientificjszhai.unscientficclassscheduler.util.setSystemUIAppearance
 import com.google.android.material.textfield.TextInputEditText
@@ -28,7 +32,7 @@ import kotlinx.coroutines.launch
  */
 class CurrentTableSelectorActivity : CalendarOperatorActivity() {
 
-    private lateinit var timeManagerApplication: TimeManagerApplication
+    private lateinit var schedulerApplication: SchedulerApplication
 
     private lateinit var viewModel: CurrentTableSelectorActivityViewModel
 
@@ -39,13 +43,13 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_current_table_selector)
         setSystemUIAppearance(this)
-        this.timeManagerApplication = application as TimeManagerApplication
+        this.schedulerApplication = application as SchedulerApplication
 
         this.viewModel =
             ViewModelProvider(
                 this,
                 CurrentTableSelectorActivityViewModel.Factory(
-                    timeManagerApplication.getCourseTableDatabase().courseTableDao()
+                    schedulerApplication.getCourseDatabase().courseTableDao()
                 )
             )[CurrentTableSelectorActivityViewModel::class.java]
 
@@ -54,7 +58,7 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
 
         //初始化RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
-        this.adapter = CurrentTableSelectorAdapter(timeManagerApplication.nowTableID, ::setTable)
+        this.adapter = CurrentTableSelectorAdapter(schedulerApplication.nowTableID, ::setTable)
         recyclerView.adapter = this.adapter
 
         //注册监听器
@@ -85,7 +89,7 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
                         dialog?.dismiss()
                     }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
                         //从当前选中的表中复制上课时间信息
-                        val currentTable by timeManagerApplication
+                        val currentTable by schedulerApplication
 
                         val courseTable =
                             if (checkBox.isChecked) {
@@ -142,7 +146,7 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         val info = item.menuInfo
-        val nowTableId = timeManagerApplication.nowTableID
+        val nowTableId = schedulerApplication.nowTableID
         return if (info is RecyclerViewWithContextMenu.PositionMenuInfo) {
             val courseTable = viewModel.tableList.value!![info.position]
             when (item.itemId) {
@@ -230,7 +234,7 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
     private fun setTable(courseTable: CourseTable, isDelete: Boolean) {
         if (isDelete) {
             //删除CourseTable的逻辑。
-            if (courseTable.id != this.timeManagerApplication.nowTableID) {
+            if (courseTable.id != this.schedulerApplication.nowTableID) {
                 runIfPermissionGranted(Manifest.permission.WRITE_CALENDAR, {
                     showPermissionDeniedDialog()
                 }) {
@@ -243,8 +247,8 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
             //选中CourseTable的逻辑。
             try {
                 val id: Long = courseTable.id!!
-                if (id != timeManagerApplication.nowTableID) {
-                    timeManagerApplication.updateTableID(id)
+                if (id != schedulerApplication.nowTableID) {
+                    schedulerApplication.updateTableID(id)
                 } else {
                     return
                 }

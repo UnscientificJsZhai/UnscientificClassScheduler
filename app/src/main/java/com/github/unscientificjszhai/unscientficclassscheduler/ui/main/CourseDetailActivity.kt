@@ -14,7 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.github.unscientificjszhai.unscientficclassscheduler.R
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.ClassTime
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.Course
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.CourseWithClassTimes
@@ -69,7 +69,7 @@ class CourseDetailActivity : AppCompatActivity() {
         const val EDIT_REQUEST_CODE = 4
     }
 
-    private lateinit var timeManagerApplication: TimeManagerApplication
+    private lateinit var schedulerApplication: SchedulerApplication
 
     private lateinit var courseDao: CourseDao
 
@@ -88,8 +88,8 @@ class CourseDetailActivity : AppCompatActivity() {
 
         setSystemUIAppearance(this)
 
-        this.timeManagerApplication = application as TimeManagerApplication
-        this.courseDao = this.timeManagerApplication.getCourseDatabase().courseDao()
+        this.schedulerApplication = application as SchedulerApplication
+        this.courseDao = this.schedulerApplication.getCourseDatabase().courseDao()
 
         this.descriptionTextView = findViewById(R.id.CourseDetailActivity_DescriptionText)
         this.timeDescriptionTextView = findViewById(R.id.CourseDetailActivity_TimeDescriptionText)
@@ -112,7 +112,7 @@ class CourseDetailActivity : AppCompatActivity() {
         )[CourseDetailActivityViewModel::class.java]
 
         // 监听数据变更
-        val courseTable by timeManagerApplication
+        val courseTable by schedulerApplication
         viewModel.courseWithClassTimes.observe(this) { courseWithClassTimes ->
             if (!Course.checkLegitimacy(courseWithClassTimes, courseTable)) {
                 if (!delete) {
@@ -181,7 +181,7 @@ class CourseDetailActivity : AppCompatActivity() {
                                 MainActivityViewModel.deleteCourse(
                                     this@CourseDetailActivity,
                                     courseWithClassTimes,
-                                    timeManagerApplication.useCalendar
+                                    schedulerApplication.useCalendar
                                 )
                             }
                         } else {
@@ -231,7 +231,7 @@ class CourseDetailActivity : AppCompatActivity() {
             stringBuilder.append(" ")
         }
 
-        val courseTable by timeManagerApplication
+        val courseTable by schedulerApplication
         var veryStart = courseTable.maxWeeks
         var veryEnd = 1
         for (classTime in classTimes) {
@@ -262,7 +262,7 @@ class CourseDetailActivity : AppCompatActivity() {
      */
     private fun CourseWithClassTimes.timeDescriptionText(): String {
         val stringBuilder = StringBuilder()
-        val courseTable by timeManagerApplication
+        val courseTable by schedulerApplication
 
         this.classTimes.forEach { classTime: ClassTime ->
             stringBuilder.append(

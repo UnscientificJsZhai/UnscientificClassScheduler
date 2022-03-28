@@ -17,7 +17,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.unscientificjszhai.unscientficclassscheduler.R
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.CourseWithClassTimes
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.editor.EditCourseActivity
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.main.CourseAdapter
@@ -43,14 +43,14 @@ class CourseListFragment : Fragment() {
     private lateinit var recyclerViewAdapter: CourseAdapter
 
     private lateinit var progressBar: ProgressBar
-    private lateinit var timeManagerApplication: TimeManagerApplication
+    private lateinit var schedulerApplication: SchedulerApplication
 
     private lateinit var emptyTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        this.timeManagerApplication = requireActivity().application as TimeManagerApplication
+        this.schedulerApplication = requireActivity().application as SchedulerApplication
     }
 
     override fun onCreateView(
@@ -183,7 +183,7 @@ class CourseListFragment : Fragment() {
                                         MainActivityViewModel.deleteCourse(
                                             requireActivity(),
                                             courseWithClassTimes,
-                                            timeManagerApplication.useCalendar
+                                            schedulerApplication.useCalendar
                                         )
                                         val snackBar = Snackbar.make(
                                             rootView,
@@ -195,7 +195,7 @@ class CourseListFragment : Fragment() {
                                                 MainActivityViewModel.undoDeleteCourse(
                                                     requireActivity(),
                                                     courseWithClassTimes,
-                                                    timeManagerApplication.useCalendar
+                                                    schedulerApplication.useCalendar
                                                 )
                                             }
                                         }
@@ -275,7 +275,7 @@ class CourseListFragment : Fragment() {
      */
     fun updateActionBarLabel() {
         val currentTimeMarker by requireActivity() as MainActivity
-        val application = requireActivity().application as TimeManagerApplication
+        val application = requireActivity().application as SchedulerApplication
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val option = sharedPreferences.getString("showOnMainActivity", "table")
         val stringBuilder = StringBuilder()

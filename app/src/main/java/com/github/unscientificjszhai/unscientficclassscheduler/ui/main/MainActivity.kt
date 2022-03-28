@@ -12,7 +12,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import com.github.unscientificjszhai.unscientficclassscheduler.R
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.CurrentTimeMarker
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.WelcomeActivity
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.main.fragments.CourseListFragment
@@ -39,19 +39,19 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
             "com.github.unscientificjszhai.unscientficclassscheduler.COURSE_DATABASE_CHANGE"
 
         /**
-         * 确定是否显示帮助的Key，在SharedPreference：[TimeManagerApplication.INITIAL]中查找。
+         * 确定是否显示帮助的Key，在SharedPreference：[SchedulerApplication.INITIAL]中查找。
          */
         const val SHOW_GUIDE_KEY = "mainActivityGuideShowed"
 
         /**
-         * 确定是否为仅显示今天的Key，在SharedPreference：[TimeManagerApplication.INITIAL]中查找。
+         * 确定是否为仅显示今天的Key，在SharedPreference：[SchedulerApplication.INITIAL]中查找。
          */
         const val SHOW_TODAY_ONLY_KEY = "showTodayOnly"
     }
 
-    private lateinit var timeManagerApplication: TimeManagerApplication
+    private lateinit var schedulerApplication: SchedulerApplication
     private val currentTimeMarker: CurrentTimeMarker by lazy {
-        timeManagerApplication.courseTable?.let {
+        schedulerApplication.courseTable?.let {
             CurrentTimeMarker(it)
         } ?: throw RuntimeException()
     }
@@ -71,20 +71,22 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
                     supportFragmentManager.findFragmentById(R.id.SingleFragmentActivity_RootView)
 
                 // 更新NowTimeTagger
-                val courseTable by context.timeManagerApplication
+                val courseTable by context.schedulerApplication
                 context.currentTimeMarker.setCourseTable(courseTable)
                 if (fragment is CourseListFragment && fragment.lifecycle.currentState == Lifecycle.State.STARTED) {
                     fragment.viewModel.courseList.removeObservers(fragment.viewLifecycleOwner)
-                    viewModel.courseList = context.timeManagerApplication
-                        .getCourseDatabase().courseDao().getLiveCourses() // 更新ViewModel中的LiveData
+                    viewModel.courseList = context.schedulerApplication
+                        .getCourseDatabase().courseDao()
+                        .getLiveCourses(schedulerApplication.nowTableID) // 更新ViewModel中的LiveData
                     fragment.viewModel.courseList.observe(this@MainActivity) { courseList ->
                         fragment.bindData(courseList)
                     }
 
                     fragment.updateActionBarLabel()
                 } else {
-                    viewModel.courseList = context.timeManagerApplication
-                        .getCourseDatabase().courseDao().getLiveCourses() // 更新ViewModel中的LiveData
+                    viewModel.courseList = context.schedulerApplication
+                        .getCourseDatabase().courseDao()
+                        .getLiveCourses(schedulerApplication.nowTableID) // 更新ViewModel中的LiveData
                 }
             }
         }
@@ -131,9 +133,9 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        this.timeManagerApplication = application as TimeManagerApplication
+        this.schedulerApplication = application as SchedulerApplication
         // 与初次启动判定有关
-        if (this.timeManagerApplication.nowTableID < 0) {
+        if (this.schedulerApplication.nowTableID < 0) {
             Toast.makeText(this, R.string.activity_Main_NoTableFound, Toast.LENGTH_SHORT).show()
             startActivity<WelcomeActivity>(this)
             finish()
@@ -145,11 +147,11 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
         // 设置SystemUI颜色
         setSystemUIAppearance(this)
 
-        val courseDatabase = timeManagerApplication.getCourseDatabase()
+        val courseDatabase = schedulerApplication.getCourseDatabase()
         this.viewModel =
             ViewModelProvider(
                 this,
-                MainActivityViewModel.Factory(courseDatabase.courseDao())
+                MainActivityViewModel.Factory(courseDatabase.courseDao(), schedulerApplication)
             )[MainActivityViewModel::class.java]
 
         this.rootView = findViewById(R.id.SingleFragmentActivity_RootView)
@@ -162,7 +164,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
         }
 
         val sharedPreferences =
-            getSharedPreferences(TimeManagerApplication.INITIAL, Context.MODE_PRIVATE)
+            getSharedPreferences(SchedulerApplication.INITIAL, Context.MODE_PRIVATE)
         viewModel.showTodayOnly = sharedPreferences.getBoolean(SHOW_TODAY_ONLY_KEY, false)
 
         // 监听数据库变更
@@ -197,7 +199,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
         super.onStop()
         // 保存是否只显示今天的情况
         val sharedPreferences =
-            getSharedPreferences(TimeManagerApplication.INITIAL, Context.MODE_PRIVATE)
+            getSharedPreferences(SchedulerApplication.INITIAL, Context.MODE_PRIVATE)
         sharedPreferences.edit {
             putBoolean(SHOW_TODAY_ONLY_KEY, viewModel.showTodayOnly)
             commit()

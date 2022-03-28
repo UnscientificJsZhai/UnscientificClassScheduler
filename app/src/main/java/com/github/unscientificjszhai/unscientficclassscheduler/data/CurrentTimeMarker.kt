@@ -6,7 +6,6 @@ import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.Cours
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.FormattedTime
 import java.lang.ref.WeakReference
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.reflect.KProperty
 
 /**

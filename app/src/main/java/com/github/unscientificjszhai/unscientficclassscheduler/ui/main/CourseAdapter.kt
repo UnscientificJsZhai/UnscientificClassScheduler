@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.github.unscientificjszhai.unscientficclassscheduler.R
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.Course
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.CourseWithClassTimes
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.FormattedTime
@@ -31,7 +31,7 @@ internal class CourseAdapter(private val activity: MainActivity) :
      */
     private val timeTagger by activity
 
-    private val courseTable by (activity.application as TimeManagerApplication)
+    private val courseTable by (activity.application as SchedulerApplication)
 
     /**
      * 获取宿主Activity的状态，是否只显示今天。

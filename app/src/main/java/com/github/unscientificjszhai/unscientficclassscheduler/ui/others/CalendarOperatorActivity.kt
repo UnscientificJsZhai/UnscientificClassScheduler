@@ -12,7 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.github.unscientificjszhai.unscientficclassscheduler.R
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.util.jumpToSystemPermissionSettings
 
 /**
@@ -43,7 +43,7 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
 
     @CallSuper
     override fun onStart() {
-        if ((application as TimeManagerApplication).useCalendar) {
+        if ((application as SchedulerApplication).useCalendar) {
             if (ContextCompat.checkSelfPermission(
                     this,
                     Manifest.permission.WRITE_CALENDAR
@@ -123,7 +123,7 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
      */
     private fun showDeniedToast() {
         // 用户执意拒绝授权
-        (application as TimeManagerApplication).useCalendar = false
+        (application as SchedulerApplication).useCalendar = false
         Toast.makeText(
             this,
             R.string.preferences_CalendarOption_UseCalendar_TurnedOff,

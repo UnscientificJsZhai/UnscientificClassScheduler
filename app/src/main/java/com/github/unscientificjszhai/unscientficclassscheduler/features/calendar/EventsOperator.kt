@@ -7,14 +7,13 @@ import android.provider.CalendarContract
 import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.preference.PreferenceManager
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.ClassTime
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.CourseWithClassTimes
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.FormattedTime
 import java.lang.ref.WeakReference
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * 事件操作工具对象。对所有事件的操作都在这里完成。
@@ -210,7 +209,7 @@ object EventsOperator {
     @WorkerThread
     fun updateAllEvents(context: Context, courseTable: CourseTable) {
         val courseDao =
-            (context.applicationContext as TimeManagerApplication).getCourseDatabase().courseDao()
+            (context.applicationContext as SchedulerApplication).getCourseDatabase().courseDao()
         val courses = courseDao.getCourses()
 
         for (courseWithClassTimes in courses) {

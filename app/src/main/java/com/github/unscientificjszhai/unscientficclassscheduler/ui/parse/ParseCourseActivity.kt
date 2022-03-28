@@ -35,7 +35,7 @@ class ParseCourseActivity : CalendarOperatorActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.SingleFragmentActivity_RootView, ParserListFragment())
                 .commit()
-            supportFragmentManager.commit {  }
+            supportFragmentManager.commit { }
         }
     }
 

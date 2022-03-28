@@ -14,7 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.github.unscientificjszhai.unscientficclassscheduler.R
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientficclassscheduler.features.backup.BackupOperator
 import com.github.unscientificjszhai.unscientficclassscheduler.features.calendar.CalendarOperator
@@ -34,7 +34,7 @@ import kotlin.concurrent.thread
  */
 class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
 
-    private lateinit var timeManagerApplication: TimeManagerApplication
+    private lateinit var schedulerApplication: SchedulerApplication
 
     private lateinit var tableTitleEditText: EditText
     private lateinit var startButton: Button
@@ -50,9 +50,9 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
         // 添加帐号
         EmptyAuthenticator.addAccountToSystem(this)
 
-        this.timeManagerApplication = application as TimeManagerApplication
+        this.schedulerApplication = application as SchedulerApplication
 
-        if (this.timeManagerApplication.nowTableID != TimeManagerApplication.DEFAULT_DATABASE_OBJECT_ID) {
+        if (this.schedulerApplication.nowTableID != SchedulerApplication.DEFAULT_DATABASE_OBJECT_ID) {
             startActivity<MainActivity>(this)
             finish()
         } else {
@@ -83,7 +83,7 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
                 val uri = it.data?.data
                 if (uri != null) {
                     BackupOperator.importBackup(this, uri) { tableID, calendarID ->
-                        timeManagerApplication.updateTableID(tableID)
+                        schedulerApplication.updateTableID(tableID)
                         CalendarOperator.deleteAllTables(this, calendarID)
                         runOnUiThread {
                             startActivity<MainActivity>(this)
@@ -122,7 +122,7 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
             tableTitleEditText.text.toString()
         }
 
-        if (timeManagerApplication.useCalendar) {
+        if (schedulerApplication.useCalendar) {
             runIfPermissionGranted(Manifest.permission.WRITE_CALENDAR, {
                 if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_CALENDAR)) {
                     // 系统仍然提示权限请求
@@ -196,15 +196,15 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
         thread(start = true) {
             val courseTable = CourseTable(tableName)
 
-            if (timeManagerApplication.useCalendar) {
+            if (schedulerApplication.useCalendar) {
                 CalendarOperator.deleteAllTables(this) // 检查并删除清除数据之前的遗留日历表。
                 // 写入日历。
                 CalendarOperator.createCalendarTable(this, courseTable)
             }
             // 写入数据库。
-            val dao = timeManagerApplication.getCourseTableDatabase().courseTableDao()
+            val dao = schedulerApplication.getCourseDatabase().courseTableDao()
             val id = dao.insertCourseTable(courseTable)
-            timeManagerApplication.updateTableID(id)
+            schedulerApplication.updateTableID(id)
 
             runOnUiThread {
                 startActivity<MainActivity>(this)

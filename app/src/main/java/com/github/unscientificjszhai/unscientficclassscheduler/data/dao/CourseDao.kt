@@ -16,11 +16,21 @@ interface CourseDao {
     /**
      * 获取所有的Course对象以及关联的ClassTime对象。
      *
-     * @return 返回一个[CourseWithClassTimes]的列表。
+     * @return 返回一个[CourseWithClassTimes]的列表。包含全部课程表的所有课程。
      */
     @Query("SELECT * FROM ${Course.TABLE_NAME}")
     @Transaction
     fun getCourses(): List<CourseWithClassTimes>
+
+    /**
+     * 获取所有的Course对象以及关联的ClassTime对象。
+     *
+     * @param tableId 要查询的课程表的ID。
+     * @return 返回一个[CourseWithClassTimes]的列表。
+     */
+    @Query("SELECT * FROM ${Course.TABLE_NAME} WHERE table_id = :tableId")
+    @Transaction
+    fun getCourses(tableId: Long): List<CourseWithClassTimes>
 
     /**
      * 获取特定的Course对象以及关联的ClassTime对象。
@@ -36,8 +46,8 @@ interface CourseDao {
      * 获取特定的Course对象以及关联的ClassTime对象。
      * 以LiveData的形式返回查询结果。
      *
-     * @param id 想要查找的对象的id。
-     * @return 查找到的目标对象。
+     * @param id 要查询的课程的ID。不限制它是否属于当前打开的课程表。
+     * @return 查询到的课程项目。如果没有查询到给定ID对应的课程项目则返回null。
      */
     @Query("SELECT * FROM ${Course.TABLE_NAME} WHERE id = :id")
     @Transaction
@@ -45,6 +55,8 @@ interface CourseDao {
 
     /**
      * 向数据库中插入Course对象，但是不包括关联的ClassTime对象。
+     *
+     * 当ID冲突时，覆盖旧的项目。
      *
      * @param course 需要插入的Course对象。
      */
@@ -70,16 +82,17 @@ interface CourseDao {
     /**
      * 获取全部异步查询LiveData对象。
      *
-     * @return 包含全部查询结果的LiveData对象。
+     * @return 包含全部查询结果的列表LiveData对象。
      */
-    @Query("SELECT * FROM ${Course.TABLE_NAME}")
+    @Query("SELECT * FROM ${Course.TABLE_NAME} WHERE table_id = :tableId")
     @Transaction
-    fun getLiveCourses(): LiveData<List<CourseWithClassTimes>>
+    fun getLiveCourses(tableId: Long): LiveData<List<CourseWithClassTimes>>
 
     /**
      * 获取一个异步查询LiveData对象。
      *
-     * @return 一个包含了表中所有Course和ClassTime对象的列表的LiveData对象。
+     * @param courseId 要查询的课程的ID。不限制它是否属于当前打开的课程表。
+     * @return 查询到的课程项目的LiveData对象。如果没有查询到给定ID对应的课程项目则返回null。
      */
     @Query("SELECT * FROM ${Course.TABLE_NAME} WHERE id = :courseId")
     @Transaction

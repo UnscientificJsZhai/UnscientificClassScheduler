@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.unscientificjszhai.unscientficclassscheduler.R
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.ClassTime
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.Course
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.CourseWithClassTimes
@@ -64,7 +64,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
         }
     }
 
-    private lateinit var timeManagerApplication: TimeManagerApplication
+    private lateinit var schedulerApplication: SchedulerApplication
 
     private lateinit var viewModel: EditCourseActivityViewModel
 
@@ -88,7 +88,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
 
         setSystemUIAppearance(this)
 
-        this.timeManagerApplication = application as TimeManagerApplication
+        this.schedulerApplication = application as SchedulerApplication
 
         this.rootRecyclerView = findViewById(R.id.EditCourseActivity_RecyclerView)
 
@@ -102,7 +102,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
                 viewModel.classTimes = ArrayList(courseWithClassTimes.classTimes)
             }
         } else {
-            this.viewModel.course = Course()
+            this.viewModel.course = Course(schedulerApplication.nowTableID)
 
             if (!viewModel.classTimesInitialized) {
                 viewModel.classTimes = ArrayList()
@@ -112,10 +112,11 @@ class EditCourseActivity : CalendarOperatorActivity() {
         // 保证ViewModel中的classTimes数组已经初始化
         viewModel.classTimesInitialized = true
 
-        this.headerAdapter = EditCourseHeaderAdapter(viewModel.course ?: Course())
+        this.headerAdapter =
+            EditCourseHeaderAdapter(viewModel.course ?: Course(schedulerApplication.nowTableID))
         this.adapter = EditCourseAdapter(
             viewModel.classTimes,
-            timeManagerApplication.courseTable?.maxWeeks ?: ClassTime.MAX_STORAGE_SIZE
+            schedulerApplication.courseTable?.maxWeeks ?: ClassTime.MAX_STORAGE_SIZE
         )
 
         val linearLayoutManager = LinearLayoutManager(this)
@@ -123,7 +124,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
         this.rootRecyclerView.adapter = ConcatAdapter(headerAdapter, adapter)
 
         // 从Application获取Database的引用
-        this.courseDatabase = (application as TimeManagerApplication).getCourseDatabase()
+        this.courseDatabase = (application as SchedulerApplication).getCourseDatabase()
 
         // 浮动按钮的监听器
         val floatingActionButton: FloatingActionButton =
@@ -163,7 +164,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
         ) {
             if (it) {
                 viewModel.viewModelScope.launch {
-                    viewModel.saveData(this@EditCourseActivity, timeManagerApplication.useCalendar)
+                    viewModel.saveData(this@EditCourseActivity, schedulerApplication.useCalendar)
                 }
             }
         }
@@ -199,7 +200,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
             }) {
                 rootRecyclerView.clearFocus()
                 viewModel.viewModelScope.launch {
-                    viewModel.saveData(this@EditCourseActivity, timeManagerApplication.useCalendar)
+                    viewModel.saveData(this@EditCourseActivity, schedulerApplication.useCalendar)
                 }
             }
         } else if (item.itemId == android.R.id.home) {

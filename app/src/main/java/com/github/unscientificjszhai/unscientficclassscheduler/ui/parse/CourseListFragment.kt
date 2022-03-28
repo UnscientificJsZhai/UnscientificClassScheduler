@@ -10,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.unscientificjszhai.unscientficclassscheduler.R
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.CourseWithClassTimes
 import com.github.unscientificjszhai.unscientficclassscheduler.features.parse.ParserTypeConverter
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.others.ProgressDialog
@@ -129,7 +129,7 @@ class CourseListFragment : Fragment() {
             lifecycleScope.launch {
                 dialog.show()
                 val errorList =
-                    viewModel.save(requireActivity().application as TimeManagerApplication)
+                    viewModel.save(requireActivity().application as SchedulerApplication)
                 dialog.postDismiss()
                 // 显示确认按钮
                 if (errorList?.isNotEmpty() == true || errorList == null) {

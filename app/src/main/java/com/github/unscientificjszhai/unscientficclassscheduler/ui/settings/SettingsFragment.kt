@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewModelScope
 import androidx.preference.*
 import com.github.unscientificjszhai.unscientficclassscheduler.R
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.others.ProgressDialog
 import kotlinx.coroutines.launch
@@ -146,7 +146,7 @@ internal class SettingsFragment : PreferenceFragmentCompat(),
         weekStartPreference?.preferenceDataStore = dataStore
 
         // 读取日历开关设置
-        val useCalendar = (requireActivity().application as TimeManagerApplication).useCalendar
+        val useCalendar = (requireActivity().application as SchedulerApplication).useCalendar
 
         // 更新日历的设置项
         this.updateCalendarPreference = findPreference(UPDATE_CALENDAR_KEY)

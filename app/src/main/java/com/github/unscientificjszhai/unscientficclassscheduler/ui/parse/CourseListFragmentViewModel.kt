@@ -1,7 +1,7 @@
 package com.github.unscientificjszhai.unscientficclassscheduler.ui.parse
 
 import androidx.lifecycle.ViewModel
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.Course
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.CourseWithClassTimes
 import com.github.unscientificjszhai.unscientficclassscheduler.features.calendar.EventsOperator
@@ -24,7 +24,7 @@ internal class CourseListFragmentViewModel : ViewModel() {
      * @param application 用于导入和获取数据库对象的上下文。
      * @return 未能成功添加的课程列表。或者null如果本身就没有解析到的数据。
      */
-    suspend fun save(application: TimeManagerApplication): List<String>? {
+    suspend fun save(application: SchedulerApplication): List<String>? {
         if (this.courseList.isEmpty()) {
             return null
         }

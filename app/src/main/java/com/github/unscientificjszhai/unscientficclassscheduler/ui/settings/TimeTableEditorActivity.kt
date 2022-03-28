@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.unscientificjszhai.unscientficclassscheduler.R
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.FormattedTime
 import com.github.unscientificjszhai.unscientficclassscheduler.util.setSystemUIAppearance
 import kotlinx.coroutines.launch
@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
  */
 class TimeTableEditorActivity : AppCompatActivity() {
 
-    private lateinit var timeManagerApplication: TimeManagerApplication
+    private lateinit var schedulerApplication: SchedulerApplication
 
     private lateinit var viewModel: TimeTableEditorActivityViewModel
 
@@ -40,10 +40,10 @@ class TimeTableEditorActivity : AppCompatActivity() {
 
         this.viewModel = ViewModelProvider(this)[TimeTableEditorActivityViewModel::class.java]
 
-        this.timeManagerApplication = application as TimeManagerApplication
+        this.schedulerApplication = application as SchedulerApplication
 
         try {
-            val courseTable = this.timeManagerApplication.courseTable!!
+            val courseTable = this.schedulerApplication.courseTable!!
             viewModel.courseTable = courseTable
             this.viewModel.originTimeTable = courseTable.timeTable.typeConvert()
         } catch (e: NullPointerException) {
@@ -74,7 +74,7 @@ class TimeTableEditorActivity : AppCompatActivity() {
             val id = viewModel.courseTable.id
             if (id != null && viewModel.courseTable.timeTable.typeConvert() != this.viewModel.originTimeTable) {
                 viewModel.viewModelScope.launch {
-                    viewModel.save(this@TimeTableEditorActivity, timeManagerApplication.useCalendar)
+                    viewModel.save(this@TimeTableEditorActivity, schedulerApplication.useCalendar)
                     finish()
                 }
             } else if (viewModel.courseTable.timeTable.typeConvert() != this.viewModel.originTimeTable) {

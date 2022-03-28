@@ -19,7 +19,6 @@ import java.io.IOException
 import java.lang.ref.WeakReference
 import java.nio.charset.StandardCharsets
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.concurrent.thread
 
 /**

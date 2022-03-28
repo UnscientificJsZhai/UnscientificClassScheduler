@@ -12,7 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.github.unscientificjszhai.unscientficclassscheduler.R
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.features.backup.BackupOperator
 import com.github.unscientificjszhai.unscientficclassscheduler.features.backup.CourseICS
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.main.MainActivity
@@ -30,7 +30,7 @@ import kotlinx.coroutines.withContext
  */
 class SettingsActivity : CalendarOperatorActivity() {
 
-    private lateinit var timeManagerApplication: TimeManagerApplication
+    private lateinit var schedulerApplication: SchedulerApplication
 
     internal lateinit var viewModel: SettingsActivityViewModel
 
@@ -44,7 +44,7 @@ class SettingsActivity : CalendarOperatorActivity() {
             if (context is SettingsActivity) {
                 // 当在Selector中选择新的课程表时调用此方法更新DataStore中的courseTable对象
                 // 并且会同时更新子Fragment中的数据简介
-                settingsFragment?.updateCourseTable(timeManagerApplication.courseTable!!)
+                settingsFragment?.updateCourseTable(schedulerApplication.courseTable!!)
             }
         }
     }
@@ -60,14 +60,14 @@ class SettingsActivity : CalendarOperatorActivity() {
         // 设置SystemUI颜色
         setSystemUIAppearance(this)
 
-        this.timeManagerApplication = application as TimeManagerApplication
-        val courseTable by timeManagerApplication
+        this.schedulerApplication = application as SchedulerApplication
+        val courseTable by schedulerApplication
 
         val dataStore = SettingsDataStore(
             courseTable,
-            timeManagerApplication.getCourseTableDatabase().courseTableDao(),
+            schedulerApplication.getCourseDatabase().courseTableDao(),
             this,
-            timeManagerApplication::updateTableID
+            schedulerApplication::updateTableID
         )
         this.viewModel = ViewModelProvider(
             this,
@@ -118,9 +118,9 @@ class SettingsActivity : CalendarOperatorActivity() {
                     if (uri != null) {
                         viewModel.viewModelScope.launch {
                             val courseICS = withContext(Dispatchers.Default) {
-                                val courseList =
-                                    timeManagerApplication.getCourseDatabase().courseDao()
-                                        .getCourses()
+                                // 获取当前选中的学期的课程表
+                                val courseList = schedulerApplication.getCourseDatabase()
+                                    .courseDao().getCourses(schedulerApplication.nowTableID)
                                 CourseICS(courseList, courseTable)
                             }
                             courseICS.writeToFile(this@SettingsActivity, uri)
@@ -162,7 +162,7 @@ class SettingsActivity : CalendarOperatorActivity() {
      * @return 给onPreferenceClick做返回值的true。
      */
     internal fun saveBackup(): Boolean {
-        val courseTable by timeManagerApplication
+        val courseTable by schedulerApplication
         backupLauncher.launch(BackupOperator.getExportBackupIntent(courseTable))
         return true
     }
@@ -183,7 +183,7 @@ class SettingsActivity : CalendarOperatorActivity() {
      * @return 给onPreferenceClick做返回值的true。
      */
     internal fun exportIcs(): Boolean {
-        val courseTable by timeManagerApplication
+        val courseTable by schedulerApplication
         exportIcsLauncher.launch(CourseICS.getExportIcsIntent(courseTable))
         return true
     }

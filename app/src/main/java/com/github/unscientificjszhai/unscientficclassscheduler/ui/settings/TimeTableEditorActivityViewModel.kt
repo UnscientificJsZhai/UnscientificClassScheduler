@@ -2,7 +2,7 @@ package com.github.unscientificjszhai.unscientficclassscheduler.ui.settings
 
 import android.app.Activity
 import androidx.lifecycle.ViewModel
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.TimetableTypeConverter
 import com.github.unscientificjszhai.unscientficclassscheduler.features.calendar.EventsOperator
@@ -36,10 +36,10 @@ internal class TimeTableEditorActivityViewModel : ViewModel() {
      * @param context 执行此操作的Activity上下文。
      */
     suspend fun save(context: Activity, useCalendar: Boolean) {
-        val timeManagerApplication = context.application as TimeManagerApplication
+        val timeManagerApplication = context.application as SchedulerApplication
 
         withContext(Dispatchers.Default) {
-            timeManagerApplication.getCourseTableDatabase().courseTableDao()
+            timeManagerApplication.getCourseDatabase().courseTableDao()
                 .updateCourseTable(this@TimeTableEditorActivityViewModel.courseTable)
             timeManagerApplication.updateTableID(this@TimeTableEditorActivityViewModel.courseTable.id!!)
 

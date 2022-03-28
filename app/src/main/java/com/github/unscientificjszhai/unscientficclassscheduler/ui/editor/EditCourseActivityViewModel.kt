@@ -5,7 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.github.unscientificjszhai.unscientficclassscheduler.R
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.ClassTime
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.Course
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.CourseWithClassTimes
@@ -54,7 +54,7 @@ internal class EditCourseActivityViewModel : ViewModel() {
      * @param useCalendar 是否使用日历功能。
      */
     suspend fun saveData(context: EditCourseActivity, useCalendar: Boolean) {
-        val application = context.application as TimeManagerApplication
+        val application = context.application as SchedulerApplication
         withContext(Dispatchers.Default) {
             val courseTable = application.courseTable!!
             // 创建可读取数据库对象

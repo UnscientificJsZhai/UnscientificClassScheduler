@@ -7,7 +7,6 @@ import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.github.unscientificjszhai.unscientficclassscheduler.data.dao.CourseTableDao
 import com.github.unscientificjszhai.unscientficclassscheduler.data.database.CourseDatabase
-import com.github.unscientificjszhai.unscientficclassscheduler.data.database.CourseTableDatabase
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.main.MainActivity
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.settings.SettingsActivity
@@ -21,7 +20,7 @@ import kotlin.reflect.KProperty
  * @see CourseTable
  * @author UnscientificJsZhai
  */
-class TimeManagerApplication : Application(), CourseTable.Getter {
+class SchedulerApplication : Application(), CourseTable.Getter {
 
     companion object {
 
@@ -34,12 +33,6 @@ class TimeManagerApplication : Application(), CourseTable.Getter {
          * 在[INITIAL]作为Name的SharedPreferences中查找目前表的编号使用的Key。
          */
         const val NOW_TABLE_SP_KEY = "now"
-
-        /**
-         * 课程表数据库版本号。
-         * 从1到2，添加了CourseTable的每周开始日列。
-         */
-        const val TABLE_DATABASE_VERSION: Int = 2
 
         /**
          * 课程数据库版本号。
@@ -65,11 +58,6 @@ class TimeManagerApplication : Application(), CourseTable.Getter {
         private set
 
     /**
-     * CourseTable数据库对象。
-     */
-    private var courseTableDatabase: CourseTableDatabase? = null
-
-    /**
      * Course数据库对象。
      */
     private var courseDatabase: CourseDatabase? = null
@@ -81,10 +69,10 @@ class TimeManagerApplication : Application(), CourseTable.Getter {
             sharedPreferences.getLong(NOW_TABLE_SP_KEY, DEFAULT_DATABASE_OBJECT_ID)
         // 开启子线程加载数据库对象
         thread(start = true) {
-            getCourseTableDatabase()
+            getCourseDatabase()
             if (nowTableID != DEFAULT_DATABASE_OBJECT_ID) {
                 this.courseTable =
-                    getCourseTableDatabase().courseTableDao().getCourseTable(this.nowTableID)
+                    getCourseDatabase().courseTableDao().getCourseTable(this.nowTableID)
             }
         }
         thread(start = true) {
@@ -106,28 +94,10 @@ class TimeManagerApplication : Application(), CourseTable.Getter {
             this.courseDatabase = Room.databaseBuilder(
                 this,
                 CourseDatabase::class.java,
-                "table$nowTableID.db"
+                "table.db"
             ).build()
         }
         return this.courseDatabase!!
-    }
-
-    /**
-     * 获取CourseTable的RoomDatabase对象。全局单例。也可以调用此方法来使目标数据库初始化。
-     *
-     * @return CourseTable的RoomDatabase对象，可以调用它的Dao方法来进行数据操作。
-     */
-    fun getCourseTableDatabase(): CourseTableDatabase {
-        // 初始化CourseTableDatabase
-        if (this.courseTableDatabase == null) {
-            this.courseTableDatabase =
-                Room.databaseBuilder(
-                    this,
-                    CourseTableDatabase::class.java,
-                    "database.db"
-                ).addMigrations(CourseTableDatabase.MIGRATION_1_2).build()
-        }
-        return this.courseTableDatabase!!
     }
 
     /**
@@ -147,7 +117,7 @@ class TimeManagerApplication : Application(), CourseTable.Getter {
         val oldID = this.nowTableID
         this.nowTableID = newID
         thread(start = true) {
-            this.courseTable = getCourseTableDatabase().courseTableDao().getCourseTable(newID)
+            this.courseTable = getCourseDatabase().courseTableDao().getCourseTable(newID)
 
             // 更新成员变量中的CourseDatabase对象的引用，实例化新的CourseDatabase对象
             if (oldID != this.nowTableID) {

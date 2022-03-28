@@ -1,6 +1,6 @@
 <resources>
     <!-- 基础 -->
-    <string name="app_name">时间管理大师</string>
+    <string name="app_name">不科学的课程表</string>
 
     <string name="common_confirm">确定</string>
     <string name="common_cancel">取消</string>

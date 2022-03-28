@@ -1,9 +1,6 @@
 package com.github.unscientificjszhai.unscientficclassscheduler.data.course
 
-import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverters
+import androidx.room.*
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.CourseTable
 import org.json.JSONException
 import org.json.JSONObject
@@ -18,10 +15,19 @@ import java.lang.ref.WeakReference
  * @param credit 学分。
  * @param remarks 备注。
  * @param associatedEventsId 日历中中所有和本课程相关的事件的ID。
+ * @param tableId 对应的课程表的ID。
  * @param specificClassTime 不在数据库中的列。用来在仅显示今天的情况下，判断上课时间。
  * @author UnscientificJsZhai
  */
-@Entity(tableName = Course.TABLE_NAME)
+@Entity(
+    tableName = Course.TABLE_NAME,
+    foreignKeys = [ForeignKey(
+        entity = CourseTable::class,
+        parentColumns = ["id"],
+        childColumns = ["table_id"],
+        onDelete = ForeignKey.CASCADE
+    )]
+)
 @TypeConverters(CourseEventsConverter::class)
 data class Course(
     @PrimaryKey(autoGenerate = true) var id: Long?,
@@ -29,6 +35,7 @@ data class Course(
     var credit: Double,
     var remarks: String,
     var associatedEventsId: ArrayList<Long>,
+    @ColumnInfo(name = "table_id") var tableId: Long,
     @Ignore @Transient var specificClassTime: WeakReference<ClassTime>? = null
 ) : Serializable {
 
@@ -72,9 +79,9 @@ data class Course(
          */
         @JvmStatic
         @Throws(JSONException::class)
-        fun parseJson(jsonString: String): Course {
+        fun parseJson(jsonString: String, tableId: Long): Course {
             val jsonObject = JSONObject(jsonString)
-            val course = Course()
+            val course = Course(tableId)
             course.title = jsonObject.getString("title")
             course.credit = jsonObject.getDouble("credit")
             course.remarks = jsonObject.getString("remarks")
@@ -85,5 +92,5 @@ data class Course(
     /**
      * 创建一个新的对象的方法。
      */
-    constructor() : this(null, "", 0.0, "", ArrayList<Long>())
+    constructor(tableId: Long) : this(null, "", 0.0, "", ArrayList<Long>(), tableId)
 }

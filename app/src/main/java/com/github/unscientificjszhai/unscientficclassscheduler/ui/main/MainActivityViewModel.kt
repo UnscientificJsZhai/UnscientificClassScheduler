@@ -4,13 +4,13 @@ import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.CourseWithClassTimes
 import com.github.unscientificjszhai.unscientficclassscheduler.data.dao.CourseDao
 import com.github.unscientificjszhai.unscientficclassscheduler.features.calendar.EventsOperator
+import com.github.unscientificjszhai.unscientficclassscheduler.ui.main.fragments.CourseListFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import com.github.unscientificjszhai.unscientficclassscheduler.ui.main.fragments.CourseListFragment
 
 /**
  * MainActivity的ViewModel。也用于[CourseListFragment]。
@@ -37,7 +37,7 @@ internal class MainActivityViewModel(var courseList: LiveData<List<CourseWithCla
             courseWithClassTimes: CourseWithClassTimes,
             useCalendar: Boolean
         ) {
-            val application = (context.application) as TimeManagerApplication
+            val application = (context.application) as SchedulerApplication
             withContext(Dispatchers.IO) {
                 // 从日历中删除。
                 if (useCalendar) {
@@ -69,7 +69,7 @@ internal class MainActivityViewModel(var courseList: LiveData<List<CourseWithCla
             courseWithClassTimes: CourseWithClassTimes,
             useCalendar: Boolean
         ) {
-            val application = (context.application) as TimeManagerApplication
+            val application = (context.application) as SchedulerApplication
             val courseTable by application
             withContext(Dispatchers.IO) {
                 if (useCalendar) {
@@ -104,12 +104,12 @@ internal class MainActivityViewModel(var courseList: LiveData<List<CourseWithCla
      *
      * @param dao 一个Dao对象，用于初始化ViewModel时传入LiveData的参数
      */
-    class Factory(private val dao: CourseDao) :
+    class Factory(private val dao: CourseDao, private val application: SchedulerApplication) :
         ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return MainActivityViewModel(dao.getLiveCourses()) as T
+            return MainActivityViewModel(dao.getLiveCourses(application.nowTableID)) as T
         }
     }
 

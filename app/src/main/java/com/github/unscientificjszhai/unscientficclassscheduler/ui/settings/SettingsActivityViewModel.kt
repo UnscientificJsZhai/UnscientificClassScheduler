@@ -3,7 +3,7 @@ package com.github.unscientificjszhai.unscientficclassscheduler.ui.settings
 import android.app.Activity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.features.calendar.CalendarOperator
 import com.github.unscientificjszhai.unscientficclassscheduler.features.calendar.EventsOperator
 import kotlinx.coroutines.Dispatchers
@@ -41,12 +41,13 @@ internal class SettingsActivityViewModel(private val dataStore: SettingsDataStor
             CalendarOperator.deleteCalendarTable(context, courseTable)
             CalendarOperator.createCalendarTable(context, courseTable)
             val application =
-                context.applicationContext as TimeManagerApplication
+                context.applicationContext as SchedulerApplication
+
             val tableDao =
-                application.getCourseTableDatabase().courseTableDao()
+                application.getCourseDatabase().courseTableDao()
             tableDao.updateCourseTable(courseTable)
             val courseDao = application.getCourseDatabase().courseDao()
-            courseDao.getCourses().run {
+            courseDao.getCourses(application.nowTableID).run {
                 for (courseWithClassTimes in this) {
                     EventsOperator.addEvent(
                         context,

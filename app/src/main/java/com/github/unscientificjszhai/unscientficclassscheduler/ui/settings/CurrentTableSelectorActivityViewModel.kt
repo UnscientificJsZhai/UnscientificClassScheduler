@@ -4,7 +4,7 @@ import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.github.unscientificjszhai.unscientficclassscheduler.TimeManagerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.dao.CourseTableDao
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientficclassscheduler.features.calendar.CalendarOperator
@@ -41,13 +41,13 @@ internal class CurrentTableSelectorActivityViewModel(val tableList: LiveData<Lis
      * @param courseTable 要添加的课程表对象。
      */
     suspend fun addCourseTable(context: Activity, courseTable: CourseTable) {
-        val timeManagerApplication = context.application as TimeManagerApplication
+        val timeManagerApplication = context.application as SchedulerApplication
 
         withContext(Dispatchers.IO) {
             CalendarOperator.createCalendarTable(context, courseTable)
 
             val dao =
-                timeManagerApplication.getCourseTableDatabase().courseTableDao()
+                timeManagerApplication.getCourseDatabase().courseTableDao()
             val id = dao.insertCourseTable(courseTable)
             timeManagerApplication.updateTableID(id)
         }
@@ -60,26 +60,26 @@ internal class CurrentTableSelectorActivityViewModel(val tableList: LiveData<Lis
      * @param courseTable 要重命名的课程表对象。
      */
     suspend fun renameCourseTable(context: Activity, courseTable: CourseTable) {
-        val timeManagerApplication = context.application as TimeManagerApplication
+        val timeManagerApplication = context.application as SchedulerApplication
 
         withContext(Dispatchers.IO) {
             CalendarOperator.updateCalendarTable(context, courseTable)
 
             val dao =
-                timeManagerApplication.getCourseTableDatabase()
+                timeManagerApplication.getCourseDatabase()
                     .courseTableDao()
             dao.updateCourseTable(courseTable)
         }
     }
 
     suspend fun deleteCourseTable(context: Activity, courseTable: CourseTable) {
-        val timeManagerApplication = context.application as TimeManagerApplication
+        val timeManagerApplication = context.application as SchedulerApplication
 
         withContext(Dispatchers.IO) {
             CalendarOperator.deleteCalendarTable(context, courseTable)
 
             val dao =
-                timeManagerApplication.getCourseTableDatabase()
+                timeManagerApplication.getCourseDatabase()
                     .courseTableDao()
             dao.deleteCourseTable(courseTable)
             context.deleteDatabase("table${courseTable.id}.db")

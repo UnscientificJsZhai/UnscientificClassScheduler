@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.github.unscientificjszhai.unscientficclassscheduler">
+    package="com.github.unscientificjszhai.unscientificclassscheduler">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".SchedulerApplication"
+        android:name="com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplication"
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
@@ -23,7 +23,7 @@
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup">
         <activity
-            android:name=".ui.WelcomeActivity"
+            android:name="com.github.unscientificjszhai.unscientificclassscheduler.ui.WelcomeActivity"
             android:exported="true"
             tools:ignore="IntentFilterExportedReceiver">
             <intent-filter>
@@ -33,46 +33,46 @@
             </intent-filter>
         </activity> <!-- main包 -->
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name="com.github.unscientificjszhai.unscientificclassscheduler.ui.main.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.main.CourseDetailActivity"
+            android:name="com.github.unscientificjszhai.unscientificclassscheduler.ui.main.CourseDetailActivity"
             android:label="@string/activity_CourseDetail_Label"
-            android:parentActivityName=".ui.main.MainActivity"
+            android:parentActivityName="com.github.unscientificjszhai.unscientificclassscheduler.ui.main.MainActivity"
             android:theme="@style/Theme.TimeManager.CourseDetail"/> <!-- editor包 -->
         <activity
-            android:name=".ui.editor.EditCourseActivity"
+            android:name="com.github.unscientificjszhai.unscientificclassscheduler.ui.editor.EditCourseActivity"
             android:exported="false"
             android:label="@string/activity_EditCourse_Label"
-            android:parentActivityName=".ui.main.MainActivity" /> <!-- settings包 -->
+            android:parentActivityName="com.github.unscientificjszhai.unscientificclassscheduler.ui.main.MainActivity" /> <!-- settings包 -->
         <activity
-            android:name=".ui.settings.SettingsActivity"
+            android:name="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.SettingsActivity"
             android:exported="true"
             android:label="@string/common_settings"
-            android:parentActivityName=".ui.main.MainActivity" />
+            android:parentActivityName="com.github.unscientificjszhai.unscientificclassscheduler.ui.main.MainActivity" />
         <activity
-            android:name=".ui.settings.CurrentTableSelectorActivity"
+            android:name="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.CurrentTableSelectorActivity"
             android:exported="false"
             android:label="@string/activity_Settings_CurrentCourseListTable"
-            android:parentActivityName=".ui.settings.SettingsActivity" />
+            android:parentActivityName="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.SettingsActivity" />
         <activity
-            android:name=".ui.settings.TimeTableEditorActivity"
+            android:name="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.TimeTableEditorActivity"
             android:exported="false"
             android:label="@string/preferences_CurrentTable_TimeTable"
-            android:parentActivityName=".ui.settings.SettingsActivity" />
+            android:parentActivityName="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.SettingsActivity" />
         <activity
-            android:name=".ui.settings.InfoActivity"
+            android:name="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.InfoActivity"
             android:exported="false"
             android:label="@string/activity_Settings_Info"
-            android:parentActivityName=".ui.settings.SettingsActivity" /> <!-- parse包 -->
+            android:parentActivityName="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.SettingsActivity" /> <!-- parse包 -->
         <activity
-            android:name=".ui.parse.ParseCourseActivity"
+            android:name="com.github.unscientificjszhai.unscientificclassscheduler.ui.parse.ParseCourseActivity"
             android:exported="false"
             android:label="@string/activity_ParseCourseActivity_Label"
-            android:parentActivityName=".ui.settings.SettingsActivity" />
+            android:parentActivityName="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.SettingsActivity" />
 
         <service
-            android:name=".features.calendar.AuthenticatorService"
+            android:name="com.github.unscientificjszhai.unscientificclassscheduler.features.calendar.AuthenticatorService"
             android:exported="true"
             tools:ignore="ExportedService,IntentFilterExportedReceiver">
             <intent-filter>

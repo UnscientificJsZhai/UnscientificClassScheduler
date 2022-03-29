@@ -16,5 +16,5 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
     }
 }
-rootProject.name = "UnscientficClassScheduler"
+rootProject.name = "UnscientificClassScheduler"
 include ':app'

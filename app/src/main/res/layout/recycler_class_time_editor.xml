@@ -125,7 +125,7 @@
             app:layout_constraintStart_toEndOf="@+id/DayImage"
             app:layout_constraintTop_toTopOf="@+id/DayImage" />
 
-        <cn.unscientificjszhai.timemanager.ui.others.ContentDescriptionEditText
+        <com.github.unscientificjszhai.unscientificclassscheduler.ui.others.ContentDescriptionEditText
             android:id="@+id/ClassTimeEditView_FromEditText"
             android:layout_width="36dp"
             android:layout_height="wrap_content"
@@ -147,7 +147,7 @@
             app:layout_constraintStart_toEndOf="@+id/ClassTimeEditView_FromEditText"
             app:layout_constraintTop_toTopOf="@+id/DayImage" />
 
-        <cn.unscientificjszhai.timemanager.ui.others.ContentDescriptionEditText
+        <com.github.unscientificjszhai.unscientificclassscheduler.ui.others.ContentDescriptionEditText
             android:id="@+id/ClassTimeEditView_ToEditText"
             android:layout_width="36dp"
             android:layout_height="wrap_content"

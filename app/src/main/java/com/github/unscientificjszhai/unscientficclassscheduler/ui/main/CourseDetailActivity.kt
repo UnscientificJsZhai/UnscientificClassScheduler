@@ -24,7 +24,9 @@ import com.github.unscientificjszhai.unscientficclassscheduler.util.getWeekDescr
 import com.github.unscientificjszhai.unscientficclassscheduler.util.jumpToSystemPermissionSettings
 import com.github.unscientificjszhai.unscientficclassscheduler.util.runIfPermissionGranted
 import com.github.unscientificjszhai.unscientficclassscheduler.util.setSystemUIAppearance
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Dialog形式的Activity。用于在[MainActivity]中点击一个项目的时候显示它的详情。
@@ -34,6 +36,7 @@ import kotlinx.coroutines.launch
  * @see Course
  * @author UnscientificJsZhai
  */
+@AndroidEntryPoint
 class CourseDetailActivity : AppCompatActivity() {
 
     companion object {
@@ -69,9 +72,14 @@ class CourseDetailActivity : AppCompatActivity() {
         const val EDIT_REQUEST_CODE = 4
     }
 
-    private lateinit var schedulerApplication: SchedulerApplication
+    @Inject
+    lateinit var schedulerApplication: SchedulerApplication
 
-    private lateinit var courseDao: CourseDao
+    @Inject
+    lateinit var courseDao: CourseDao
+
+    @Inject
+    lateinit var courseDeleter: CourseDeleter
 
     private lateinit var viewModel: CourseDetailActivityViewModel
 
@@ -88,9 +96,6 @@ class CourseDetailActivity : AppCompatActivity() {
 
         setSystemUIAppearance(this)
 
-        this.schedulerApplication = application as SchedulerApplication
-        this.courseDao = this.schedulerApplication.getCourseDatabase().courseDao()
-
         this.descriptionTextView = findViewById(R.id.CourseDetailActivity_DescriptionText)
         this.timeDescriptionTextView = findViewById(R.id.CourseDetailActivity_TimeDescriptionText)
         this.remarkTextView = findViewById(R.id.CourseDetailActivity_RemarkText)
@@ -105,11 +110,8 @@ class CourseDetailActivity : AppCompatActivity() {
             return
         }
 
+        this.viewModel = ViewModelProvider(this)[CourseDetailActivityViewModel::class.java]
 
-        this.viewModel = ViewModelProvider(
-            this,
-            CourseDetailActivityViewModel.Factory(courseWithClassTimesLiveData)
-        )[CourseDetailActivityViewModel::class.java]
 
         // 监听数据变更
         val courseTable by schedulerApplication
@@ -178,8 +180,7 @@ class CourseDetailActivity : AppCompatActivity() {
                         if (courseWithClassTimes != null) {
                             delete = true
                             viewModel.viewModelScope.launch {
-                                MainActivityViewModel.deleteCourse(
-                                    this@CourseDetailActivity,
+                                deleteCourse(
                                     courseWithClassTimes,
                                     schedulerApplication.useCalendar
                                 )
@@ -312,6 +313,19 @@ class CourseDetailActivity : AppCompatActivity() {
         }
 
         return stringBuilder.toString()
+    }
+
+    /**
+     * MainActivity和CourseDetailActivity操作删除课程。
+     *
+     * @param courseWithClassTimes 要删除的课程对象。
+     * @param useCalendar 是否使用日历功能。
+     */
+    private suspend fun deleteCourse(
+        courseWithClassTimes: CourseWithClassTimes,
+        useCalendar: Boolean
+    ) {
+        courseDeleter.deleteCourse(this, courseWithClassTimes, useCalendar)
     }
 
     /**

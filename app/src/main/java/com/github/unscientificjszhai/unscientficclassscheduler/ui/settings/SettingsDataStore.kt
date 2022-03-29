@@ -17,11 +17,12 @@ import kotlin.reflect.KProperty
  * @param context 上下文，用于更新日历。
  * @author UnscientificJsZhai
  */
-internal class SettingsDataStore(
+class SettingsDataStore(
     var nowCourseTable: CourseTable,
     private val courseTableDao: CourseTableDao,
     private val context: Context,
-    val notifyApplicationCourseTableChanged: (Long) -> Unit
+    private val eventsOperator: EventsOperator,
+    private val notifyApplicationCourseTableChanged: ((Long) -> Unit)?
 ) : PreferenceDataStore() {
 
     /**
@@ -123,10 +124,10 @@ internal class SettingsDataStore(
     internal fun updateCourseTable() {
         thread(start = true) {
             courseTableDao.updateCourseTable(this.nowCourseTable)
-            notifyApplicationCourseTableChanged(nowCourseTable.id!!)
+            notifyApplicationCourseTableChanged?.invoke(nowCourseTable.id!!)
 
             //向日历插入数据
-            EventsOperator.updateAllEvents(context, this.nowCourseTable)
+            eventsOperator.updateAllEvents(context, this.nowCourseTable)
         }
     }
 }

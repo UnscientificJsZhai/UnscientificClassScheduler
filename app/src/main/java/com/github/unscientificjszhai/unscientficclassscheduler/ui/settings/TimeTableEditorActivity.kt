@@ -15,6 +15,7 @@ import com.github.unscientificjszhai.unscientficclassscheduler.R
 import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.FormattedTime
 import com.github.unscientificjszhai.unscientficclassscheduler.util.setSystemUIAppearance
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
  *
  * @author UnscientificJsZhai
  */
+@AndroidEntryPoint
 class TimeTableEditorActivity : AppCompatActivity() {
 
     private lateinit var schedulerApplication: SchedulerApplication

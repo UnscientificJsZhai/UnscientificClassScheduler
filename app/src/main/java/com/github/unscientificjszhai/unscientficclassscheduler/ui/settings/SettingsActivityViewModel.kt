@@ -2,12 +2,14 @@ package com.github.unscientificjszhai.unscientficclassscheduler.ui.settings
 
 import android.app.Activity
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.features.backup.BackupOperator
 import com.github.unscientificjszhai.unscientficclassscheduler.features.calendar.CalendarOperator
 import com.github.unscientificjszhai.unscientficclassscheduler.features.calendar.EventsOperator
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 import kotlin.reflect.KProperty
 
 /**
@@ -16,16 +18,13 @@ import kotlin.reflect.KProperty
  * @see SettingsActivity
  * @author UnscientificJsZhai
  */
-internal class SettingsActivityViewModel(private val dataStore: SettingsDataStore) : ViewModel(),
-    SettingsDataStore.Getter {
-
-    class Factory(private val dataStore: SettingsDataStore) : ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return SettingsActivityViewModel(dataStore) as T
-        }
-    }
+@HiltViewModel
+internal class SettingsActivityViewModel @Inject constructor(
+    private val dataStore: SettingsDataStore,
+    val backupOperator: BackupOperator,
+    private val calendarOperator: CalendarOperator,
+    private val eventsOperator: EventsOperator
+) : ViewModel(), SettingsDataStore.Getter {
 
     override fun getValue(thisRef: Any?, property: KProperty<*>) = this.dataStore
 
@@ -38,8 +37,8 @@ internal class SettingsActivityViewModel(private val dataStore: SettingsDataStor
         // 删除全部日历并重新创建。
         withContext(Dispatchers.Default) {
             val courseTable = dataStore.nowCourseTable
-            CalendarOperator.deleteCalendarTable(context, courseTable)
-            CalendarOperator.createCalendarTable(context, courseTable)
+            calendarOperator.deleteCalendarTable(context, courseTable)
+            calendarOperator.createCalendarTable(context, courseTable)
             val application =
                 context.applicationContext as SchedulerApplication
 
@@ -49,7 +48,7 @@ internal class SettingsActivityViewModel(private val dataStore: SettingsDataStor
             val courseDao = application.getCourseDatabase().courseDao()
             courseDao.getCourses(application.nowTableID).run {
                 for (courseWithClassTimes in this) {
-                    EventsOperator.addEvent(
+                    eventsOperator.addEvent(
                         context,
                         courseTable,
                         courseWithClassTimes
@@ -63,7 +62,7 @@ internal class SettingsActivityViewModel(private val dataStore: SettingsDataStor
     suspend fun setCalendarColor(context: Activity, value: String) {
         val color = value.toInt()
         withContext(Dispatchers.Default) {
-            CalendarOperator.updateCalendarColor(context, color)
+            calendarOperator.updateCalendarColor(context, color)
         }
     }
 
@@ -76,7 +75,7 @@ internal class SettingsActivityViewModel(private val dataStore: SettingsDataStor
      */
     suspend fun clearCalendar(context: Activity) {
         withContext(Dispatchers.Default) {
-            CalendarOperator.deleteAllTables(context)
+            calendarOperator.deleteAllTables(context)
         }
     }
 }

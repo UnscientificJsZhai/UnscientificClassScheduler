@@ -3,13 +3,14 @@ package com.github.unscientificjszhai.unscientficclassscheduler.ui.settings
 import android.app.Activity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientficclassscheduler.data.dao.CourseTableDao
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientficclassscheduler.features.calendar.CalendarOperator
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 /**
  * CurrentTableSelectorActivity的ViewModel
@@ -17,22 +18,13 @@ import kotlinx.coroutines.withContext
  * @see CurrentTableSelectorActivity
  * @author UnscientificJsZhai
  */
-internal class CurrentTableSelectorActivityViewModel(val tableList: LiveData<List<CourseTable>>) :
-    ViewModel() {
+@HiltViewModel
+internal class CurrentTableSelectorActivityViewModel @Inject constructor(
+    dao: CourseTableDao,
+    private val calendarOperator: CalendarOperator
+) : ViewModel() {
 
-    /**
-     * 创建CurrentTableSelectorActivity的ViewModel的Factory。
-     *
-     * @param dao 一个Dao对象，用于初始化ViewModel时传入LiveData的参数
-     */
-    class Factory(private val dao: CourseTableDao) :
-        ViewModelProvider.Factory {
-
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return CurrentTableSelectorActivityViewModel(dao.getLiveCourseTables()) as T
-        }
-    }
+    val tableList: LiveData<List<CourseTable>> = dao.getLiveCourseTables()
 
     /**
      * 向数据库中添加课程表。
@@ -44,7 +36,7 @@ internal class CurrentTableSelectorActivityViewModel(val tableList: LiveData<Lis
         val timeManagerApplication = context.application as SchedulerApplication
 
         withContext(Dispatchers.IO) {
-            CalendarOperator.createCalendarTable(context, courseTable)
+            calendarOperator.createCalendarTable(context, courseTable)
 
             val dao =
                 timeManagerApplication.getCourseDatabase().courseTableDao()
@@ -63,7 +55,7 @@ internal class CurrentTableSelectorActivityViewModel(val tableList: LiveData<Lis
         val timeManagerApplication = context.application as SchedulerApplication
 
         withContext(Dispatchers.IO) {
-            CalendarOperator.updateCalendarTable(context, courseTable)
+            calendarOperator.updateCalendarTable(context, courseTable)
 
             val dao =
                 timeManagerApplication.getCourseDatabase()
@@ -76,7 +68,7 @@ internal class CurrentTableSelectorActivityViewModel(val tableList: LiveData<Lis
         val timeManagerApplication = context.application as SchedulerApplication
 
         withContext(Dispatchers.IO) {
-            CalendarOperator.deleteCalendarTable(context, courseTable)
+            calendarOperator.deleteCalendarTable(context, courseTable)
 
             val dao =
                 timeManagerApplication.getCourseDatabase()

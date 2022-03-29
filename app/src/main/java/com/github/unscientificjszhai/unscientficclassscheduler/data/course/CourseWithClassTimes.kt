@@ -27,6 +27,7 @@ data class CourseWithClassTimes(
         /**
          * 从Json中解析出一个课程组合对象。
          *
+         * @param jsonString JSON字符串。
          * @return 生成的CourseWithClassTimes对象。
          * @exception JSONException 当Json解析出错时抛出此错误。
          */
@@ -34,7 +35,8 @@ data class CourseWithClassTimes(
         @Throws(JSONException::class)
         fun parseJson(jsonString: String): CourseWithClassTimes {
             val jsonObject = JSONObject(jsonString)
-            val course = Course.parseJson(jsonObject.getString("course"))
+            // 暂时使用0替代表ID。
+            val course = Course.parseJson(jsonObject.getString("course"), 0)
             val classTimes = ArrayList<ClassTime>()
             val jsonArrayOfClassTime = JSONArray(jsonObject.getString("classTimes"))
             for (index in 0 until jsonArrayOfClassTime.length()) {

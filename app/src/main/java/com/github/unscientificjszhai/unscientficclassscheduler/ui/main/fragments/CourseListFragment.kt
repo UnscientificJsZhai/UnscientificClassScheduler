@@ -180,7 +180,7 @@ class CourseListFragment : Fragment() {
                                 }) {
                                 if (courseWithClassTimes != null) {
                                     viewModel.viewModelScope.launch {
-                                        MainActivityViewModel.deleteCourse(
+                                        viewModel.deleteCourse(
                                             requireActivity(),
                                             courseWithClassTimes,
                                             schedulerApplication.useCalendar
@@ -192,7 +192,7 @@ class CourseListFragment : Fragment() {
                                         )
                                         snackBar.setAction(R.string.common_undo) {
                                             viewModel.viewModelScope.launch {
-                                                MainActivityViewModel.undoDeleteCourse(
+                                                viewModel.undoDeleteCourse(
                                                     requireActivity(),
                                                     courseWithClassTimes,
                                                     schedulerApplication.useCalendar

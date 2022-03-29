@@ -11,6 +11,8 @@ import androidx.preference.PreferenceManager
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.settings.SettingsFragment
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * 日历操作工具对象。所有对日历的操作（表的层面上）都在这里完成。日历将被写入系统日历提供程序中，并和此应用的账户关联。
@@ -20,7 +22,8 @@ import java.util.*
  * @see EventsOperator
  * @author UnscientificJsZhai
  */
-object CalendarOperator {
+@Singleton
+class CalendarOperator @Inject constructor() {
 
     /**
      * 为目标课程表创建一个日历表。同时会给CourseTable的成员变量赋值，但不会保存到数据库。
@@ -29,7 +32,7 @@ object CalendarOperator {
      *
      * @param context 插入操作的上下文。
      * @param courseTable 要创建日历表的CourseTable
-     * @return 插入后的ID,插入失败则返回空。
+     * @return 插入后的ID，插入失败则返回空。
      */
     @WorkerThread
     fun createCalendarTable(context: Context, courseTable: CourseTable): Long? {

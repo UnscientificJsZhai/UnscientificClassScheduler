@@ -15,6 +15,7 @@ import com.github.unscientificjszhai.unscientficclassscheduler.data.course.Cours
 import com.github.unscientificjszhai.unscientficclassscheduler.features.parse.ParserTypeConverter
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.others.ProgressDialog
 import com.github.unscientificjszhai.unscientificcourseparser.core.export.CoursesJson.Companion.json
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import com.github.unscientificjszhai.unscientificcourseparser.core.data.Course as SourceCourse
 
@@ -23,6 +24,7 @@ import com.github.unscientificjszhai.unscientificcourseparser.core.data.Course a
  *
  * @author UnscientificJsZhai
  */
+@AndroidEntryPoint
 class CourseListFragment : Fragment() {
 
     /**

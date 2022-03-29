@@ -11,8 +11,10 @@ import com.github.unscientificjszhai.unscientficclassscheduler.data.course.Cours
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.CourseWithClassTimes
 import com.github.unscientificjszhai.unscientficclassscheduler.features.calendar.EventsOperator
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.main.CourseDetailActivity
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 /**
  * EditCourseActivity的ViewModel。
@@ -20,7 +22,10 @@ import kotlinx.coroutines.withContext
  * @see EditCourseActivity
  * @author UnscientificJsZhai
  */
-internal class EditCourseActivityViewModel : ViewModel() {
+@HiltViewModel
+internal class EditCourseActivityViewModel @Inject constructor(
+    private val eventsOperator: EventsOperator
+) : ViewModel() {
 
     /**
      * 如果是修改已有Course的话，则不为空。
@@ -105,7 +110,7 @@ internal class EditCourseActivityViewModel : ViewModel() {
                                 course,
                                 this@EditCourseActivityViewModel.classTimes
                             )
-                        EventsOperator.addEvent(context, courseTable, courseWithClassTimes)
+                        eventsOperator.addEvent(context, courseTable, courseWithClassTimes)
 
                         // 正式开始插入
                         try {
@@ -116,7 +121,7 @@ internal class EditCourseActivityViewModel : ViewModel() {
                             }
                         } catch (e: Exception) {
                             Log.e("EditCourseActivity", "saveData: Can not access Room database")
-                            EventsOperator.deleteEvent(context, courseTable, courseWithClassTimes)
+                            eventsOperator.deleteEvent(context, courseTable, courseWithClassTimes)
                         }
                     }
 
@@ -152,7 +157,7 @@ internal class EditCourseActivityViewModel : ViewModel() {
                                 course,
                                 this@EditCourseActivityViewModel.classTimes
                             )
-                        EventsOperator.updateEvent(context, courseTable, courseWithClassTimes)
+                        eventsOperator.updateEvent(context, courseTable, courseWithClassTimes)
                     }
 
                     //写入数据库的Course表

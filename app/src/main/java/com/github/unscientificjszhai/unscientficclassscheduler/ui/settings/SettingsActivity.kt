@@ -13,11 +13,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.github.unscientificjszhai.unscientficclassscheduler.R
 import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
-import com.github.unscientificjszhai.unscientficclassscheduler.features.backup.BackupOperator
 import com.github.unscientificjszhai.unscientficclassscheduler.features.backup.CourseICS
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.main.MainActivity
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.others.CalendarOperatorActivity
 import com.github.unscientificjszhai.unscientficclassscheduler.util.setSystemUIAppearance
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,6 +28,7 @@ import kotlinx.coroutines.withContext
  * @see SettingsFragment
  * @author UnscientificJsZhai
  */
+@AndroidEntryPoint
 class SettingsActivity : CalendarOperatorActivity() {
 
     private lateinit var schedulerApplication: SchedulerApplication
@@ -63,16 +64,7 @@ class SettingsActivity : CalendarOperatorActivity() {
         this.schedulerApplication = application as SchedulerApplication
         val courseTable by schedulerApplication
 
-        val dataStore = SettingsDataStore(
-            courseTable,
-            schedulerApplication.getCourseDatabase().courseTableDao(),
-            this,
-            schedulerApplication::updateTableID
-        )
-        this.viewModel = ViewModelProvider(
-            this,
-            SettingsActivityViewModel.Factory(dataStore)
-        )[SettingsActivityViewModel::class.java]
+        this.viewModel = ViewModelProvider(this)[SettingsActivityViewModel::class.java]
 
         // 替换Fragment
 
@@ -94,7 +86,7 @@ class SettingsActivity : CalendarOperatorActivity() {
                 if (it.resultCode == RESULT_OK) {
                     val uri = it.data?.data
                     if (uri != null) {
-                        BackupOperator.exportBackup(this, uri)
+                        viewModel.backupOperator.exportBackup(this, uri)
                     }
                 }
             }
@@ -105,7 +97,7 @@ class SettingsActivity : CalendarOperatorActivity() {
                 if (it.resultCode == RESULT_OK) {
                     val uri = it.data?.data
                     if (uri != null) {
-                        BackupOperator.importBackup(this, uri)
+                        viewModel.backupOperator.importBackup(this, uri)
                     }
                 }
             }
@@ -163,7 +155,7 @@ class SettingsActivity : CalendarOperatorActivity() {
      */
     internal fun saveBackup(): Boolean {
         val courseTable by schedulerApplication
-        backupLauncher.launch(BackupOperator.getExportBackupIntent(courseTable))
+        backupLauncher.launch(viewModel.backupOperator.getExportBackupIntent(courseTable))
         return true
     }
 
@@ -173,7 +165,7 @@ class SettingsActivity : CalendarOperatorActivity() {
      * @return 给onPreferenceClick做返回值的true。
      */
     internal fun importBackup(): Boolean {
-        importLauncher.launch(BackupOperator.getImportBackupIntent())
+        importLauncher.launch(viewModel.backupOperator.getImportBackupIntent())
         return true
     }
 

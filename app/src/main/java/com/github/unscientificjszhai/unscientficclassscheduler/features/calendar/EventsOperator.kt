@@ -14,6 +14,8 @@ import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.Cours
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.FormattedTime
 import java.lang.ref.WeakReference
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * 事件操作工具对象。对所有事件的操作都在这里完成。
@@ -21,9 +23,13 @@ import java.util.*
  * @see CalendarOperator
  * @author UnscientificJsZhai
  */
-object EventsOperator {
+@Singleton
+class EventsOperator @Inject constructor() {
 
-    private const val TAG = "EventOperator"
+    companion object {
+
+        private const val TAG = "EventOperator"
+    }
 
     /**
      * 按连续上课周分割好的上课时间。会把每个ClassTime对象从每个上课周数的断点处分割开，保存成不同的对象。

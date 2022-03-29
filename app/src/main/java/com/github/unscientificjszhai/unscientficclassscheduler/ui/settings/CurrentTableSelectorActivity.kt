@@ -23,6 +23,7 @@ import com.github.unscientificjszhai.unscientficclassscheduler.ui.others.Recycle
 import com.github.unscientificjszhai.unscientficclassscheduler.util.runIfPermissionGranted
 import com.github.unscientificjszhai.unscientficclassscheduler.util.setSystemUIAppearance
 import com.google.android.material.textfield.TextInputEditText
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
@@ -30,6 +31,7 @@ import kotlinx.coroutines.launch
  *
  * @author UnscientificJsZhai
  */
+@AndroidEntryPoint
 class CurrentTableSelectorActivity : CalendarOperatorActivity() {
 
     private lateinit var schedulerApplication: SchedulerApplication
@@ -46,12 +48,7 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
         this.schedulerApplication = application as SchedulerApplication
 
         this.viewModel =
-            ViewModelProvider(
-                this,
-                CurrentTableSelectorActivityViewModel.Factory(
-                    schedulerApplication.getCourseDatabase().courseTableDao()
-                )
-            )[CurrentTableSelectorActivityViewModel::class.java]
+            ViewModelProvider(this)[CurrentTableSelectorActivityViewModel::class.java]
 
         this.recyclerView = findViewById(R.id.SettingsActivity_RecyclerView)
         registerForContextMenu(recyclerView)

@@ -26,7 +26,8 @@ import java.lang.ref.WeakReference
         parentColumns = ["id"],
         childColumns = ["table_id"],
         onDelete = ForeignKey.CASCADE
-    )]
+    )],
+    indices = [Index(value = ["table_id"])]
 )
 @TypeConverters(CourseEventsConverter::class)
 data class Course(

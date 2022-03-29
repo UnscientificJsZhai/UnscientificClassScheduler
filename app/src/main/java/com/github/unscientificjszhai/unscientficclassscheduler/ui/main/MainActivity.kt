@@ -18,6 +18,7 @@ import com.github.unscientificjszhai.unscientficclassscheduler.ui.WelcomeActivit
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.main.fragments.CourseListFragment
 import com.github.unscientificjszhai.unscientficclassscheduler.util.setSystemUIAppearance
 import com.github.unscientificjszhai.unscientficclassscheduler.util.startActivity
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import kotlin.reflect.KProperty
 
@@ -28,6 +29,7 @@ import kotlin.reflect.KProperty
  * @see MainActivityViewModel
  * @author UnscientificJsZhai
  */
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
     companion object {
@@ -147,12 +149,8 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
         // 设置SystemUI颜色
         setSystemUIAppearance(this)
 
-        val courseDatabase = schedulerApplication.getCourseDatabase()
         this.viewModel =
-            ViewModelProvider(
-                this,
-                MainActivityViewModel.Factory(courseDatabase.courseDao(), schedulerApplication)
-            )[MainActivityViewModel::class.java]
+            ViewModelProvider(this)[MainActivityViewModel::class.java]
 
         this.rootView = findViewById(R.id.SingleFragmentActivity_RootView)
 

@@ -25,6 +25,8 @@ import com.github.unscientificjszhai.unscientficclassscheduler.util.jumpToSystem
 import com.github.unscientificjszhai.unscientficclassscheduler.util.runIfPermissionGranted
 import com.github.unscientificjszhai.unscientficclassscheduler.util.setSystemUIAppearance
 import com.github.unscientificjszhai.unscientficclassscheduler.util.startActivity
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.concurrent.thread
 
 /**
@@ -32,6 +34,7 @@ import kotlin.concurrent.thread
  *
  * @author UnscientificJsZhai
  */
+@AndroidEntryPoint
 class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
 
     private lateinit var schedulerApplication: SchedulerApplication
@@ -43,6 +46,12 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
 
     private lateinit var importBackupLauncher: ActivityResultLauncher<Intent>
     private lateinit var permissionRequestLauncher: ActivityResultLauncher<String>
+
+    @Inject
+    lateinit var backupOperator: BackupOperator
+
+    @Inject
+    lateinit var calendarOperator: CalendarOperator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,9 +91,9 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                 val uri = it.data?.data
                 if (uri != null) {
-                    BackupOperator.importBackup(this, uri) { tableID, calendarID ->
+                    backupOperator.importBackup(this, uri) { tableID, calendarID ->
                         schedulerApplication.updateTableID(tableID)
-                        CalendarOperator.deleteAllTables(this, calendarID)
+                        calendarOperator.deleteAllTables(this, calendarID)
                         runOnUiThread {
                             startActivity<MainActivity>(this)
                             finish()
@@ -137,7 +146,7 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
                                     Manifest.permission.WRITE_CALENDAR
                                 ) == PackageManager.PERMISSION_DENIED
                             ) {
-                                //申请日历权限
+                                // 申请日历权限
                                 permissionRequestLauncher.launch(Manifest.permission.WRITE_CALENDAR)
                             }
                             dialog.dismiss()
@@ -180,7 +189,7 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
                     Toast.LENGTH_SHORT
                 ).show()
             }) {
-                importBackupLauncher.launch(BackupOperator.getImportBackupIntent())
+                importBackupLauncher.launch(backupOperator.getImportBackupIntent())
             }
         }
         return super.onOptionsItemSelected(item)
@@ -197,11 +206,11 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
             val courseTable = CourseTable(tableName)
 
             if (schedulerApplication.useCalendar) {
-                CalendarOperator.deleteAllTables(this) // 检查并删除清除数据之前的遗留日历表。
-                // 写入日历。
-                CalendarOperator.createCalendarTable(this, courseTable)
+                calendarOperator.deleteAllTables(this) // 检查并删除清除数据之前的遗留日历表
+                // 写入日历
+                calendarOperator.createCalendarTable(this, courseTable)
             }
-            // 写入数据库。
+            // 写入数据库
             val dao = schedulerApplication.getCourseDatabase().courseTableDao()
             val id = dao.insertCourseTable(courseTable)
             schedulerApplication.updateTableID(id)

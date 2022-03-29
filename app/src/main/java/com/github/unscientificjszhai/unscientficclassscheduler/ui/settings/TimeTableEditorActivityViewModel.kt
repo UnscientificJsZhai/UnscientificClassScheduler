@@ -6,16 +6,22 @@ import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplicat
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.TimetableTypeConverter
 import com.github.unscientificjszhai.unscientficclassscheduler.features.calendar.EventsOperator
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 import kotlin.reflect.KProperty
 
 /**
  * 用于给[TimeTableEditorActivity]保存每节课间隔的ViewModel。
  *
+ * @see TimeTableEditorActivity
  * @author UnscientificJsZhai
  */
-internal class TimeTableEditorActivityViewModel : ViewModel() {
+@HiltViewModel
+internal class TimeTableEditorActivityViewModel @Inject constructor(
+    private val eventsOperator: EventsOperator
+) : ViewModel() {
 
     var duration = 0
 
@@ -44,7 +50,7 @@ internal class TimeTableEditorActivityViewModel : ViewModel() {
             timeManagerApplication.updateTableID(this@TimeTableEditorActivityViewModel.courseTable.id!!)
 
             if (useCalendar) {
-                EventsOperator.updateAllEvents(
+                eventsOperator.updateAllEvents(
                     context,
                     this@TimeTableEditorActivityViewModel.courseTable
                 )

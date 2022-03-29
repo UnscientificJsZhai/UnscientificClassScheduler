@@ -24,6 +24,7 @@ import com.github.unscientificjszhai.unscientficclassscheduler.ui.main.CourseDet
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.others.CalendarOperatorActivity
 import com.github.unscientificjszhai.unscientficclassscheduler.util.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
@@ -31,6 +32,7 @@ import kotlinx.coroutines.launch
  *
  * @author UnscientificJsZhai
  */
+@AndroidEntryPoint
 class EditCourseActivity : CalendarOperatorActivity() {
 
     companion object {

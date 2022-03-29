@@ -1,6 +1,7 @@
 package com.github.unscientificjszhai.unscientficclassscheduler.features.backup
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
@@ -10,14 +11,20 @@ import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AppCompatActivity
 import com.github.unscientificjszhai.unscientficclassscheduler.R
 import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplication
+import com.github.unscientificjszhai.unscientficclassscheduler.data.dao.ClassTimeDao
+import com.github.unscientificjszhai.unscientficclassscheduler.data.dao.CourseDao
+import com.github.unscientificjszhai.unscientficclassscheduler.data.dao.CourseTableDao
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientficclassscheduler.features.calendar.CalendarOperator
 import com.github.unscientificjszhai.unscientficclassscheduler.features.calendar.EventsOperator
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.others.ProgressDialog
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 import java.nio.charset.StandardCharsets
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.concurrent.thread
 
 /**
@@ -26,12 +33,25 @@ import kotlin.concurrent.thread
  *
  * @author UnscientificJsZhai
  */
-object BackupOperator {
+@Singleton
+class BackupOperator @Inject constructor(
+    @ApplicationContext private val applicationContext: Context,
+    private val courseTableDao: CourseTableDao,
+    private val courseDao: CourseDao,
+    private val classTimeDao: ClassTimeDao,
+    private val calendarOperator: CalendarOperator,
+    private val eventsOperator: EventsOperator
+) {
 
-    /**
-     * 日历Ics文件的MIME Type。
-     */
-    private const val MIME_TYPE = "application/octet-stream"
+    companion object {
+
+        /**
+         * 日历Ics文件的MIME Type。
+         */
+        private const val MIME_TYPE = "application/octet-stream"
+    }
+
+    private val application: SchedulerApplication get() = this.applicationContext as SchedulerApplication
 
     /**
      * 导出备份的具体实现。在处理过程中，会在窗口上显示一个Dialog。
@@ -45,16 +65,14 @@ object BackupOperator {
      */
     @UiThread
     fun exportBackup(context: Activity, uri: Uri) {
-        val schedulerApplication = (context.applicationContext) as SchedulerApplication
-        val courseTable by schedulerApplication
+        val courseTable by application
         val contentResolver = context.contentResolver
 
         val progressDialog = ProgressDialog(context)
         progressDialog.show()
         thread(start = true) {
             val objectString: String
-            val courseList = schedulerApplication.getCourseDatabase()
-                .courseDao().getCourses(schedulerApplication.nowTableID)
+            val courseList = courseDao.getCourses(application.nowTableID)
             val tableWithCourses = TableWithCourses(courseTable, courseList)
             try {
                 objectString = tableWithCourses.toJson().toString()
@@ -90,7 +108,6 @@ object BackupOperator {
         uri: Uri,
         @WorkerThread doOnImportThread: (tableID: Long, calendarID: Long?) -> Unit = { _, _ -> }
     ) {
-        val schedulerApplication = (context.applicationContext) as SchedulerApplication
         val contentResolver = context.contentResolver
 
         val progressDialog = ProgressDialog(context)
@@ -137,17 +154,12 @@ object BackupOperator {
             } else {
                 // 数据判定合法，开始导入过程
                 val newCourseTable = tableWithCourses.courseTable
-                val courseTableDao = schedulerApplication
-                    .getCourseDatabase()
-                    .courseTableDao()
-                CalendarOperator.createCalendarTable(context, newCourseTable)
+                calendarOperator.createCalendarTable(context, newCourseTable)
                 val tableID = courseTableDao.insertCourseTable(newCourseTable)
                 // 添加课程
-                val courseDao = schedulerApplication.getCourseDatabase().courseDao()
-                val classTimeDao = schedulerApplication.getCourseDatabase().classTimeDao()
                 for (courseWithClassTimes in tableWithCourses.courses) {
                     courseWithClassTimes.course.tableId = tableID
-                    EventsOperator.addEvent(context, newCourseTable, courseWithClassTimes)
+                    eventsOperator.addEvent(context, newCourseTable, courseWithClassTimes)
                     val courseId = courseDao.insertCourse(courseWithClassTimes.course)
                     for (classTime in courseWithClassTimes.classTimes) {
                         classTimeDao.insertClassTime(classTime.apply {

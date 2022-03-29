@@ -4,13 +4,14 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import androidx.preference.PreferenceManager
-import androidx.room.Room
 import com.github.unscientificjszhai.unscientficclassscheduler.data.dao.CourseTableDao
 import com.github.unscientificjszhai.unscientficclassscheduler.data.database.CourseDatabase
 import com.github.unscientificjszhai.unscientficclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.main.MainActivity
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.settings.SettingsActivity
 import com.github.unscientificjszhai.unscientficclassscheduler.ui.settings.SettingsFragment
+import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 import kotlin.concurrent.thread
 import kotlin.reflect.KProperty
 
@@ -20,6 +21,7 @@ import kotlin.reflect.KProperty
  * @see CourseTable
  * @author UnscientificJsZhai
  */
+@HiltAndroidApp
 class SchedulerApplication : Application(), CourseTable.Getter {
 
     companion object {
@@ -60,7 +62,9 @@ class SchedulerApplication : Application(), CourseTable.Getter {
     /**
      * Course数据库对象。
      */
-    private var courseDatabase: CourseDatabase? = null
+    @Inject
+    lateinit var courseDatabase: CourseDatabase
+        @JvmName("_getCourseDatabase") get
 
     override fun onCreate() {
         super.onCreate()
@@ -89,15 +93,7 @@ class SchedulerApplication : Application(), CourseTable.Getter {
      * @return Course的RoomDatabase对象，可以调用它的Dao方法进行数据操作。
      */
     fun getCourseDatabase(): CourseDatabase {
-        if (this.courseDatabase == null) {
-            // 初始化CourseDatabase
-            this.courseDatabase = Room.databaseBuilder(
-                this,
-                CourseDatabase::class.java,
-                "table.db"
-            ).build()
-        }
-        return this.courseDatabase!!
+        return this.courseDatabase
     }
 
     /**
@@ -114,16 +110,9 @@ class SchedulerApplication : Application(), CourseTable.Getter {
         editor.putLong(NOW_TABLE_SP_KEY, newID)
         editor.apply()
 
-        val oldID = this.nowTableID
         this.nowTableID = newID
         thread(start = true) {
             this.courseTable = getCourseDatabase().courseTableDao().getCourseTable(newID)
-
-            // 更新成员变量中的CourseDatabase对象的引用，实例化新的CourseDatabase对象
-            if (oldID != this.nowTableID) {
-                this.courseDatabase = null
-                this.getCourseDatabase()
-            }
 
             // 发送广播
             val broadcastIntent = Intent(MainActivity.COURSE_DATABASE_CHANGE_ACTION)

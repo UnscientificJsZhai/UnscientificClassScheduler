@@ -38,7 +38,7 @@ class ParserTypeConverter(private val coursesSource: List<SourceCourse>) :
     fun generateConvertedCourse(): List<CourseWithClassTimes> {
         val courseWithClassTimes = ArrayList<CourseWithClassTimes>()
         for (sourceCourse in this.coursesSource) {
-            val course = Course()
+            val course = Course(0)
             course.title = sourceCourse.title
             course.remarks = sourceCourse.remark
             course.credit = sourceCourse.credit

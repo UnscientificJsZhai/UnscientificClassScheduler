@@ -5,8 +5,10 @@ import com.github.unscientificjszhai.unscientficclassscheduler.SchedulerApplicat
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.Course
 import com.github.unscientificjszhai.unscientficclassscheduler.data.course.CourseWithClassTimes
 import com.github.unscientificjszhai.unscientficclassscheduler.features.calendar.EventsOperator
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 /**
  * 用于CourseListFragment的ViewModel。
@@ -14,7 +16,10 @@ import kotlinx.coroutines.withContext
  * @see CourseListFragment
  * @author UnscientificJsZhai
  */
-internal class CourseListFragmentViewModel : ViewModel() {
+@HiltViewModel
+internal class CourseListFragmentViewModel @Inject constructor(
+    private val eventsOperator: EventsOperator
+) : ViewModel() {
 
     lateinit var courseList: List<CourseWithClassTimes>
 
@@ -42,7 +47,7 @@ internal class CourseListFragmentViewModel : ViewModel() {
                     continue
                 }
                 val course = courseWithClassTime.course
-                EventsOperator.addEvent(application, courseTable, courseWithClassTime)
+                eventsOperator.addEvent(application, courseTable, courseWithClassTime)
                 val courseId = courseDao.insertCourse(course)
                 for (classTime in courseWithClassTime.classTimes) {
                     classTime.courseId = courseId

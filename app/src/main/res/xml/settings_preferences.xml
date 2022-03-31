@@ -8,8 +8,8 @@
             app:key="current"
             app:title="@string/activity_Settings_CurrentCourseListTable">
             <intent
-                android:targetClass="cn.unscientificjszhai.timemanager.ui.settings.CurrentTableSelectorActivity"
-                android:targetPackage="cn.unscientificjszhai.timemanager" />
+                android:targetClass="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.CurrentTableSelectorActivity"
+                android:targetPackage="com.github.unscientificjszhai.unscientificclassscheduler" />
         </Preference>
 
         <EditTextPreference
@@ -25,8 +25,8 @@
             app:key="time"
             app:title="@string/preferences_CurrentTable_TimeTable">
             <intent
-                android:targetClass="cn.unscientificjszhai.timemanager.ui.settings.TimeTableEditorActivity"
-                android:targetPackage="cn.unscientificjszhai.timemanager" />
+                android:targetClass="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.TimeTableEditorActivity"
+                android:targetPackage="com.github.unscientificjszhai.unscientificclassscheduler" />
         </Preference>
 
         <Preference
@@ -110,8 +110,8 @@
             app:key="parse"
             app:title="@string/activity_ParseCourseActivity_Label">
             <intent
-                android:targetClass="cn.unscientificjszhai.timemanager.ui.parse.ParseCourseActivity"
-                android:targetPackage="cn.unscientificjszhai.timemanager" />
+                android:targetClass="com.github.unscientificjszhai.unscientificclassscheduler.ui.parse.ParseCourseActivity"
+                android:targetPackage="com.github.unscientificjszhai.unscientificclassscheduler" />
         </Preference>
     </PreferenceCategory>
 

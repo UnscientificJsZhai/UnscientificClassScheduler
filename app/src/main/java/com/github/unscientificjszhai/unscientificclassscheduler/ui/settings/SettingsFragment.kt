@@ -23,7 +23,7 @@ import java.util.*
  * @see SettingsActivity
  * @author UnscientificJsZhai
  */
-internal class SettingsFragment : PreferenceFragmentCompat(),
+class SettingsFragment : PreferenceFragmentCompat(),
     Preference.SummaryProvider<Preference> {
 
     companion object {

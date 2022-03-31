@@ -23,11 +23,10 @@ class ParserListFragment : Fragment() {
     /**
      * 用于解析器列表的RecyclerView的适配器。
      */
-    internal class ParserAdapter(
+    class ParserAdapter(
         factory: ParserFactory,
         private val setWebViewFragment: (String) -> Unit
-    ) :
-        RecyclerView.Adapter<ParserAdapter.ViewHolder>() {
+    ) : RecyclerView.Adapter<ParserAdapter.ViewHolder>() {
 
         private val parserList = factory.parserList().keys.toList()
         private val parserMap = factory.parserList()

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.settings.CurrentTableSelectorActivity">
 
-    <cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
+    <com.github.unscientificjszhai.unscientificclassscheduler.ui.others.RecyclerViewWithContextMenu
         android:id="@+id/SettingsActivity_RecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

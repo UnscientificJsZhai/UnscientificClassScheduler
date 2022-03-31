@@ -14,6 +14,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 /**
  * 为设置Activity提供自定义DataStore的Module。
  *
+ * @see SettingsDataStore
  * @author UnscientificJsZhai
  */
 @Module

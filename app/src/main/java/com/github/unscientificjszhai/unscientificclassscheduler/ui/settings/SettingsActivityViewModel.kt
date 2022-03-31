@@ -19,7 +19,7 @@ import kotlin.reflect.KProperty
  * @author UnscientificJsZhai
  */
 @HiltViewModel
-internal class SettingsActivityViewModel @Inject constructor(
+class SettingsActivityViewModel @Inject constructor(
     private val dataStore: SettingsDataStore,
     val backupOperator: BackupOperator,
     private val calendarOperator: CalendarOperator,

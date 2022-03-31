@@ -17,7 +17,7 @@ import javax.inject.Inject
  * @author UnscientificJsZhai
  */
 @HiltViewModel
-internal class CourseListFragmentViewModel @Inject constructor(
+class CourseListFragmentViewModel @Inject constructor(
     private val eventsOperator: EventsOperator
 ) : ViewModel() {
 

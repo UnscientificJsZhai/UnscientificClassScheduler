@@ -9,7 +9,7 @@ import com.github.unscientificjszhai.unscientificcourseparser.core.parser.Parser
  * @see WebViewFragment
  * @author UnscientificJsZhai
  */
-internal class WebViewFragmentViewModel : ViewModel() {
+class WebViewFragmentViewModel : ViewModel() {
 
     lateinit var parser: Parser
 }

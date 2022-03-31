@@ -16,7 +16,7 @@ import com.google.android.material.textfield.TextInputEditText
  *
  * @author UnscientificJsZhai
  */
-internal class TimeTableHeaderAdapter(private val viewModel: TimeTableEditorActivityViewModel) :
+class TimeTableHeaderAdapter(private val viewModel: TimeTableEditorActivityViewModel) :
     RecyclerView.Adapter<TimeTableHeaderAdapter.HeaderViewHolder>() {
 
     class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {

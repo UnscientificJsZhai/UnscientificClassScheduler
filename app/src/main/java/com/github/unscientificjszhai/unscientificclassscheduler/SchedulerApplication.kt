@@ -79,12 +79,6 @@ class SchedulerApplication : Application(), CourseTable.Getter {
                     getCourseDatabase().courseTableDao().getCourseTable(this.nowTableID)
             }
         }
-        thread(start = true) {
-            // 如果是第一次启动应用时，则不会在Application创建的过程中启动数据库对象
-            if (nowTableID != DEFAULT_DATABASE_OBJECT_ID) {
-                getCourseDatabase()
-            }
-        }
     }
 
     /**

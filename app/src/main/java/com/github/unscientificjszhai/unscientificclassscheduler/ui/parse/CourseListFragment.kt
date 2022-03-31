@@ -33,11 +33,10 @@ class CourseListFragment : Fragment() {
      * @param courseList 要展示的数据列表。
      * @param classTimeString 格式化上课时间字符串的模板。
      */
-    internal class CourseAdapter(
+    class CourseAdapter(
         private val courseList: List<CourseWithClassTimes>,
         private val classTimeString: String
-    ) :
-        RecyclerView.Adapter<CourseAdapter.ViewHolder>() {
+    ) : RecyclerView.Adapter<CourseAdapter.ViewHolder>() {
 
         class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -98,7 +97,6 @@ class CourseListFragment : Fragment() {
         this.viewModel = ViewModelProvider(this)[CourseListFragmentViewModel::class.java]
         if (savedInstanceState == null) {
             val jsonString = arguments?.getString(RESULT_KEY) ?: ""
-            //Log.e("CourseListFragment", "\n$jsonString")
             this.viewModel.courseList =
                 ParserTypeConverter.fromJson(jsonString).generateConvertedCourse()
         }

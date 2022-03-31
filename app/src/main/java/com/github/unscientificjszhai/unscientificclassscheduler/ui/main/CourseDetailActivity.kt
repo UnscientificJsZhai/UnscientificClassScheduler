@@ -73,9 +73,6 @@ class CourseDetailActivity : AppCompatActivity() {
     }
 
     @Inject
-    lateinit var schedulerApplication: SchedulerApplication
-
-    @Inject
     lateinit var courseDao: CourseDao
 
     @Inject
@@ -83,6 +80,7 @@ class CourseDetailActivity : AppCompatActivity() {
 
     private lateinit var viewModel: CourseDetailActivityViewModel
 
+    private lateinit var schedulerApplication: SchedulerApplication
 
     private lateinit var descriptionTextView: TextView
     private lateinit var timeDescriptionTextView: TextView
@@ -93,6 +91,7 @@ class CourseDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course_detail)
+        this.schedulerApplication = application as SchedulerApplication
 
         setSystemUIAppearance(this)
 

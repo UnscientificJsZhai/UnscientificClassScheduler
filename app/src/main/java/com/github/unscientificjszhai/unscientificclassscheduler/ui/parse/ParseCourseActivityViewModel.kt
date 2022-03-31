@@ -9,7 +9,7 @@ import com.github.unscientificjszhai.unscientificcourseparser.core.factory.Parse
  * @see ParseCourseActivity
  * @author UnscientificJsZhai
  */
-internal class ParseCourseActivityViewModel : ViewModel() {
+class ParseCourseActivityViewModel : ViewModel() {
 
     val parserFactory by lazy {
         ParserFactory()

@@ -34,7 +34,7 @@
             app:layout_constraintStart_toStartOf="@+id/MainActivity_RootRecyclerView"
             app:layout_constraintTop_toTopOf="@+id/MainActivity_RootRecyclerView" />
 
-        <cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu
+        <com.github.unscientificjszhai.unscientificclassscheduler.ui.others.RecyclerViewWithContextMenu
             android:id="@+id/MainActivity_RootRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -43,9 +43,7 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0">
-
-        </cn.unscientificjszhai.timemanager.ui.others.RecyclerViewWithContextMenu>
+            app:layout_constraintVertical_bias="1.0"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

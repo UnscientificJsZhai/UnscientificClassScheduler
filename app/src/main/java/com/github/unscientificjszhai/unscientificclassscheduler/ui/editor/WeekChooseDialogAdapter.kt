@@ -17,10 +17,11 @@ import com.github.unscientificjszhai.unscientificclassscheduler.data.course.Clas
  * @see ClassTime
  * @author UnscientificJsZhai
  */
-internal class WeekChooseDialogAdapter(
+class WeekChooseDialogAdapter(
     private val weekData: ClassTime,
     private val items: Array<String>
 ) : RecyclerView.Adapter<WeekChooseDialogAdapter.ViewHolder>() {
+
     inner class ViewHolder(rootView: View) : RecyclerView.ViewHolder(rootView) {
         val checkBox: CheckBox = rootView.findViewById(R.id.WeekChooseRecycler_CheckBox)
     }

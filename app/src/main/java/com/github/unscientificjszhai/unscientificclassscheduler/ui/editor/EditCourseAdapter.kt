@@ -30,7 +30,7 @@ import com.github.unscientificjszhai.unscientificclassscheduler.util.getWeekDesc
  * @see EditCourseActivity
  * @author UnscientificJsZhai
  */
-internal class EditCourseAdapter(
+class EditCourseAdapter(
     private val classTimes: ArrayList<ClassTime>,
     private val maxWeeks: Int
 ) : RecyclerView.Adapter<EditCourseAdapter.ViewHolder>() {

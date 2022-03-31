@@ -15,7 +15,7 @@ import com.google.android.material.textfield.TextInputEditText
  *
  * @author UnscientificJsZhai
  */
-internal class EditCourseHeaderAdapter(private val course: Course) :
+class EditCourseHeaderAdapter(private val course: Course) :
     RecyclerView.Adapter<EditCourseHeaderAdapter.HeaderViewHolder>() {
 
     class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {

@@ -23,7 +23,7 @@ import javax.inject.Inject
  * @author UnscientificJsZhai
  */
 @HiltViewModel
-internal class EditCourseActivityViewModel @Inject constructor(
+class EditCourseActivityViewModel @Inject constructor(
     private val eventsOperator: EventsOperator
 ) : ViewModel() {
 

@@ -19,7 +19,7 @@ import javax.inject.Inject
  * @author UnscientificJsZhai
  */
 @HiltViewModel
-internal class CurrentTableSelectorActivityViewModel @Inject constructor(
+class CurrentTableSelectorActivityViewModel @Inject constructor(
     dao: CourseTableDao,
     private val calendarOperator: CalendarOperator
 ) : ViewModel() {

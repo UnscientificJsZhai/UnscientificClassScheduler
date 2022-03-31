@@ -23,7 +23,7 @@ import com.github.unscientificjszhai.unscientificclassscheduler.util.with0
  * @see MainActivity
  * @author UnscientificJsZhai
  */
-internal class CourseAdapter(private val activity: MainActivity) :
+class CourseAdapter(private val activity: MainActivity) :
     ListAdapter<CourseWithClassTimes, CourseAdapter.ViewHolder>(CourseDiffCallback) {
 
     /**

@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.github.unscientificjszhai.unscientificclassscheduler.R
 import com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplication
+import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.CourseTableDao
 import com.github.unscientificjszhai.unscientificclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientificclassscheduler.features.backup.BackupOperator
 import com.github.unscientificjszhai.unscientificclassscheduler.features.calendar.CalendarOperator
@@ -52,6 +53,9 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
 
     @Inject
     lateinit var calendarOperator: CalendarOperator
+
+    @Inject
+    lateinit var courseTableDao: CourseTableDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -211,8 +215,7 @@ class WelcomeActivity : CalendarOperatorActivity(), View.OnClickListener {
                 calendarOperator.createCalendarTable(this, courseTable)
             }
             // 写入数据库
-            val dao = schedulerApplication.getCourseDatabase().courseTableDao()
-            val id = dao.insertCourseTable(courseTable)
+            val id = this.courseTableDao.insertCourseTable(courseTable)
             schedulerApplication.updateTableID(id)
 
             runOnUiThread {

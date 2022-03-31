@@ -19,7 +19,7 @@ import kotlin.reflect.KProperty
  * @author UnscientificJsZhai
  */
 @HiltViewModel
-internal class TimeTableEditorActivityViewModel @Inject constructor(
+class TimeTableEditorActivityViewModel @Inject constructor(
     private val eventsOperator: EventsOperator
 ) : ViewModel() {
 

@@ -17,7 +17,7 @@ import com.github.unscientificjszhai.unscientificclassscheduler.data.tables.Form
  * @see TimeTableEditorActivity
  * @author UnscientificJsZhai
  */
-internal class TimeTableEditorAdapter(
+class TimeTableEditorAdapter(
     private val viewModel: TimeTableEditorActivityViewModel
 ) :
     RecyclerView.Adapter<TimeTableEditorAdapter.ViewHolder>() {

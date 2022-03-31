@@ -13,7 +13,7 @@ class EmptyAuthenticator(private val context: Context) : AbstractAccountAuthenti
 
     companion object {
 
-        const val ACCOUNT_TYPE = "com.github.unscientificjszhai.unscientficclassscheduler.calendar"
+        const val ACCOUNT_TYPE = "com.github.unscientificjszhai.unscientificclassscheduler.calendar"
 
         const val ACCOUNT_NAME = "CalendarAccount"
 

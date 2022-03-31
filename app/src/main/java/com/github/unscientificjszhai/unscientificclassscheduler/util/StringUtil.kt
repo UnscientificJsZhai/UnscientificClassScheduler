@@ -27,14 +27,14 @@ internal fun ClassTime.getWeekDescriptionString(
         var index = 1
         do {
             if (getWeekData(index)) {
-                //如果非空则添加逗号分割
+                // 如果非空则添加逗号分割
                 if (stringBuilder.isNotBlank()) {
                     stringBuilder.append(",")
                 }
 
-                //首先添加当前指向的周数
+                // 首先添加当前指向的周数
                 stringBuilder.append(index.toString())
-                //二级循环查找连续的值
+                // 二级循环查找连续的值
                 if (index < rangeTo) {
                     for (subIndex in index + 1..rangeTo) {
                         if (!getWeekData(subIndex)) {

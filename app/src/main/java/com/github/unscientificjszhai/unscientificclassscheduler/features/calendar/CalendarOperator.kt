@@ -27,9 +27,11 @@ class CalendarOperator @Inject constructor() {
 
     /**
      * 为目标课程表创建一个日历表。同时会给CourseTable的成员变量赋值，但不会保存到数据库。
+     *
      * 应该异步调用此方法。
      * 调用时需要注意，此方法还会修改CourseTable中的数据且未保存。需要手动保存。
      *
+     * @see CourseTable
      * @param context 插入操作的上下文。
      * @param courseTable 要创建日历表的CourseTable
      * @return 插入后的ID，插入失败则返回空。

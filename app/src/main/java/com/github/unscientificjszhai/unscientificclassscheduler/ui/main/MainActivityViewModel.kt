@@ -1,6 +1,7 @@
 package com.github.unscientificjszhai.unscientificclassscheduler.ui.main
 
 import android.app.Activity
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplication
@@ -9,6 +10,7 @@ import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.CourseD
 import com.github.unscientificjszhai.unscientificclassscheduler.features.calendar.EventsOperator
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.fragments.CourseListFragment
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -25,15 +27,15 @@ import javax.inject.Inject
  * @author UnscientificJsZhai
  */
 @HiltViewModel
-internal class MainActivityViewModel @Inject constructor(
+class MainActivityViewModel @Inject constructor(
     dao: CourseDao,
-    application: SchedulerApplication,
+    @ApplicationContext application: Context,
     private val eventsOperator: EventsOperator,
     private val deleteOperator: CourseDeleter
 ) : ViewModel() {
 
     var courseList: LiveData<List<CourseWithClassTimes>> =
-        dao.getLiveCourses(application.nowTableID)
+        dao.getLiveCourses((application as SchedulerApplication).nowTableID)
 
     /**
      * MainActivity和CourseDetailActivity操作删除课程。

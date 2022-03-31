@@ -19,7 +19,7 @@ import com.github.unscientificjszhai.unscientificclassscheduler.data.tables.Cour
  * @see CurrentTableSelectorActivity
  * @author UnscientificJsZhai
  */
-internal class CurrentTableSelectorAdapter(
+class CurrentTableSelectorAdapter(
     private var nowTableId: Long,
     val setTable: (CourseTable, Boolean) -> Unit
 ) :

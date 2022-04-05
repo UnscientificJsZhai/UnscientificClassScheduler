@@ -1,4 +1,4 @@
-package com.github.unscientificjszhai.unscientificclassscheduler.ui.settings
+package com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.table
 
 import android.os.Bundle
 import android.view.Menu

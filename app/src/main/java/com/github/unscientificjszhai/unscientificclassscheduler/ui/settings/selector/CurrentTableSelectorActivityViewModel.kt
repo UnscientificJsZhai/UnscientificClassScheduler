@@ -1,4 +1,4 @@
-package com.github.unscientificjszhai.unscientificclassscheduler.ui.settings
+package com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.selector
 
 import android.app.Activity
 import androidx.lifecycle.LiveData

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.settings.CurrentTableSelectorActivity">
+    tools:context=".ui.settings.selector.CurrentTableSelectorActivity">
 
     <com.github.unscientificjszhai.unscientificclassscheduler.ui.others.RecyclerViewWithContextMenu
         android:id="@+id/SettingsActivity_RecyclerView"

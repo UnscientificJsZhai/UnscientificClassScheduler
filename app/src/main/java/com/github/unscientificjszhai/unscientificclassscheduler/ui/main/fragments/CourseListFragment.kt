@@ -226,7 +226,7 @@ class CourseListFragment : Fragment() {
         val currentTimeMarker by requireActivity() as MainActivity
         progressBar.visibility = View.GONE
         val listToSubmit = if (viewModel.showTodayOnly) {
-            currentTimeMarker.getTodayCourseList(courseList)
+            currentTimeMarker.getTodayCourseList(originalList = courseList)
         } else {
             courseList
         }

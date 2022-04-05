@@ -109,7 +109,10 @@ class CourseDetailActivity : AppCompatActivity() {
             return
         }
 
-        this.viewModel = ViewModelProvider(this)[CourseDetailActivityViewModel::class.java]
+        this.viewModel = ViewModelProvider(
+            this,
+            CourseDetailActivityViewModel.Factory(courseWithClassTimesLiveData)
+        )[CourseDetailActivityViewModel::class.java]
 
 
         // 监听数据变更

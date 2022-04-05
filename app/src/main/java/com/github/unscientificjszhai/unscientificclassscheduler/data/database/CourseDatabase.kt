@@ -11,7 +11,7 @@ import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.CourseT
 import com.github.unscientificjszhai.unscientificclassscheduler.data.tables.CourseTable
 
 /**
- * Course对象的数据库。文件名为table1.db，其中1的位置应该为这个数据库文件对应的[CourseTable]对象的id。
+ * Course对象的数据库。文件名为table.db。
  *
  * @author UnscientificJsZhai
  */
@@ -21,9 +21,24 @@ import com.github.unscientificjszhai.unscientificclassscheduler.data.tables.Cour
 )
 abstract class CourseDatabase : RoomDatabase() {
 
+    /**
+     * 获取操作课程表数据库的Dao对象。
+     *
+     * @return 由Room提供的Dao接口实现对象。
+     */
+    abstract fun courseTableDao(): CourseTableDao
+
+    /**
+     * 获取操作课程数据库的Dao对象。
+     *
+     * @return 由Room提供的Dao接口实现对象。
+     */
     abstract fun courseDao(): CourseDao
 
+    /**
+     * 获取操作上课时间数据库的Dao对象。
+     *
+     * @return 由Room提供的Dao接口实现对象。
+     */
     abstract fun classTimeDao(): ClassTimeDao
-
-    abstract fun courseTableDao(): CourseTableDao
 }

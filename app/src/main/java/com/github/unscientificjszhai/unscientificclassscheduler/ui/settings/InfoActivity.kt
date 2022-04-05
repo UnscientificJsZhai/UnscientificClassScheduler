@@ -74,7 +74,7 @@ class InfoActivity : AppCompatActivity(), View.OnClickListener, View.OnLongClick
         when (v) {
             this.githubButton -> {
                 val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse("https://github.com/UnscientificJsZhai/TimeManager")
+                intent.data = Uri.parse("https://github.com/UnscientificJsZhai/UnscientificClassScheduler")
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
             }

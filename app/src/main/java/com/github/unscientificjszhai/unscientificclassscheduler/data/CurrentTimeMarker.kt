@@ -26,6 +26,9 @@ class CurrentTimeMarker(private var courseTable: CourseTable) {
 
     /**
      * 用于排序比较多个已经确认在同一天有效的ClassTime对象谁先谁后的比较用包装类。
+     * 通过这个类，可以让上课时间直接使用大于小于号比较，以及让对应集合类可以被排序。
+     *
+     * 上课时间越靠前，值越小。同样上课时间的情况下，下课时间越早，值越小。
      *
      * @param classTime 比较的对象。
      * @param courseWithClassTimes 比较对象对应的Course整体。
@@ -35,10 +38,10 @@ class CurrentTimeMarker(private var courseTable: CourseTable) {
         val courseWithClassTimes: CourseWithClassTimes
     ) : Comparable<ClassTimeCompareOperator> {
 
+        private val numerical get() = classTime.start * 100 + classTime.end
+
         override operator fun compareTo(other: ClassTimeCompareOperator): Int {
-            val thisNumerical = classTime.start * 100 + classTime.end
-            val otherNumerical = other.classTime.start * 100 + other.classTime.end
-            return thisNumerical - otherNumerical
+            return this.numerical - other.numerical
         }
     }
 
@@ -46,15 +49,17 @@ class CurrentTimeMarker(private var courseTable: CourseTable) {
      * 计算当前日期是学期的第几周。
      * 会获取当前时间作为第二个参数进行计算。
      *
+     * @param nowDate 当前时间对象。用[java.util.Calendar]类表示。默认值为[Calendar.getInstance]。
      * @return 如果一个星期的星期二被设定为这个学期的开始日，那么这个星期的星期一到星期六都返回1。如果学期尚未开始，返回0。
      */
-    fun getWeekNumber(): Int {
+    fun getWeekNumber(nowDate: Calendar = Calendar.getInstance()): Int {
         val startDate = this.courseTable.startDate
-        val nowDate = Calendar.getInstance()
+
         val absoluteDateDistance = getDateDistance(
             startDate,
             nowDate
-        ) + startDate.get(Calendar.DAY_OF_WEEK) - if (courseTable.weekStart) { // 一周开始日
+        ) + startDate.get(Calendar.DAY_OF_WEEK) - if (courseTable.weekStart) {
+            // 一周开始日
             2
         } else {
             1
@@ -128,18 +133,22 @@ class CurrentTimeMarker(private var courseTable: CourseTable) {
     }
 
     /**
-     * 获取今天有课的课程列表。
+     * 筛选今天有课的课程列表。
      *
+     * @param nowDate 今天的日期。
      * @param originalList 完整的列表。
-     * @return 新的列表，只包括今天上的课程。
+     * @return 新的列表，只包括今天有课的课程。
      */
-    fun getTodayCourseList(originalList: List<CourseWithClassTimes>): ArrayList<CourseWithClassTimes> {
+    @JvmOverloads
+    fun getTodayCourseList(
+        nowDate: Calendar = Calendar.getInstance(),
+        originalList: List<CourseWithClassTimes>
+    ): ArrayList<CourseWithClassTimes> {
         val weekNumber = this.getWeekNumber()
         if (weekNumber == 0) {
             // 学期未开始的时候返回空表
             return ArrayList()
         }
-        val nowDate = Calendar.getInstance()
         val classTimes = ArrayList<ClassTimeCompareOperator>()
         val newList = ArrayList<CourseWithClassTimes>()
 

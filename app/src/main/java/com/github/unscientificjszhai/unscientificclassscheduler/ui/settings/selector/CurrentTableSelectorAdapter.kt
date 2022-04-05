@@ -1,4 +1,4 @@
-package com.github.unscientificjszhai.unscientificclassscheduler.ui.settings
+package com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.selector
 
 import android.view.LayoutInflater
 import android.view.View

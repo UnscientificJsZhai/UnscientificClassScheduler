@@ -33,7 +33,7 @@ class TimetableTypeConverter {
     fun getStartDate(value: String): Calendar {
         val calendar = Calendar.getInstance()
         val year: Int = value.subSequence(0, 4).toString().toInt()
-        //在Calendar类中Month字段0表示1月
+        // 在Calendar类中Month字段0表示1月
         val month: Int = value.subSequence(4, 6).toString().toInt() - 1
         val day: Int = value.subSequence(6, 8).toString().toInt()
         calendar.clear()

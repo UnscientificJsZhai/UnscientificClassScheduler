@@ -8,7 +8,7 @@
             app:key="current"
             app:title="@string/activity_Settings_CurrentCourseListTable">
             <intent
-                android:targetClass="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.CurrentTableSelectorActivity"
+                android:targetClass="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.selector.CurrentTableSelectorActivity"
                 android:targetPackage="com.github.unscientificjszhai.unscientificclassscheduler" />
         </Preference>
 
@@ -25,7 +25,7 @@
             app:key="time"
             app:title="@string/preferences_CurrentTable_TimeTable">
             <intent
-                android:targetClass="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.TimeTableEditorActivity"
+                android:targetClass="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.table.TimeTableEditorActivity"
                 android:targetPackage="com.github.unscientificjszhai.unscientificclassscheduler" />
         </Preference>
 

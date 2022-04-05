@@ -51,12 +51,12 @@
             android:label="@string/common_settings"
             android:parentActivityName="com.github.unscientificjszhai.unscientificclassscheduler.ui.main.MainActivity" />
         <activity
-            android:name="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.CurrentTableSelectorActivity"
+            android:name="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.selector.CurrentTableSelectorActivity"
             android:exported="false"
             android:label="@string/activity_Settings_CurrentCourseListTable"
             android:parentActivityName="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.SettingsActivity" />
         <activity
-            android:name="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.TimeTableEditorActivity"
+            android:name="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.table.TimeTableEditorActivity"
             android:exported="false"
             android:label="@string/preferences_CurrentTable_TimeTable"
             android:parentActivityName="com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.SettingsActivity" />

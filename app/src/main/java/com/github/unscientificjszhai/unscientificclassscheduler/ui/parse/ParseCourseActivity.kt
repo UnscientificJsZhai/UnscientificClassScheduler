@@ -2,7 +2,6 @@ package com.github.unscientificjszhai.unscientificclassscheduler.ui.parse
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
 import com.github.unscientificjszhai.unscientificclassscheduler.R
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.others.CalendarOperatorActivity
@@ -35,7 +34,6 @@ class ParseCourseActivity : CalendarOperatorActivity() {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.SingleFragmentActivity_RootView, ParserListFragment())
                 .commit()
-            supportFragmentManager.commit { }
         }
     }
 

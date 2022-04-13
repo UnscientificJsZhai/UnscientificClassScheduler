@@ -24,7 +24,7 @@ import com.github.unscientificjszhai.unscientificclassscheduler.R
 fun setSystemUIAppearance(context: Activity) {
     val window = context.window
     if (context.isDarkMode()) {
-        //深色模式不进行调整
+        // 深色模式不进行调整
         return
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

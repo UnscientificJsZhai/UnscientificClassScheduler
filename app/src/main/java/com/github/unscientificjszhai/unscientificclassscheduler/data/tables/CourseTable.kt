@@ -148,28 +148,6 @@ data class CourseTable(
         }
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as CourseTable
-
-        if (id != other.id) return false
-        if (name != other.name) return false
-        if (classesPerDay != other.classesPerDay) return false
-        if (!timeTable.contentEquals(other.timeTable)) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = id?.hashCode() ?: 0
-        result = 31 * result + name.hashCode()
-        result = 31 * result + classesPerDay
-        result = 31 * result + timeTable.contentHashCode()
-        return result
-    }
-
     /**
      * 有时学期开始日不是一周的开始日。处理方法是无视这种情况。所有的学期开始日都会被转换为周日。
      * 这个方法可以完成转换。
@@ -233,5 +211,35 @@ data class CourseTable(
         jsonObject.put("startDate", converter.setStartDate(startDate))
         jsonObject.put("weekStart", weekStart)
         return jsonObject
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as CourseTable
+
+        if (id != other.id) return false
+        if (name != other.name) return false
+        if (classesPerDay != other.classesPerDay) return false
+        if (maxWeeks != other.maxWeeks) return false
+        if (!timeTable.contentEquals(other.timeTable)) return false
+        if (startDate != other.startDate) return false
+        if (calendarID != other.calendarID) return false
+        if (weekStart != other.weekStart) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id?.hashCode() ?: 0
+        result = 31 * result + name.hashCode()
+        result = 31 * result + classesPerDay
+        result = 31 * result + maxWeeks
+        result = 31 * result + timeTable.contentHashCode()
+        result = 31 * result + startDate.hashCode()
+        result = 31 * result + (calendarID?.hashCode() ?: 0)
+        result = 31 * result + weekStart.hashCode()
+        return result
     }
 }

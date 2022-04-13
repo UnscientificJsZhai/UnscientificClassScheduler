@@ -13,8 +13,6 @@
 
     <application
         android:name="com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplication"
-        android:allowBackup="false"
-        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -39,7 +37,7 @@
             android:name="com.github.unscientificjszhai.unscientificclassscheduler.ui.main.CourseDetailActivity"
             android:label="@string/activity_CourseDetail_Label"
             android:parentActivityName="com.github.unscientificjszhai.unscientificclassscheduler.ui.main.MainActivity"
-            android:theme="@style/Theme.TimeManager.CourseDetail"/> <!-- editor包 -->
+            android:theme="@style/Theme.TimeManager.CourseDetail" /> <!-- editor包 -->
         <activity
             android:name="com.github.unscientificjszhai.unscientificclassscheduler.ui.editor.EditCourseActivity"
             android:exported="false"

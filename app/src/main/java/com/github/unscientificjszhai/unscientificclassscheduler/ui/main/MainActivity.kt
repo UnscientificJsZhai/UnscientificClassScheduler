@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
     }
 
     private lateinit var viewModel: MainActivityViewModel
+    private lateinit var labelViewModel: MainActivityLabelViewModel
 
     private lateinit var rootView: FrameLayout
 
@@ -76,11 +77,11 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
                 val courseTable by context.schedulerApplication
                 context.currentTimeMarker.setCourseTable(courseTable)
                 if (fragment is CourseListFragment && fragment.lifecycle.currentState == Lifecycle.State.STARTED) {
-                    fragment.viewModel.courseList.removeObservers(fragment.viewLifecycleOwner)
+                    viewModel.courseList.removeObservers(fragment.viewLifecycleOwner)
                     viewModel.courseList = context.schedulerApplication
                         .getCourseDatabase().courseDao()
                         .getLiveCourses(schedulerApplication.nowTableID) // 更新ViewModel中的LiveData
-                    fragment.viewModel.courseList.observe(this@MainActivity) { courseList ->
+                    viewModel.courseList.observe(this@MainActivity) { courseList ->
                         fragment.bindData(courseList)
                     }
 
@@ -94,43 +95,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
         }
     }
 
-    /**
-     * 处理系统日期变更的广播接收器。
-     */
-    inner class DateChangeReceiver : BroadcastReceiver() {
-
-        /**
-         * 上次收到时间变化广播的时间。
-         */
-        private var timeBeforeUpdate = Calendar.getInstance()
-
-        override fun onReceive(context: Context?, intent: Intent?) {
-            if (intent?.action == Intent.ACTION_TIME_TICK) {
-                // 检测日期是否发生变化
-                val timeRightNow = Calendar.getInstance()
-                if (this.timeBeforeUpdate.get(Calendar.DAY_OF_YEAR) != timeRightNow.get(Calendar.DAY_OF_YEAR) ||
-                    this.timeBeforeUpdate.get(Calendar.YEAR) != timeRightNow.get(Calendar.YEAR)
-                ) {
-                    if (context is MainActivity) {
-                        // 如果为只显示今天则更新数据集
-                        val fragment =
-                            context.supportFragmentManager.findFragmentById(R.id.SingleFragmentActivity_RootView)
-                        if (fragment is CourseListFragment && fragment.lifecycle.currentState == Lifecycle.State.STARTED) {
-                            fragment.run {
-                                bindData(viewModel.courseList.value ?: ArrayList())
-                            }
-                        }
-                    }
-                }
-
-                // 最后更新新的当前时间
-                this.timeBeforeUpdate = timeRightNow
-            }
-        }
-    }
-
     private lateinit var databaseChangeReceiver: DatabaseChangeReceiver
-    private lateinit var dateChangeReceiver: DateChangeReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -151,6 +116,12 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
         this.viewModel =
             ViewModelProvider(this)[MainActivityViewModel::class.java]
+        this.labelViewModel =
+            ViewModelProvider(this)[MainActivityLabelViewModel::class.java]
+
+        this.labelViewModel.getLiveData().observe(this) {
+            supportActionBar?.title = it
+        }
 
         this.rootView = findViewById(R.id.SingleFragmentActivity_RootView)
 
@@ -171,26 +142,11 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
             addAction(COURSE_DATABASE_CHANGE_ACTION)
         })
 
-        // 监听日期变更
-        this.dateChangeReceiver = DateChangeReceiver()
-        registerReceiver(this.dateChangeReceiver, IntentFilter().apply {
-            addAction(Intent.ACTION_TIME_TICK)
-        })
-
         // 首次打开则显示帮助
         if (!sharedPreferences.getBoolean(SHOW_GUIDE_KEY, false)) {
             Toast.makeText(this, R.string.activity_Main_GuideToast, Toast.LENGTH_LONG).show()
             sharedPreferences.edit().putBoolean(SHOW_GUIDE_KEY, true).apply()
         }
-    }
-
-    /**
-     * 更新主界面的ActionBar的Label。
-     *
-     * @param label 新的label。
-     */
-    fun updateLabel(label: String) {
-        supportActionBar?.title = label
     }
 
     override fun onStop() {
@@ -206,7 +162,6 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
 
     override fun onDestroy() {
         unregisterReceiver(this.databaseChangeReceiver)
-        unregisterReceiver(this.dateChangeReceiver)
         super.onDestroy()
     }
 

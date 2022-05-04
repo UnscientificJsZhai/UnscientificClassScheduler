@@ -49,7 +49,8 @@ class CourseDetailActivity : AppCompatActivity() {
          * @param option 动画数据。
          */
         @JvmStatic
-        fun startThisActivity(context: Context, courseId: Long, option: Bundle?) {
+        @JvmOverloads
+        fun startThisActivity(context: Context, courseId: Long, option: Bundle? = null) {
             val intent = Intent(context, CourseDetailActivity::class.java)
             intent.putExtra(INTENT_EXTRA_COURSE, courseId)
             ActivityCompat.startActivity(context, intent, option)

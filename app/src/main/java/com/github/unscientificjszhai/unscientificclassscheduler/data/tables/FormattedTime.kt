@@ -1,12 +1,11 @@
 package com.github.unscientificjszhai.unscientificclassscheduler.data.tables
 
+import com.github.unscientificjszhai.unscientificclassscheduler.util.forEachIn
 import java.util.*
 
 /**
- * 时间段封装类型。
+ * 时间段封装类型。存储一个包含开始时间和结束时间的一个时间段。开始时间和结束时间均只包含小时和分钟2个字段。
  *
- * @throws NumberFormatException 传入的字符串不是纯数字时抛出此异常。
- * @throws IndexOutOfBoundsException 传入的字符串长度小于8时抛出此异常。
  * @author UnscientificJsZhai
  */
 class FormattedTime {
@@ -70,6 +69,8 @@ class FormattedTime {
      * 通过给定8位只有数字的字符串，初始化对象。
      *
      * @param string 输入的字符串，长度至少为8。每一位都必须是数字。
+     * @throws NumberFormatException 传入的字符串不是纯数字时抛出此异常。
+     * @throws IndexOutOfBoundsException 传入的字符串长度小于8时抛出此异常。
      */
     constructor(string: String) {
         startH = String(charArrayOf(string[0], string[1])).toInt()
@@ -113,7 +114,7 @@ class FormattedTime {
      *
      * @param duration 间隔，单位分钟。
      */
-    fun autoSetEndTime(duration: Int) {
+    fun setDuration(duration: Int) {
         var hour = this.startH
         var min = this.startM
         min += duration
@@ -157,7 +158,7 @@ class FormattedTime {
 
     override fun toString(): String {
         val stringBuilder = StringBuilder()
-        arrayOf(this.startH, this.startM, this.endH, this.endM).forEach { number ->
+        forEachIn(this.startH, this.startM, this.endH, this.endM) { number ->
             if (number < 10) {
                 stringBuilder.append(0)
             }

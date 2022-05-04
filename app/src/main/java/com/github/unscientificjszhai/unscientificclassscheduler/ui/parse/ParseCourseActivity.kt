@@ -7,6 +7,7 @@ import com.github.unscientificjszhai.unscientificclassscheduler.R
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.others.CalendarOperatorActivity
 import com.github.unscientificjszhai.unscientificclassscheduler.util.setSystemUIAppearance
 import com.github.unscientificjszhai.unscientificcourseparser.core.factory.ParserFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.reflect.KProperty
 
 /**
@@ -17,6 +18,7 @@ import kotlin.reflect.KProperty
  * @see CourseListFragment
  * @author UnscientificJsZhai
  */
+@AndroidEntryPoint
 class ParseCourseActivity : CalendarOperatorActivity() {
 
     private lateinit var viewModel: ParseCourseActivityViewModel

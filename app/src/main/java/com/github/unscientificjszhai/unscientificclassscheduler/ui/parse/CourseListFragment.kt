@@ -7,6 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.unscientificjszhai.unscientificclassscheduler.R
@@ -110,11 +111,17 @@ class CourseListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_course_list, container, false)
 
         val recyclerView: RecyclerView = view.findViewById(R.id.CourseListFragment_RecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = layoutManager
         recyclerView.adapter = CourseAdapter(
             this.viewModel.courseList,
             getString(R.string.fragment_CourseListFragment_ClassTimeDescription)
         )
+        val dividerItemDecoration = DividerItemDecoration(
+            recyclerView.context,
+            layoutManager.orientation
+        )
+        recyclerView.addItemDecoration(dividerItemDecoration)
 
         return view
     }

@@ -294,7 +294,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
      *
      * @param courseTable 更新后的CourseTable。
      */
-    internal fun updateCourseTable(courseTable: CourseTable) {
+    fun updateCourseTable(courseTable: CourseTable) {
         val dataStore by (requireActivity() as SettingsActivity).viewModel
         dataStore.nowCourseTable = courseTable
         // 通过重设summaryProvider的方法更新Summary

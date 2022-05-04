@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.unscientificjszhai.unscientificclassscheduler.R
@@ -54,9 +55,16 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
         registerForContextMenu(recyclerView)
 
         //初始化RecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        val layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = layoutManager
         this.adapter = CurrentTableSelectorAdapter(schedulerApplication.nowTableID, ::setTable)
         recyclerView.adapter = this.adapter
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                recyclerView.context,
+                layoutManager.orientation
+            )
+        )
 
         //注册监听器
         this.viewModel.tableList.observe(this) {

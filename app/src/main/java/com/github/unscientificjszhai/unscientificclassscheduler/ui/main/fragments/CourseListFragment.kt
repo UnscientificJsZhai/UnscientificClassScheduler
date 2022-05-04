@@ -2,7 +2,10 @@ package com.github.unscientificjszhai.unscientificclassscheduler.ui.main.fragmen
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -12,6 +15,7 @@ import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +26,7 @@ import com.github.unscientificjszhai.unscientificclassscheduler.data.course.Cour
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.editor.EditCourseActivity
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.CourseAdapter
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.MainActivity
+import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.MainActivityLabelViewModel
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.MainActivityViewModel
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.others.RecyclerViewWithContextMenu
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.parse.ParseCourseActivity
@@ -34,9 +39,15 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.util.*
 
+/**
+ * 首页显示课程列表的Fragment。
+ *
+ * @author UnscientificJsZhai
+ */
 class CourseListFragment : Fragment() {
 
-    internal val viewModel: MainActivityViewModel by activityViewModels()
+    private val viewModel: MainActivityViewModel by activityViewModels()
+    private val labelViewModel: MainActivityLabelViewModel by activityViewModels()
 
     private lateinit var rootView: CoordinatorLayout
     private lateinit var recyclerView: RecyclerView
@@ -47,10 +58,47 @@ class CourseListFragment : Fragment() {
 
     private lateinit var emptyTextView: TextView
 
+    /**
+     * 处理系统日期变更的广播接收器。
+     */
+    inner class DateChangeReceiver : BroadcastReceiver() {
+
+        /**
+         * 上次收到时间变化广播的时间。
+         */
+        private var timeBeforeUpdate = Calendar.getInstance()
+
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == Intent.ACTION_TIME_TICK) {
+                // 检测日期是否发生变化
+                val timeRightNow = Calendar.getInstance()
+                if (this.timeBeforeUpdate.get(Calendar.DAY_OF_YEAR) != timeRightNow.get(Calendar.DAY_OF_YEAR) ||
+                    this.timeBeforeUpdate.get(Calendar.YEAR) != timeRightNow.get(Calendar.YEAR)
+                ) {
+                    // 如果为只显示今天则更新数据集
+                    if (lifecycle.currentState == Lifecycle.State.STARTED) {
+                        bindData(viewModel.courseList.value ?: ArrayList())
+                    }
+                }
+
+                // 最后更新新的当前时间
+                this.timeBeforeUpdate = timeRightNow
+            }
+        }
+    }
+
+    private lateinit var dateChangeReceiver: DateChangeReceiver
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         this.schedulerApplication = requireActivity().application as SchedulerApplication
+
+        // 监听日期变更
+        this.dateChangeReceiver = DateChangeReceiver()
+        requireActivity().registerReceiver(this.dateChangeReceiver, IntentFilter().apply {
+            addAction(Intent.ACTION_TIME_TICK)
+        })
     }
 
     override fun onCreateView(
@@ -257,7 +305,7 @@ class CourseListFragment : Fragment() {
             viewModel.showTodayOnly = false
         }
 
-        //监听LiveData变更
+        // 监听LiveData变更
         this.viewModel.courseList.observe(viewLifecycleOwner) {
             bindData(it)
         }
@@ -268,6 +316,11 @@ class CourseListFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         viewModel.courseList.removeObservers(viewLifecycleOwner) //每次暂停都移除监听
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        requireActivity().unregisterReceiver(this.dateChangeReceiver)
     }
 
     /**
@@ -308,8 +361,7 @@ class CourseListFragment : Fragment() {
                     stringBuilder.append(
                         getString(R.string.view_ClassTimeEdit_WeekItem_ForKotlin)
                             .format(currentTimeMarker.getWeekNumber())
-                    )
-                        .append(" ")
+                    ).append(" ")
                         .append(dayOfWeek())
                         .append(" ")
                         .append(
@@ -324,6 +376,6 @@ class CourseListFragment : Fragment() {
                 }
             }
         }
-        (requireActivity() as MainActivity).updateLabel(stringBuilder.toString())
+        labelViewModel.postLabel(stringBuilder.toString())
     }
 }

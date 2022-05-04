@@ -51,7 +51,7 @@ class TimeTableEditorAdapter(
                     formattedTime.startM = minute
 
                     // 从ViewModel中读取间隔时间
-                    formattedTime.autoSetEndTime(viewModel.duration)
+                    formattedTime.setDuration(viewModel.duration)
 
                     courseTable.timeTable[holder.bindingAdapterPosition] = formattedTime.toString()
                     this.notifyItemChanged(holder.bindingAdapterPosition)

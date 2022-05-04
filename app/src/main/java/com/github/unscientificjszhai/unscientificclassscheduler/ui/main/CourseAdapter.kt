@@ -68,16 +68,10 @@ class CourseAdapter(private val activity: MainActivity) :
 
         view.setOnClickListener {
             val course = getItem(holder.bindingAdapterPosition)
-            holder.titleText.transitionName = "CourseTitle"
-            val option = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                activity,
-                Pair(holder.titleText, "CourseTitle")
-            )
 
             CourseDetailActivity.startThisActivity(
                 view.context,
-                course.course.id ?: -1,
-                option.toBundle()
+                course.course.id ?: -1
             )
         }
         return holder

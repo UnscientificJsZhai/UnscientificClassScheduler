@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.unscientificjszhai.unscientificclassscheduler.R
@@ -60,8 +61,15 @@ class TimeTableEditorActivity : AppCompatActivity() {
         this.adapter = TimeTableEditorAdapter(this.viewModel)
         this.headerAdapter = TimeTableHeaderAdapter(this.viewModel)
         this.recyclerView = findViewById(R.id.TimeTableEditorActivity_RecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        val layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = layoutManager
         recyclerView.adapter = ConcatAdapter(headerAdapter, adapter)
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                recyclerView.context,
+                layoutManager.orientation
+            )
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

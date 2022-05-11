@@ -6,6 +6,7 @@ import android.view.*
 import android.webkit.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.github.unscientificjszhai.unscientificclassscheduler.R
@@ -39,7 +40,7 @@ class WebViewFragment : Fragment() {
      */
     private fun callInjectedJavaScriptMethod() {
         this.webView.loadUrl(
-            "javascript:window.java_interface.getSource('<html>'+document." +
+            "javascript:window.$JAVASCRIPT_INTERFACE_NAME.getSource('<html>'+document." +
                     "getElementsByTagName('html')[0].innerHTML+'</html>');"
         )
     }
@@ -47,6 +48,8 @@ class WebViewFragment : Fragment() {
     companion object {
 
         private const val BEAN_NAME_KEY = "beanName"
+
+        private const val JAVASCRIPT_INTERFACE_NAME = "java_interface"
 
         /**
          * 启动这个Fragment的静态方法。
@@ -62,7 +65,9 @@ class WebViewFragment : Fragment() {
     }
 
     private lateinit var webView: WebView
+
     private lateinit var viewModel: WebViewFragmentViewModel
+    private val activityViewModel: ParseCourseActivityViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,11 +75,9 @@ class WebViewFragment : Fragment() {
 
         this.viewModel = ViewModelProvider(this)[WebViewFragmentViewModel::class.java]
         if (savedInstanceState == null) {
-            val activity = requireActivity() as ParseCourseActivity
             arguments?.let {
                 val beanName = it.getString(BEAN_NAME_KEY)
-                val factory by activity
-                viewModel.parser = factory[beanName!!]
+                viewModel.parser = activityViewModel.parserFactory[beanName!!]
             }
         }
     }
@@ -91,7 +94,9 @@ class WebViewFragment : Fragment() {
         webView.apply {
             webViewClient = WebViewClient()
             webChromeClient = object : WebChromeClient() {
+
                 override fun onProgressChanged(view: WebView?, newProgress: Int) {
+                    // Do nothing
                 }
 
                 override fun onJsAlert(
@@ -138,17 +143,15 @@ class WebViewFragment : Fragment() {
                 blockNetworkLoads = false
                 databaseEnabled = true
             }
-            addJavascriptInterface(InJavaScriptLocalObject(), "java_interface")
+            addJavascriptInterface(InJavaScriptLocalObject(), JAVASCRIPT_INTERFACE_NAME)
             loadUrl(viewModel.parser.url)
         }
 
         //显示提示气泡
         Toast.makeText(
             container?.context,
-            if (viewModel.parser.message.isEmpty()) {
+            viewModel.parser.message.ifBlank {
                 getString(R.string.activity_ParseCourseActivity_HelpToast)
-            } else {
-                viewModel.parser.message
             },
             Toast.LENGTH_LONG
         ).show()
@@ -193,16 +196,14 @@ class WebViewFragment : Fragment() {
     }
 
     /**
-     * WebView是否可以返回。
+     * 在WebView上返回上一个页面。
      *
-     * @return WebView已经返回，返回true。如果WebView不能返回，返回false，调用Activity的返回回调。
+     * @return WebView已经返回，返回true。如果WebView不能返回，返回false。
      */
-    internal fun canWebPageBack(): Boolean {
-        return if (webView.canGoBack()) {
-            webView.goBack()
-            true
-        } else {
-            false
-        }
+    fun webPageBack(): Boolean = if (webView.canGoBack()) {
+        webView.goBack()
+        true
+    } else {
+        false
     }
 }

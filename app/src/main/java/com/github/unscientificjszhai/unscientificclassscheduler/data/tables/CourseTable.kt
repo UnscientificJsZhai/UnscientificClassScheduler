@@ -112,7 +112,7 @@ data class CourseTable(
     /**
      * 为[CourseTable]提供属性委托功能。
      */
-    interface Getter {
+    interface Provider {
 
         operator fun getValue(thisRef: Any?, property: KProperty<*>): CourseTable
     }

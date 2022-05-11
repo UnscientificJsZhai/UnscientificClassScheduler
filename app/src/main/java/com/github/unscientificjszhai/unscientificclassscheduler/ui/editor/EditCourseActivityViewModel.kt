@@ -9,6 +9,8 @@ import com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplica
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.ClassTime
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.Course
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.CourseWithClassTimes
+import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.ClassTimeDao
+import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.CourseDao
 import com.github.unscientificjszhai.unscientificclassscheduler.features.calendar.EventsOperator
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.CourseDetailActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +26,9 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class EditCourseActivityViewModel @Inject constructor(
-    private val eventsOperator: EventsOperator
+    private val eventsOperator: EventsOperator,
+    private val courseDao: CourseDao,
+    private val classTimeDao: ClassTimeDao
 ) : ViewModel() {
 
     /**
@@ -62,14 +66,9 @@ class EditCourseActivityViewModel @Inject constructor(
         val application = context.application as SchedulerApplication
         withContext(Dispatchers.Default) {
             val courseTable = application.courseTable!!
-            // 创建可读取数据库对象
-            val courseDatabase = application.getCourseDatabase()
-            val courseDao = courseDatabase.courseDao()
-            val classTimeDao = courseDatabase.classTimeDao()
-
             val course = this@EditCourseActivityViewModel.course
 
-            if (course?.title?.isBlank() == true) {
+            if (course?.title?.isBlank() != false) {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         context,
@@ -80,108 +79,95 @@ class EditCourseActivityViewModel @Inject constructor(
                 return@withContext
             }
 
-            when {
-                course == null -> {
-                    Toast.makeText(
-                        context,
-                        R.string.activity_EditCourse_DataError,
-                        Toast.LENGTH_SHORT
-                    ).show()
+            if (course.id == null) {
+                // 新建Course对象时
+                for (classTime in this@EditCourseActivityViewModel.classTimes) {
+                    if (!classTime.isLegitimacy(courseTable)) {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(
+                                context,
+                                R.string.activity_EditCourse_DataError,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        return@withContext
+                    }
                 }
-                course.id == null -> {
-                    //新建Course对象时
-                    for (classTime in this@EditCourseActivityViewModel.classTimes) {
-                        if (!classTime.isLegitimacy(courseTable)) {
-                            withContext(Dispatchers.Main) {
-                                Toast.makeText(
-                                    context,
-                                    R.string.activity_EditCourse_DataError,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                            return@withContext
+
+                if (useCalendar) {
+                    // 插入日历表
+                    val courseWithClassTimes =
+                        CourseWithClassTimes(
+                            course,
+                            this@EditCourseActivityViewModel.classTimes
+                        )
+                    eventsOperator.addEvent(context, courseTable, courseWithClassTimes)
+
+                    // 正式开始插入
+                    try {
+                        val courseId = courseDao.insertCourse(course)
+                        for (classTime in this@EditCourseActivityViewModel.classTimes) {
+                            classTime.courseId = courseId
+                            classTimeDao.insertClassTime(classTime)
                         }
+                    } catch (e: Exception) {
+                        Log.e("EditCourseActivity", "saveData: Can not access Room database")
+                        eventsOperator.deleteEvent(context, courseTable, courseWithClassTimes)
                     }
-
-                    if (useCalendar) {
-                        // 插入日历表
-                        val courseWithClassTimes =
-                            CourseWithClassTimes(
-                                course,
-                                this@EditCourseActivityViewModel.classTimes
-                            )
-                        eventsOperator.addEvent(context, courseTable, courseWithClassTimes)
-
-                        // 正式开始插入
-                        try {
-                            val courseId = courseDao.insertCourse(course)
-                            for (classTime in this@EditCourseActivityViewModel.classTimes) {
-                                classTime.courseId = courseId
-                                classTimeDao.insertClassTime(classTime)
-                            }
-                        } catch (e: Exception) {
-                            Log.e("EditCourseActivity", "saveData: Can not access Room database")
-                            eventsOperator.deleteEvent(context, courseTable, courseWithClassTimes)
-                        }
-                    }
-
-                    context.finish()
                 }
-                else -> {
-                    // 修改现有Course对象时
-                    for (classTime: ClassTime in this@EditCourseActivityViewModel.classTimes) {
-                        if (!classTime.isLegitimacy(courseTable)) {
-                            withContext(Dispatchers.Main) {
-                                Toast.makeText(
-                                    context,
-                                    R.string.activity_EditCourse_DataError,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                            return@withContext
+            } else {
+                // 修改现有Course对象时
+                for (classTime: ClassTime in this@EditCourseActivityViewModel.classTimes) {
+                    if (!classTime.isLegitimacy(courseTable)) {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(
+                                context,
+                                R.string.activity_EditCourse_DataError,
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
+                        return@withContext
                     }
-
-                    //从数据库中删除应该被删除的对象
-                    for (removedClassTime: ClassTime in this@EditCourseActivityViewModel.removedClassTimes) {
-                        this@EditCourseActivityViewModel.classTimes.removeIf { classTime ->
-                            classTime.id == removedClassTime.id
-                        }
-                        classTimeDao.deleteClassTime(removedClassTime)
-                    }
-
-                    if (useCalendar) {
-                        //修改日历表
-                        val courseWithClassTimes =
-                            CourseWithClassTimes(
-                                course,
-                                this@EditCourseActivityViewModel.classTimes
-                            )
-                        eventsOperator.updateEvent(context, courseTable, courseWithClassTimes)
-                    }
-
-                    //写入数据库的Course表
-                    courseDao.updateCourse(course)
-                    //写入数据库的ClassTime表
-                    for (classTime: ClassTime in this@EditCourseActivityViewModel.classTimes) {
-                        if (classTime.courseId == null) {
-                            classTime.courseId = course.id
-                        }
-                        if (classTime.id == null) {
-                            classTime.id = classTimeDao.insertClassTime(classTime)
-                        } else {
-                            classTimeDao.updateClassTime(classTime)
-                        }
-                    }
-
-                    val intent = Intent()
-
-                    intent.putExtra(
-                        CourseDetailActivity.EDIT_INTENT_RESULT,
-                        CourseWithClassTimes(course, this@EditCourseActivityViewModel.classTimes)
-                    )
-                    context.finish()
                 }
+
+                //从数据库中删除应该被删除的对象
+                for (removedClassTime: ClassTime in this@EditCourseActivityViewModel.removedClassTimes) {
+                    this@EditCourseActivityViewModel.classTimes.removeIf { classTime ->
+                        classTime.id == removedClassTime.id
+                    }
+                    classTimeDao.deleteClassTime(removedClassTime)
+                }
+
+                if (useCalendar) {
+                    //修改日历表
+                    val courseWithClassTimes =
+                        CourseWithClassTimes(
+                            course,
+                            this@EditCourseActivityViewModel.classTimes
+                        )
+                    eventsOperator.updateEvent(context, courseTable, courseWithClassTimes)
+                }
+
+                //写入数据库的Course表
+                courseDao.updateCourse(course)
+                //写入数据库的ClassTime表
+                for (classTime: ClassTime in this@EditCourseActivityViewModel.classTimes) {
+                    if (classTime.courseId == null) {
+                        classTime.courseId = course.id
+                    }
+                    if (classTime.id == null) {
+                        classTime.id = classTimeDao.insertClassTime(classTime)
+                    } else {
+                        classTimeDao.updateClassTime(classTime)
+                    }
+                }
+
+                val intent = Intent()
+
+                intent.putExtra(
+                    CourseDetailActivity.EDIT_INTENT_RESULT,
+                    CourseWithClassTimes(course, this@EditCourseActivityViewModel.classTimes)
+                )
             }
         }
     }

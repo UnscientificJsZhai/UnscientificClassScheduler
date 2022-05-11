@@ -22,7 +22,7 @@ import kotlin.reflect.KProperty
  * @author UnscientificJsZhai
  */
 @HiltAndroidApp
-class SchedulerApplication : Application(), CourseTable.Getter {
+class SchedulerApplication : Application(), CourseTable.Provider {
 
     companion object {
 

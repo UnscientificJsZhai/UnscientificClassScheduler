@@ -1,10 +1,5 @@
 package com.github.unscientificjszhai.unscientificclassscheduler.ui.editor
 
-import android.app.Service
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import android.os.VibratorManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.unscientificjszhai.unscientificclassscheduler.R
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.ClassTime
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.others.StaticViewHeaderAdapter
+import com.github.unscientificjszhai.unscientificclassscheduler.util.clickVibration
 import com.github.unscientificjszhai.unscientificclassscheduler.util.getWeekDescriptionString
 
 /**
@@ -34,15 +30,6 @@ class EditCourseAdapter(
     private val classTimes: ArrayList<ClassTime>,
     private val maxWeeks: Int
 ) : RecyclerView.Adapter<EditCourseAdapter.ViewHolder>() {
-
-    companion object {
-
-        @Deprecated("Android 10以上使用自带振动效果")
-        const val VIBRATION_LENGTH: Long = 5//ms
-
-        @Deprecated("Android 10以上使用自带振动效果")
-        const val VIBRATION_STRENGTH = 5
-    }
 
     inner class ViewHolder(val rootView: View) : RecyclerView.ViewHolder(rootView) {
 
@@ -95,30 +82,7 @@ class EditCourseAdapter(
 
                         //创建振动效果
                         if (fromUser) {
-                            when {
-                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-                                    val manager =
-                                        context.getSystemService(Service.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-                                    val effect =
-                                        VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
-                                    manager.defaultVibrator.vibrate(effect)
-                                }
-                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && Build.VERSION.SDK_INT < Build.VERSION_CODES.S -> {
-                                    @Suppress("DEPRECATION")
-                                    (context.getSystemService(Service.VIBRATOR_SERVICE) as Vibrator).vibrate(
-                                        VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
-                                    )
-                                }
-                                else -> {
-                                    @Suppress("DEPRECATION")
-                                    (context.getSystemService(Service.VIBRATOR_SERVICE) as Vibrator).vibrate(
-                                        VibrationEffect.createOneShot(
-                                            VIBRATION_LENGTH,
-                                            VIBRATION_STRENGTH
-                                        )
-                                    )
-                                }
-                            }
+                            clickVibration(context)
                         }
 
                         holder.classTime.whichDay = progress
@@ -220,7 +184,6 @@ class EditCourseAdapter(
 
         return holder
     }
-
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val classTime = classTimes[position]

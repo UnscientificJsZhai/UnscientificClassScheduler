@@ -7,6 +7,7 @@ import android.view.*
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.unscientificjszhai.unscientificclassscheduler.R
@@ -20,8 +21,13 @@ import com.github.unscientificjszhai.unscientificcourseparser.core.factory.Parse
  */
 class ParserListFragment : Fragment() {
 
+    private val viewModel: ParseCourseActivityViewModel by activityViewModels()
+
     /**
      * 用于解析器列表的RecyclerView的适配器。
+     *
+     * @param factory 解析器工厂。
+     * @param setWebViewFragment 点击每个条目后的逻辑。
      */
     class ParserAdapter(
         factory: ParserFactory,
@@ -43,7 +49,7 @@ class ParserListFragment : Fragment() {
 
             view.setOnClickListener {
                 val beanName = parserMap[parserList[viewHolder.bindingAdapterPosition]]
-                setWebViewFragment(beanName!!)
+                setWebViewFragment(beanName ?: return@setOnClickListener)
             }
 
             return viewHolder
@@ -70,10 +76,9 @@ class ParserListFragment : Fragment() {
 
         val recyclerView: RecyclerView = view.findViewById(R.id.ParserListFragment_RecyclerView)
         val activity = requireActivity() as ParseCourseActivity
-        val factory by activity
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = ParserAdapter(factory) { beanName ->
-            //启动第二Fragment
+        recyclerView.adapter = ParserAdapter(viewModel.parserFactory) { beanName ->
+            //m启动第二Fragment
             val webViewFragment = WebViewFragment.newInstance(beanName)
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.SingleFragmentActivity_RootView, webViewFragment)

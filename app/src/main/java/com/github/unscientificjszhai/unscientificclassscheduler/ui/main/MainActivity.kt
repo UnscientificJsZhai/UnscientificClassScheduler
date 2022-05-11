@@ -19,7 +19,6 @@ import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.fragment
 import com.github.unscientificjszhai.unscientificclassscheduler.util.setSystemUIAppearance
 import com.github.unscientificjszhai.unscientificclassscheduler.util.startActivity
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 import kotlin.reflect.KProperty
 
 /**
@@ -30,7 +29,7 @@ import kotlin.reflect.KProperty
  * @author UnscientificJsZhai
  */
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
+class MainActivity : AppCompatActivity(), CurrentTimeMarker.Provider {
 
     companion object {
 
@@ -165,7 +164,7 @@ class MainActivity : AppCompatActivity(), CurrentTimeMarker.Getter {
         super.onDestroy()
     }
 
-    override fun getValue(thisRef: Any?, property: KProperty<*>): CurrentTimeMarker {
+    override operator fun getValue(thisRef: Any?, property: KProperty<*>): CurrentTimeMarker {
         return this.currentTimeMarker
     }
 

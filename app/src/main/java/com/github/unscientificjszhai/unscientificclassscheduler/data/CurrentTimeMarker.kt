@@ -19,7 +19,7 @@ class CurrentTimeMarker(private var courseTable: CourseTable) {
     /**
      * 为[CurrentTimeMarker]提供属性委托功能。
      */
-    interface Getter {
+    interface Provider {
 
         operator fun getValue(thisRef: Any?, property: KProperty<*>): CurrentTimeMarker
     }

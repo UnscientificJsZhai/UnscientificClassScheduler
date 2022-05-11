@@ -61,13 +61,11 @@ inline fun <T> Activity.runIfPermissionGranted(
     permission: String,
     permissionDenied: Activity.() -> Unit,
     block: Activity.() -> T
-): T? {
-    if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
-        return block()
-    } else {
-        permissionDenied()
-    }
-    return null
+): T? = if (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
+    block()
+} else {
+    permissionDenied()
+    null
 }
 
 /**

@@ -167,6 +167,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
             if (it) {
                 viewModel.viewModelScope.launch {
                     viewModel.saveData(this@EditCourseActivity, schedulerApplication.useCalendar)
+                    finish()
                 }
             }
         }
@@ -183,31 +184,37 @@ class EditCourseActivity : CalendarOperatorActivity() {
      * @param item 菜单项目
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.EditCourseActivity_Done) {
-            runIfPermissionGranted(Manifest.permission.WRITE_CALENDAR, {
-                // 没有获得权限时。
-                AlertDialog.Builder(this)
-                    .setTitle(R.string.activity_WelcomeActivity_AskPermissionTitle)
-                    .setMessage(R.string.activity_EditCourse_AskPermissionText)
-                    .setNegativeButton(R.string.common_cancel) { dialog, _ ->
-                        dialog.dismiss()
-                    }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
-                        if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_CALENDAR)) {
-                            requestWriteCalendarPermissionCallback.launch(Manifest.permission.WRITE_CALENDAR)
-                        } else {
-                            jumpToSystemPermissionSettings()
+        when (item.itemId) {
+            R.id.EditCourseActivity_Done -> {
+                runIfPermissionGranted(Manifest.permission.WRITE_CALENDAR, {
+                    // 没有获得权限时。
+                    AlertDialog.Builder(this)
+                        .setTitle(R.string.activity_WelcomeActivity_AskPermissionTitle)
+                        .setMessage(R.string.activity_EditCourse_AskPermissionText)
+                        .setNegativeButton(R.string.common_cancel) { dialog, _ ->
+                            dialog.dismiss()
+                        }.setPositiveButton(R.string.common_confirm) { dialog, _ ->
+                            if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_CALENDAR)) {
+                                requestWriteCalendarPermissionCallback.launch(Manifest.permission.WRITE_CALENDAR)
+                            } else {
+                                jumpToSystemPermissionSettings()
+                            }
+                            dialog.dismiss()
                         }
-                        dialog.dismiss()
+                }) {
+                    rootRecyclerView.clearFocus()
+                    viewModel.viewModelScope.launch {
+                        viewModel.saveData(
+                            this@EditCourseActivity,
+                            schedulerApplication.useCalendar
+                        )
+                        finish()
                     }
-            }) {
-                rootRecyclerView.clearFocus()
-                viewModel.viewModelScope.launch {
-                    viewModel.saveData(this@EditCourseActivity, schedulerApplication.useCalendar)
                 }
             }
-        } else if (item.itemId == android.R.id.home) {
+
             // 按下左上角返回箭头的逻辑
-            this.onBackPressed()
+            android.R.id.home -> this.onBackPressed()
         }
         return true
     }

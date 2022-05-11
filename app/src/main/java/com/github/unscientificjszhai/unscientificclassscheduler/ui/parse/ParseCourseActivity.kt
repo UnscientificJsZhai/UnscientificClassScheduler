@@ -32,7 +32,7 @@ class ParseCourseActivity : CalendarOperatorActivity() {
         this.viewModel = ViewModelProvider(this)[ParseCourseActivityViewModel::class.java]
 
         if (savedInstanceState == null) {
-            //旋转屏幕时不重新进入ParserListFragment
+            // 旋转屏幕时不重新进入ParserListFragment
             supportFragmentManager.beginTransaction()
                 .replace(R.id.SingleFragmentActivity_RootView, ParserListFragment())
                 .commit()
@@ -49,16 +49,9 @@ class ParseCourseActivity : CalendarOperatorActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    /**
-     * 提供工厂类的属性委托功能。
-     */
-    operator fun getValue(thisRef: Any?, property: KProperty<*>): ParserFactory {
-        return this.viewModel.parserFactory
-    }
-
     override fun onBackPressed() {
         val fragment = supportFragmentManager.findFragmentById(R.id.SingleFragmentActivity_RootView)
-        if (fragment is WebViewFragment && fragment.canWebPageBack()) {
+        if (fragment is WebViewFragment && fragment.webPageBack()) {
             return
         }
         super.onBackPressed()

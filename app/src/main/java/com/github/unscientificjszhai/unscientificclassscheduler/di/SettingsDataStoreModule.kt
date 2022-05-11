@@ -38,10 +38,10 @@ object SettingsDataStoreModule {
         val courseTable by this
         SettingsDataStore(
             courseTableDao = courseTableDao,
-            context = context,
+            context = this,
             nowCourseTable = courseTable,
             eventsOperator = eventsOperator,
-            notifyApplicationCourseTableChanged = context::updateTableID
+            notifyApplicationCourseTableChanged = ::updateTableID
         )
     }
 }

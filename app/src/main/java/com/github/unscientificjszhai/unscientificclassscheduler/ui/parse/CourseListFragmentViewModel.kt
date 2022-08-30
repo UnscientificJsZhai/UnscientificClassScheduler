@@ -41,12 +41,16 @@ class CourseListFragmentViewModel @Inject constructor(
             val courseDao = courseDatabase.courseDao()
             val classTimesDao = courseDatabase.classTimeDao()
 
+            val table = application.courseTable
+
             for (courseWithClassTime in this@CourseListFragmentViewModel.courseList) {
                 if (!Course.checkLegitimacy(courseWithClassTime, courseTable)) {
                     exceptionList.add(courseWithClassTime.course.title)
                     continue
                 }
-                val course = courseWithClassTime.course
+                val course = courseWithClassTime.course.apply {
+                    tableId = table?.id ?: -1
+                }
                 eventsOperator.addEvent(application, courseTable, courseWithClassTime)
                 val courseId = courseDao.insertCourse(course)
                 for (classTime in courseWithClassTime.classTimes) {

@@ -5,7 +5,9 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -33,7 +35,8 @@ import kotlinx.coroutines.launch
  * @author UnscientificJsZhai
  */
 @AndroidEntryPoint
-class EditCourseActivity : CalendarOperatorActivity() {
+class EditCourseActivity : CalendarOperatorActivity(), View.OnClickListener,
+    View.OnLongClickListener {
 
     companion object {
 
@@ -76,6 +79,8 @@ class EditCourseActivity : CalendarOperatorActivity() {
     private lateinit var adapter: EditCourseAdapter
     private lateinit var headerAdapter: EditCourseHeaderAdapter
 
+    private lateinit var floatingActionButton: FloatingActionButton
+
     /**
      * 保存数据时申请权限的回调。
      */
@@ -94,6 +99,7 @@ class EditCourseActivity : CalendarOperatorActivity() {
 
         this.rootRecyclerView = findViewById(R.id.EditCourseActivity_RecyclerView)
 
+        @Suppress("DEPRECATION")
         val courseWithClassTimes =
             intent.getSerializableExtra(CourseDetailActivity.INTENT_EXTRA_COURSE)
         if (courseWithClassTimes is CourseWithClassTimes) {
@@ -129,36 +135,9 @@ class EditCourseActivity : CalendarOperatorActivity() {
         this.courseDatabase = (application as SchedulerApplication).getCourseDatabase()
 
         // 浮动按钮的监听器
-        val floatingActionButton: FloatingActionButton =
-            findViewById(R.id.EditCourseActivity_PlusButton)
-        floatingActionButton.setOnClickListener {
-            val lastClassTime = viewModel.classTimes.lastOrNull()
-            if (lastClassTime == null || !viewModel.copyFromPrevious) {
-                viewModel.classTimes.add(ClassTime())
-            } else {
-                rootRecyclerView.clearFocus()
-                viewModel.classTimes.add(ClassTime(lastClassTime))
-            }
-            this.adapter.notifyItemInserted(adapter.itemCount - 1)
-
-            //滚动到底部
-            this.rootRecyclerView.scrollToBottom()
-        }
-        floatingActionButton.setOnLongClickListener {
-            viewModel.copyFromPrevious = !viewModel.copyFromPrevious
-
-            Toast.makeText(
-                this,
-                if (viewModel.copyFromPrevious) {
-                    R.string.activity_EditCourse_CopyFromPrevious_True
-                } else {
-                    R.string.activity_EditCourse_CopyFromPrevious_False
-                },
-                Toast.LENGTH_SHORT
-            ).show()
-
-            true
-        }
+        this.floatingActionButton = findViewById(R.id.EditCourseActivity_PlusButton)
+        floatingActionButton.setOnClickListener(this)
+        floatingActionButton.setOnLongClickListener(this)
 
         // 注册申请权限回调
         this.requestWriteCalendarPermissionCallback = registerForActivityResult(
@@ -170,6 +149,11 @@ class EditCourseActivity : CalendarOperatorActivity() {
                     finish()
                 }
             }
+        }
+
+        // 注册返回监听
+        onBackPressedDispatcher.addCallback {
+            showUnsavedAlertDialog()
         }
     }
 
@@ -213,13 +197,55 @@ class EditCourseActivity : CalendarOperatorActivity() {
                 }
             }
 
-            // 按下左上角返回箭头的逻辑
-            android.R.id.home -> this.onBackPressed()
+            // 按下左上角返回箭头的逻辑。
+            android.R.id.home -> onBackPressedDispatcher.onBackPressed()
         }
         return true
     }
 
-    override fun onBackPressed() {
+    override fun onClick(v: View?) {
+        when (v) {
+            // 长按添加按钮的回调。
+            this.floatingActionButton -> {
+                val lastClassTime = viewModel.classTimes.lastOrNull()
+                if (lastClassTime == null || !viewModel.copyFromPrevious) {
+                    viewModel.classTimes.add(ClassTime())
+                } else {
+                    rootRecyclerView.clearFocus()
+                    viewModel.classTimes.add(ClassTime(lastClassTime))
+                }
+                this.adapter.notifyItemInserted(adapter.itemCount - 1)
+
+                //滚动到底部
+                this.rootRecyclerView.scrollToBottom()
+            }
+        }
+    }
+
+    override fun onLongClick(v: View?): Boolean {
+        when (v) {
+            this.floatingActionButton -> {
+                viewModel.copyFromPrevious = !viewModel.copyFromPrevious
+
+                Toast.makeText(
+                    this,
+                    if (viewModel.copyFromPrevious) {
+                        R.string.activity_EditCourse_CopyFromPrevious_True
+                    } else {
+                        R.string.activity_EditCourse_CopyFromPrevious_False
+                    },
+                    Toast.LENGTH_SHORT
+                ).show()
+                return true
+            }
+        }
+        return false
+    }
+
+    /**
+     * 显示未保存内容的警告弹窗。
+     */
+    private fun showUnsavedAlertDialog() {
         AlertDialog.Builder(this).setTitle(R.string.activity_EditCourse_UnsavedAlertTitle)
             // 确定按键
             .setPositiveButton(R.string.common_confirm) { dialog, _ ->

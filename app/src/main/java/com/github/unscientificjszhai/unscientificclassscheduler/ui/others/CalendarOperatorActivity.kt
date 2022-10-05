@@ -26,7 +26,7 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
     /**
      * 每次在onStart中检查权限。如果权限不足时用此启动器申请权限。
      */
-    private lateinit var requestPermissionCallback: ActivityResultLauncher<Array<out String>>
+    private lateinit var requestPermissionCallback: ActivityResultLauncher<Array<String>>
 
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,7 +119,7 @@ abstract class CalendarOperatorActivity : AppCompatActivity() {
         }
 
     /**
-     * 权限申请不通过。
+     * 权限申请不通过时弹出Toast提醒。
      */
     private fun showDeniedToast() {
         // 用户执意拒绝授权

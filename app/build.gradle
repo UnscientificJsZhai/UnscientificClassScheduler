@@ -6,14 +6,14 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.github.unscientificjszhai.unscientificclassscheduler"
         minSdk 26
-        targetSdk 31
-        versionCode 2
-        versionName "1.3.1"
+        targetSdk 33
+        versionCode 3
+        versionName "1.3.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -38,6 +38,7 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    namespace 'com.github.unscientificjszhai.unscientificclassscheduler'
 }
 
 dependencies {

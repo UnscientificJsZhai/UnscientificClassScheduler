@@ -9,9 +9,9 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.github.unscientificjszhai.unscientificclassscheduler.R
 import com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplication
@@ -79,7 +79,7 @@ class CourseDetailActivity : AppCompatActivity() {
     @Inject
     lateinit var courseDeleter: CourseDeleter
 
-    private lateinit var viewModel: CourseDetailActivityViewModel
+    private val viewModel: CourseDetailActivityViewModel by viewModels()
 
     private lateinit var schedulerApplication: SchedulerApplication
 
@@ -101,8 +101,9 @@ class CourseDetailActivity : AppCompatActivity() {
         this.remarkTextView = findViewById(R.id.CourseDetailActivity_RemarkText)
 
         val id = intent.getLongExtra(INTENT_EXTRA_COURSE, -1)
-        val courseWithClassTimesLiveData = courseDao.getLiveCourse(id)
-        if (courseWithClassTimesLiveData == null) {
+        try {
+            this.viewModel.setCurrentCourseId(id)
+        } catch (e: IllegalArgumentException) {
             // 数据异常退出Activity
             Toast.makeText(this, R.string.activity_CourseDetail_DataError, Toast.LENGTH_SHORT)
                 .show()
@@ -110,15 +111,9 @@ class CourseDetailActivity : AppCompatActivity() {
             return
         }
 
-        this.viewModel = ViewModelProvider(
-            this,
-            CourseDetailActivityViewModel.Factory(courseWithClassTimesLiveData)
-        )[CourseDetailActivityViewModel::class.java]
-
-
         // 监听数据变更
         val courseTable by schedulerApplication
-        viewModel.courseWithClassTimes.observe(this) { courseWithClassTimes ->
+        viewModel.courseDetail.observe(this) { courseWithClassTimes ->
             if (!Course.checkLegitimacy(courseWithClassTimes, courseTable)) {
                 if (!delete) {
                     Toast.makeText(
@@ -129,7 +124,6 @@ class CourseDetailActivity : AppCompatActivity() {
                 }
                 finish()
             } else {
-
                 findViewById<TextView>(R.id.CourseDetailActivity_Title).text =
                     courseWithClassTimes.course.title
                 descriptionTextView.text =
@@ -143,7 +137,7 @@ class CourseDetailActivity : AppCompatActivity() {
 
         // 定义编辑按钮
         findViewById<Button>(R.id.CourseDetailActivity_EditButton).setOnClickListener {
-            val courseWithClassTimes = viewModel.courseWithClassTimes.value
+            val courseWithClassTimes = viewModel.courseDetail.value
             if (courseWithClassTimes != null) {
                 EditCourseActivity.startThisActivity(this, courseWithClassTimes)
             } else {
@@ -178,12 +172,13 @@ class CourseDetailActivity : AppCompatActivity() {
                             }
                     }) {
 
-                        val courseWithClassTimes = viewModel.courseWithClassTimes.value
+                        val courseWithClassTimes = viewModel.courseDetail.value
 
                         if (courseWithClassTimes != null) {
-                            delete = true
+                                  delete = true
                             viewModel.viewModelScope.launch {
-                                deleteCourse(
+                                viewModel.deleteCourse(
+                                    this@CourseDetailActivity,
                                     courseWithClassTimes,
                                     schedulerApplication.useCalendar
                                 )
@@ -204,15 +199,11 @@ class CourseDetailActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == android.R.id.home) {
-            onBackPressed()
+            finish()
             true
         } else {
             super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onBackPressed() {
-        finish()
     }
 
     // 以下为文字格式化方法。
@@ -316,19 +307,6 @@ class CourseDetailActivity : AppCompatActivity() {
         }
 
         return stringBuilder.toString()
-    }
-
-    /**
-     * MainActivity和CourseDetailActivity操作删除课程。
-     *
-     * @param courseWithClassTimes 要删除的课程对象。
-     * @param useCalendar 是否使用日历功能。
-     */
-    private suspend fun deleteCourse(
-        courseWithClassTimes: CourseWithClassTimes,
-        useCalendar: Boolean
-    ) {
-        courseDeleter.deleteCourse(this, courseWithClassTimes, useCalendar)
     }
 
     /**

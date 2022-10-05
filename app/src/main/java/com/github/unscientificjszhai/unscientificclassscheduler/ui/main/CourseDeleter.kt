@@ -1,6 +1,6 @@
 package com.github.unscientificjszhai.unscientificclassscheduler.ui.main
 
-import android.app.Activity
+import android.content.Context
 import com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.CourseWithClassTimes
 import com.github.unscientificjszhai.unscientificclassscheduler.features.calendar.EventsOperator
@@ -28,11 +28,11 @@ class CourseDeleter @Inject constructor(private val eventsOperator: EventsOperat
      * @param useCalendar 是否使用日历。
      */
     suspend fun deleteCourse(
-        context: Activity,
+        context: Context,
         courseWithClassTimes: CourseWithClassTimes,
         useCalendar: Boolean
     ) {
-        val application = (context.application) as SchedulerApplication
+        val application = (context.applicationContext) as SchedulerApplication
         withContext(Dispatchers.IO) {
             // 从日历中删除。
             if (useCalendar) {

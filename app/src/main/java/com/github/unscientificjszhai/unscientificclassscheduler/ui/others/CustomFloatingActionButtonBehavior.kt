@@ -46,7 +46,7 @@ class CustomFloatingActionButtonBehavior(context: Context, attributes: Attribute
                 .setInterpolator(linearInterpolator)
                 .setListener(object : AnimatorListenerAdapter() {
 
-                    override fun onAnimationStart(animation: Animator?) {
+                    override fun onAnimationStart(animation: Animator) {
                         view.visibility = View.VISIBLE
                     }
                 }).start()
@@ -68,16 +68,16 @@ class CustomFloatingActionButtonBehavior(context: Context, attributes: Attribute
 
                     private var mCanceled = false
 
-                    override fun onAnimationStart(animation: Animator?) {
+                    override fun onAnimationStart(animation: Animator) {
                         view.visibility = View.VISIBLE
                         mCanceled = false
                     }
 
-                    override fun onAnimationCancel(animation: Animator?) {
+                    override fun onAnimationCancel(animation: Animator) {
                         mCanceled = true
                     }
 
-                    override fun onAnimationEnd(animation: Animator?) {
+                    override fun onAnimationEnd(animation: Animator) {
                         if (!mCanceled) {
                             view.visibility = View.INVISIBLE
                         }

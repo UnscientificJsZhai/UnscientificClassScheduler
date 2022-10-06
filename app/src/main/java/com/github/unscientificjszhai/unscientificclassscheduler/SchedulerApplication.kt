@@ -8,6 +8,7 @@ import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.CourseT
 import com.github.unscientificjszhai.unscientificclassscheduler.data.database.CourseDatabase
 import com.github.unscientificjszhai.unscientificclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.MainActivity
+import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.fragments.CourseListFragment
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.SettingsActivity
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.SettingsFragment
 import dagger.hilt.android.HiltAndroidApp
@@ -42,7 +43,7 @@ class SchedulerApplication : Application(), CourseTable.Provider {
         const val COURSE_DATABASE_VERSION: Int = 1
 
         /**
-         * 默认的[CourseTable]id，表示新创建的对象的id时使用（本来为null）。
+         * 默认的[CourseTable]的id，表示新创建的对象的id时使用（本来为null）。
          */
         const val DEFAULT_DATABASE_OBJECT_ID: Long = -1
     }
@@ -95,7 +96,7 @@ class SchedulerApplication : Application(), CourseTable.Provider {
      * 因为创建新的CourseTable对象时id为null，所以需要将结果保存到数据库再从数据库中读取。
      *
      * @param newID 更改后的ID。可以从[CourseTable]对象中获取，也可以从[CourseTableDao.insertCourseTable]的返回值中获取。
-     * @see MainActivity.DatabaseChangeReceiver
+     * @see CourseListFragment.DatabaseChangeReceiver
      * @see SettingsActivity.DatabaseChangeReceiver
      */
     fun updateTableID(newID: Long) {

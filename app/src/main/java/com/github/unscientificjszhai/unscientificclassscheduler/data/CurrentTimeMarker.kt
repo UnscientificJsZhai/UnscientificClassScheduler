@@ -14,7 +14,7 @@ import kotlin.reflect.KProperty
  * @param courseTable 课程表对象。
  * @author UnscientificJsZhai
  */
-class CurrentTimeMarker(private var courseTable: CourseTable) {
+class CurrentTimeMarker(var courseTable: CourseTable) {
 
     /**
      * 为[CurrentTimeMarker]提供属性委托功能。
@@ -71,11 +71,11 @@ class CurrentTimeMarker(private var courseTable: CourseTable) {
     }
 
     /**
-     * 返回当前在第几节课。0.5意味着在今天所有课上课之前。1.5意味着已经下了第一节课但是第二节课还没有上课。
+     * 返回当前在第几节课。
      *
-     * @param courseTable 获取时间表。
+     * @return 一个浮点数。0.5意味着在今天所有课上课之前。1.0意味着正在上第一节课。1.5意味着已经下了第一节课但是第二节课还没有上课。
      */
-    fun nowLessonNumber(courseTable: CourseTable): Double {
+    fun nowLessonNumber(): Double {
         val timeTable = courseTable.timeTable
         val now = Calendar.getInstance()
         var answer = 0.0
@@ -170,14 +170,5 @@ class CurrentTimeMarker(private var courseTable: CourseTable) {
         }
 
         return newList
-    }
-
-    /**
-     * 更新CourseTable的方法。
-     *
-     * @param courseTable 更改后的课程表对象。
-     */
-    fun setCourseTable(courseTable: CourseTable) {
-        this.courseTable = courseTable
     }
 }

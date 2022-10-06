@@ -13,6 +13,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.unscientificjszhai.unscientificclassscheduler.R
 import com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplication
+import com.github.unscientificjszhai.unscientificclassscheduler.data.CurrentTimeMarker
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.CourseWithClassTimes
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.editor.EditCourseActivity
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.CourseAdapter
@@ -58,6 +61,12 @@ class CourseListFragment : Fragment() {
 
     private lateinit var emptyTextView: TextView
 
+    private val currentTimeMarker: CurrentTimeMarker by lazy {
+        schedulerApplication.courseTable?.let {
+            CurrentTimeMarker(it)
+        } ?: throw RuntimeException()
+    }
+
     /**
      * 处理系统日期变更的广播接收器。
      */
@@ -87,6 +96,30 @@ class CourseListFragment : Fragment() {
         }
     }
 
+    /**
+     * 用于处理当前课程表更改事件的广播接收器。
+     */
+    inner class DatabaseChangeReceiver : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent?) {
+            // 更新NowTimeTagger
+            val schedulerApplication = context.applicationContext as SchedulerApplication
+            val courseTable by schedulerApplication
+            currentTimeMarker.courseTable = courseTable
+
+            viewModel.courseList.removeObservers(this@CourseListFragment)
+            viewModel.courseList = schedulerApplication
+                .getCourseDatabase().courseDao()
+                .getLiveCourses(schedulerApplication.nowTableID) // 更新ViewModel中的LiveData
+            viewModel.courseList.observe(this@CourseListFragment) { courseList ->
+                bindData(courseList)
+                updateActionBarLabel()
+            }
+        }
+    }
+
+    private lateinit var databaseChangeReceiver: DatabaseChangeReceiver
+
     private lateinit var dateChangeReceiver: DateChangeReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,9 +129,15 @@ class CourseListFragment : Fragment() {
 
         // 监听日期变更
         this.dateChangeReceiver = DateChangeReceiver()
-        requireActivity().registerReceiver(this.dateChangeReceiver, IntentFilter().apply {
+        registerReceiver(requireContext(), this.dateChangeReceiver, IntentFilter().apply {
             addAction(Intent.ACTION_TIME_TICK)
-        })
+        }, ContextCompat.RECEIVER_EXPORTED)
+
+        // 监听数据库变更
+        this.databaseChangeReceiver = DatabaseChangeReceiver()
+        registerReceiver(requireContext(), this.databaseChangeReceiver, IntentFilter().apply {
+            addAction(MainActivity.COURSE_DATABASE_CHANGE_ACTION)
+        }, ContextCompat.RECEIVER_NOT_EXPORTED)
     }
 
     override fun onCreateView(
@@ -112,7 +151,10 @@ class CourseListFragment : Fragment() {
         this.rootView = view.findViewById(R.id.MainActivity_RootView)
 
         this.recyclerView = view.findViewById(R.id.MainActivity_RootRecyclerView)
-        this.recyclerViewAdapter = CourseAdapter(requireActivity() as MainActivity)
+        this.recyclerViewAdapter = CourseAdapter(
+            currentTimeMarker,
+            isShowTodayOnly()
+        )
         this.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         this.recyclerView.adapter = this.recyclerViewAdapter
         registerForContextMenu(recyclerView)
@@ -133,8 +175,6 @@ class CourseListFragment : Fragment() {
 
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        val currentTimeMarker by requireActivity() as MainActivity
-
         menu.findItem(R.id.MainActivity_ShowTodayOnly).apply {
             isEnabled = currentTimeMarker.getWeekNumber() != 0
             isChecked = viewModel.showTodayOnly
@@ -147,6 +187,7 @@ class CourseListFragment : Fragment() {
             R.id.MainActivity_Settings -> startActivity<SettingsActivity>(requireActivity())
             R.id.MainActivity_ShowTodayOnly -> {
                 viewModel.showTodayOnly = !item.isChecked
+                recyclerViewAdapter.setShowTodayOnly(viewModel.showTodayOnly)
                 bindData(viewModel.courseList.value ?: ArrayList())
                 updateActionBarLabel()
             }
@@ -271,7 +312,6 @@ class CourseListFragment : Fragment() {
      * @param courseList 完整的Course列表。
      */
     fun bindData(courseList: List<CourseWithClassTimes>) {
-        val currentTimeMarker by requireActivity() as MainActivity
         progressBar.visibility = View.GONE
         val listToSubmit = if (viewModel.showTodayOnly) {
             currentTimeMarker.getTodayCourseList(originalList = courseList)
@@ -299,7 +339,6 @@ class CourseListFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        val currentTimeMarker by requireActivity() as MainActivity
         updateActionBarLabel()
         if (currentTimeMarker.getWeekNumber() == 0) {
             viewModel.showTodayOnly = false
@@ -320,6 +359,7 @@ class CourseListFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        requireActivity().unregisterReceiver(this.databaseChangeReceiver)
         requireActivity().unregisterReceiver(this.dateChangeReceiver)
     }
 
@@ -327,7 +367,6 @@ class CourseListFragment : Fragment() {
      * 更新ActionBar的标题。
      */
     fun updateActionBarLabel() {
-        val currentTimeMarker by requireActivity() as MainActivity
         val application = requireActivity().application as SchedulerApplication
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val option = sharedPreferences.getString("showOnMainActivity", "table")
@@ -378,4 +417,11 @@ class CourseListFragment : Fragment() {
         }
         labelViewModel.postLabel(stringBuilder.toString())
     }
+
+    /**
+     * 查询是否只显示今天，提供给Adapter使用。
+     *
+     * @return 是否只显示今天。
+     */
+    private fun isShowTodayOnly(): Boolean = this.viewModel.showTodayOnly
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.CourseWithClassTimes
+import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.ClassTimeDao
 import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.CourseDao
 import com.github.unscientificjszhai.unscientificclassscheduler.features.calendar.EventsOperator
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.fragments.CourseListFragment
@@ -31,11 +32,14 @@ class MainActivityViewModel @Inject constructor(
     dao: CourseDao,
     @ApplicationContext application: Context,
     private val eventsOperator: EventsOperator,
-    private val deleteOperator: CourseDeleter
+    private val deleteOperator: CourseDeleter,
+    private val courseDao: CourseDao,
+    private val classTimeDao: ClassTimeDao
 ) : ViewModel() {
 
     var courseList: LiveData<List<CourseWithClassTimes>> =
         dao.getLiveCourses((application as SchedulerApplication).nowTableID)
+        private set
 
     /**
      * MainActivity和CourseDetailActivity操作删除课程。
@@ -72,9 +76,6 @@ class MainActivityViewModel @Inject constructor(
                 eventsOperator.addEvent(context, courseTable, courseWithClassTimes)
             }
             // 重新添加回数据库
-            val database = application.getCourseDatabase()
-            val courseDao = database.courseDao()
-            val classTimeDao = database.classTimeDao()
             courseDao.insertCourse(courseWithClassTimes.course)
             courseWithClassTimes.classTimes.forEach {
                 classTimeDao.insertClassTime(it)
@@ -90,6 +91,10 @@ class MainActivityViewModel @Inject constructor(
     fun isListEmpty(): Boolean {
         val courseList = this.courseList.value
         return courseList?.isEmpty() ?: true
+    }
+
+    fun setTableID(id: Long) {
+        this.courseList = this.courseDao.getLiveCourses(id)
     }
 
     /**

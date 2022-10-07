@@ -20,7 +20,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class CurrentTableSelectorActivityViewModel @Inject constructor(
-    dao: CourseTableDao,
+    private val dao: CourseTableDao,
     private val calendarOperator: CalendarOperator
 ) : ViewModel() {
 
@@ -38,8 +38,6 @@ class CurrentTableSelectorActivityViewModel @Inject constructor(
         withContext(Dispatchers.IO) {
             calendarOperator.createCalendarTable(context, courseTable)
 
-            val dao =
-                timeManagerApplication.getCourseDatabase().courseTableDao()
             val id = dao.insertCourseTable(courseTable)
             timeManagerApplication.updateTableID(id)
         }
@@ -52,27 +50,19 @@ class CurrentTableSelectorActivityViewModel @Inject constructor(
      * @param courseTable 要重命名的课程表对象。
      */
     suspend fun renameCourseTable(context: Activity, courseTable: CourseTable) {
-        val timeManagerApplication = context.application as SchedulerApplication
 
         withContext(Dispatchers.IO) {
             calendarOperator.updateCalendarTable(context, courseTable)
 
-            val dao =
-                timeManagerApplication.getCourseDatabase()
-                    .courseTableDao()
             dao.updateCourseTable(courseTable)
         }
     }
 
     suspend fun deleteCourseTable(context: Activity, courseTable: CourseTable) {
-        val timeManagerApplication = context.application as SchedulerApplication
 
         withContext(Dispatchers.IO) {
             calendarOperator.deleteCalendarTable(context, courseTable)
 
-            val dao =
-                timeManagerApplication.getCourseDatabase()
-                    .courseTableDao()
             dao.deleteCourseTable(courseTable)
             context.deleteDatabase("table${courseTable.id}.db")
         }

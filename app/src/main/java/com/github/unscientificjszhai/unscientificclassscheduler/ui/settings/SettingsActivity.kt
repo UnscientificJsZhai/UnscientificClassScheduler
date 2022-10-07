@@ -18,9 +18,7 @@ import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.MainActi
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.others.CalendarOperatorActivity
 import com.github.unscientificjszhai.unscientificclassscheduler.util.setSystemUIAppearance
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * 设置Activity，设置项的初始化在SettingsFragment中。使用了JetPack库的Preference库。
@@ -109,12 +107,7 @@ class SettingsActivity : CalendarOperatorActivity() {
                     val uri = it.data?.data
                     if (uri != null) {
                         viewModel.viewModelScope.launch {
-                            val courseICS = withContext(Dispatchers.Default) {
-                                // 获取当前选中的学期的课程表
-                                val courseList = schedulerApplication.getCourseDatabase()
-                                    .courseDao().getCourses(schedulerApplication.nowTableID)
-                                CourseICS(courseList, courseTable)
-                            }
+                            val courseICS = viewModel.getCourseICS(courseTable)
                             courseICS.writeToFile(this@SettingsActivity, uri)
                         }
                     }

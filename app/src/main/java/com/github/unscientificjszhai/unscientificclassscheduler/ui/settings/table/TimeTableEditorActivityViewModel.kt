@@ -3,6 +3,7 @@ package com.github.unscientificjszhai.unscientificclassscheduler.ui.settings.tab
 import android.app.Activity
 import androidx.lifecycle.ViewModel
 import com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplication
+import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.CourseTableDao
 import com.github.unscientificjszhai.unscientificclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientificclassscheduler.data.tables.TimetableTypeConverter
 import com.github.unscientificjszhai.unscientificclassscheduler.features.calendar.EventsOperator
@@ -20,7 +21,8 @@ import kotlin.reflect.KProperty
  */
 @HiltViewModel
 class TimeTableEditorActivityViewModel @Inject constructor(
-    private val eventsOperator: EventsOperator
+    private val eventsOperator: EventsOperator,
+    private val courseTableDao: CourseTableDao
 ) : ViewModel() {
 
     var duration = 0
@@ -45,8 +47,7 @@ class TimeTableEditorActivityViewModel @Inject constructor(
         val timeManagerApplication = context.application as SchedulerApplication
 
         withContext(Dispatchers.Default) {
-            timeManagerApplication.getCourseDatabase().courseTableDao()
-                .updateCourseTable(this@TimeTableEditorActivityViewModel.courseTable)
+            courseTableDao.updateCourseTable(this@TimeTableEditorActivityViewModel.courseTable)
             timeManagerApplication.updateTableID(this@TimeTableEditorActivityViewModel.courseTable.id!!)
 
             if (useCalendar) {

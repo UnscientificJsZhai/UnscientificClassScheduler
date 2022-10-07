@@ -7,9 +7,9 @@ import android.provider.CalendarContract
 import android.util.Log
 import androidx.annotation.WorkerThread
 import androidx.preference.PreferenceManager
-import com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.ClassTime
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.CourseWithClassTimes
+import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.CourseDao
 import com.github.unscientificjszhai.unscientificclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientificclassscheduler.data.tables.FormattedTime
 import java.lang.ref.WeakReference
@@ -24,7 +24,9 @@ import javax.inject.Singleton
  * @author UnscientificJsZhai
  */
 @Singleton
-class EventsOperator @Inject constructor() {
+class EventsOperator @Inject constructor(
+    private val courseDao: CourseDao
+) {
 
     companion object {
 
@@ -214,8 +216,6 @@ class EventsOperator @Inject constructor() {
      */
     @WorkerThread
     fun updateAllEvents(context: Context, courseTable: CourseTable) {
-        val courseDao =
-            (context.applicationContext as SchedulerApplication).getCourseDatabase().courseDao()
         val courses = courseDao.getCourses()
 
         for (courseWithClassTimes in courses) {

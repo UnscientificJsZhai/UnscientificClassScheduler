@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -55,7 +56,7 @@ class TimeTableEditorActivity : AppCompatActivity() {
             return
         }
 
-        //初始化ViewModel中的数据
+        // 初始化ViewModel中的数据
         viewModel.duration = FormattedTime(viewModel.courseTable.timeTable[0]).duration()
 
         this.adapter = TimeTableEditorAdapter(this.viewModel)
@@ -70,6 +71,18 @@ class TimeTableEditorActivity : AppCompatActivity() {
                 layoutManager.orientation
             )
         )
+
+        onBackPressedDispatcher.addCallback {
+            AlertDialog.Builder(this@TimeTableEditorActivity)
+                .setTitle(R.string.activity_EditCourse_UnsavedAlertTitle)
+                .setPositiveButton(R.string.common_confirm) { dialog, _ ->
+                    dialog?.dismiss()
+                    finish()
+                }
+                .setNegativeButton(R.string.common_cancel) { dialog, _ ->
+                    dialog?.dismiss()
+                }.show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -79,32 +92,28 @@ class TimeTableEditorActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         } else if (item.itemId == R.id.TimeTableEditorActivity_Done) {
             val id = viewModel.courseTable.id
-            if (id != null && viewModel.courseTable.timeTable.typeConvert() != this.viewModel.originTimeTable) {
-                viewModel.viewModelScope.launch {
-                    viewModel.save(this@TimeTableEditorActivity, schedulerApplication.useCalendar)
+            if (id != null) {
+                if (viewModel.courseTable.timeTable.typeConvert() != this.viewModel.originTimeTable) {
+                    viewModel.viewModelScope.launch {
+                        viewModel.save(
+                            this@TimeTableEditorActivity,
+                            schedulerApplication.useCalendar
+                        )
+                        finish()
+                    }
+                } else {
                     finish()
                 }
-            } else if (viewModel.courseTable.timeTable.typeConvert() != this.viewModel.originTimeTable) {
+            } else {
                 Toast.makeText(this, R.string.activity_EditCourse_DataError, Toast.LENGTH_SHORT)
                     .show()
                 finish()
             }
         }
         return true
-    }
-
-    override fun onBackPressed() {
-        AlertDialog.Builder(this).setTitle(R.string.activity_EditCourse_UnsavedAlertTitle)
-            .setPositiveButton(R.string.common_confirm) { dialog, _ ->
-                dialog?.dismiss()
-                finish()
-            }
-            .setNegativeButton(R.string.common_cancel) { dialog, _ ->
-                dialog?.dismiss()
-            }.show()
     }
 
     /**

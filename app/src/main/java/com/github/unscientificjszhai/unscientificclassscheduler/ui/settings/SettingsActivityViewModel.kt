@@ -3,7 +3,11 @@ package com.github.unscientificjszhai.unscientificclassscheduler.ui.settings
 import android.app.Activity
 import androidx.lifecycle.ViewModel
 import com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplication
+import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.CourseDao
+import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.CourseTableDao
+import com.github.unscientificjszhai.unscientificclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientificclassscheduler.features.backup.BackupOperator
+import com.github.unscientificjszhai.unscientificclassscheduler.features.backup.CourseICS
 import com.github.unscientificjszhai.unscientificclassscheduler.features.calendar.CalendarOperator
 import com.github.unscientificjszhai.unscientificclassscheduler.features.calendar.EventsOperator
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +27,9 @@ class SettingsActivityViewModel @Inject constructor(
     private val dataStore: SettingsDataStore,
     val backupOperator: BackupOperator,
     private val calendarOperator: CalendarOperator,
-    private val eventsOperator: EventsOperator
+    private val eventsOperator: EventsOperator,
+    private val tableDao: CourseTableDao,
+    private val courseDao: CourseDao
 ) : ViewModel(), SettingsDataStore.Getter {
 
     override fun getValue(thisRef: Any?, property: KProperty<*>) = this.dataStore
@@ -39,19 +45,13 @@ class SettingsActivityViewModel @Inject constructor(
             val courseTable = dataStore.nowCourseTable
             calendarOperator.deleteCalendarTable(context, courseTable)
             calendarOperator.createCalendarTable(context, courseTable)
-            val application =
-                context.applicationContext as SchedulerApplication
+            val application = context.applicationContext as SchedulerApplication
 
-            val tableDao =
-                application.getCourseDatabase().courseTableDao()
             tableDao.updateCourseTable(courseTable)
-            val courseDao = application.getCourseDatabase().courseDao()
             courseDao.getCourses(application.nowTableID).run {
                 for (courseWithClassTimes in this) {
                     eventsOperator.addEvent(
-                        context,
-                        courseTable,
-                        courseWithClassTimes
+                        context, courseTable, courseWithClassTimes
                     )
                     courseDao.updateCourse(courseWithClassTimes.course)
                 }
@@ -78,4 +78,19 @@ class SettingsActivityViewModel @Inject constructor(
             calendarOperator.deleteAllTables(context)
         }
     }
+
+    /**
+     * 获取制定课程表的全部课程，封装成ICS对象。
+     *
+     * @param courseTable 课程表对象。
+     * @return 包含这张表中所有课程的课程表ICS对象。
+     */
+    suspend fun getCourseICS(courseTable: CourseTable) =
+        withContext(Dispatchers.Default) {
+            // 获取当前选中的学期的课程表
+            val courseList = courseDao.getCourses(
+                courseTable.id ?: SchedulerApplication.DEFAULT_DATABASE_OBJECT_ID
+            )
+            CourseICS(courseList, courseTable)
+        }
 }

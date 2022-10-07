@@ -3,6 +3,8 @@ package com.github.unscientificjszhai.unscientificclassscheduler.ui.main
 import android.content.Context
 import com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.CourseWithClassTimes
+import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.ClassTimeDao
+import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.CourseDao
 import com.github.unscientificjszhai.unscientificclassscheduler.features.calendar.EventsOperator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -18,7 +20,11 @@ import javax.inject.Singleton
  * @since 1.3.0
  */
 @Singleton
-class CourseDeleter @Inject constructor(private val eventsOperator: EventsOperator) {
+class CourseDeleter @Inject constructor(
+    private val eventsOperator: EventsOperator,
+    private val courseDao: CourseDao,
+    private val classTimeDao: ClassTimeDao
+) {
 
     /**
      * MainActivity和CourseDetailActivity操作删除课程。
@@ -45,9 +51,6 @@ class CourseDeleter @Inject constructor(private val eventsOperator: EventsOperat
             }
 
             // 从数据库中删除。
-            val database = application.getCourseDatabase()
-            val courseDao = database.courseDao()
-            val classTimeDao = database.classTimeDao()
             courseDao.deleteCourse(courseWithClassTimes.course)
             classTimeDao.deleteClassTimes(courseWithClassTimes.classTimes)
         }

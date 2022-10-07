@@ -108,9 +108,7 @@ class CourseListFragment : Fragment() {
             currentTimeMarker.courseTable = courseTable
 
             viewModel.courseList.removeObservers(this@CourseListFragment)
-            viewModel.courseList = schedulerApplication
-                .getCourseDatabase().courseDao()
-                .getLiveCourses(schedulerApplication.nowTableID) // 更新ViewModel中的LiveData
+            viewModel.setTableID(schedulerApplication.nowTableID) // 更新ViewModel中的LiveData
             viewModel.courseList.observe(this@CourseListFragment) { courseList ->
                 bindData(courseList)
                 updateActionBarLabel()

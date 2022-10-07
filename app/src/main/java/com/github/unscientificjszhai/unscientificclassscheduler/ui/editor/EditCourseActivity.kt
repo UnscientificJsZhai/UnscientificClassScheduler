@@ -21,7 +21,6 @@ import com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplica
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.ClassTime
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.Course
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.CourseWithClassTimes
-import com.github.unscientificjszhai.unscientificclassscheduler.data.database.CourseDatabase
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.CourseDetailActivity
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.others.CalendarOperatorActivity
 import com.github.unscientificjszhai.unscientificclassscheduler.util.*
@@ -72,8 +71,6 @@ class EditCourseActivity : CalendarOperatorActivity(), View.OnClickListener,
     private lateinit var schedulerApplication: SchedulerApplication
 
     private lateinit var viewModel: EditCourseActivityViewModel
-
-    private lateinit var courseDatabase: CourseDatabase
 
     private lateinit var rootRecyclerView: RecyclerView
     private lateinit var adapter: EditCourseAdapter
@@ -130,9 +127,6 @@ class EditCourseActivity : CalendarOperatorActivity(), View.OnClickListener,
         val linearLayoutManager = LinearLayoutManager(this)
         this.rootRecyclerView.layoutManager = linearLayoutManager
         this.rootRecyclerView.adapter = ConcatAdapter(headerAdapter, adapter)
-
-        // 从Application获取Database的引用
-        this.courseDatabase = (application as SchedulerApplication).getCourseDatabase()
 
         // 浮动按钮的监听器
         this.floatingActionButton = findViewById(R.id.EditCourseActivity_PlusButton)

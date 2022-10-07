@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.Course
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.CourseWithClassTimes
+import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.ClassTimeDao
+import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.CourseDao
 import com.github.unscientificjszhai.unscientificclassscheduler.features.calendar.EventsOperator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +20,9 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class CourseListFragmentViewModel @Inject constructor(
-    private val eventsOperator: EventsOperator
+    private val eventsOperator: EventsOperator,
+    private val courseDao: CourseDao,
+    private val classTimeDao: ClassTimeDao
 ) : ViewModel() {
 
     lateinit var courseList: List<CourseWithClassTimes>
@@ -36,10 +40,7 @@ class CourseListFragmentViewModel @Inject constructor(
         val exceptionList = ArrayList<String>()
         withContext(Dispatchers.IO) {
             //导入到当前的课程表中
-            val courseDatabase = application.getCourseDatabase()
             val courseTable by application
-            val courseDao = courseDatabase.courseDao()
-            val classTimesDao = courseDatabase.classTimeDao()
 
             val table = application.courseTable
 
@@ -55,7 +56,7 @@ class CourseListFragmentViewModel @Inject constructor(
                 val courseId = courseDao.insertCourse(course)
                 for (classTime in courseWithClassTime.classTimes) {
                     classTime.courseId = courseId
-                    classTimesDao.insertClassTime(classTime)
+                    classTimeDao.insertClassTime(classTime)
                 }
             }
         }

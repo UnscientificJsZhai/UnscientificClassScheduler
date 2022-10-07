@@ -4,8 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.content.Intent
 import androidx.preference.PreferenceManager
+import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.CourseDao
 import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.CourseTableDao
-import com.github.unscientificjszhai.unscientificclassscheduler.data.database.CourseDatabase
 import com.github.unscientificjszhai.unscientificclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.MainActivity
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.fragments.CourseListFragment
@@ -60,35 +60,26 @@ class SchedulerApplication : Application(), CourseTable.Provider {
     var courseTable: CourseTable? = null
         private set
 
-    /**
-     * Course数据库对象。
-     */
+    private lateinit var tableDao: CourseTableDao
+    private lateinit var courseDao: CourseDao
+
     @Inject
-    lateinit var courseDatabase: CourseDatabase
-        @JvmName("_getCourseDatabase") get
+    fun injectDao(
+        tableDao: CourseTableDao,
+        courseDao: CourseDao
+    ) {
+        this.tableDao = tableDao
+        this.courseDao = courseDao
+    }
 
     override fun onCreate() {
         super.onCreate()
         val sharedPreferences = getSharedPreferences(INITIAL, Context.MODE_PRIVATE)
         this.nowTableID =
             sharedPreferences.getLong(NOW_TABLE_SP_KEY, DEFAULT_DATABASE_OBJECT_ID)
-        // 开启子线程加载数据库对象
-        thread(start = true) {
-            getCourseDatabase()
-            if (nowTableID != DEFAULT_DATABASE_OBJECT_ID) {
-                this.courseTable =
-                    getCourseDatabase().courseTableDao().getCourseTable(this.nowTableID)
-            }
+        thread {
+            this.courseTable = this.tableDao.getCourseTable(this.nowTableID)
         }
-    }
-
-    /**
-     * 获取Course的RoomDatabase对象。全局单例。也可以调用此方法来使目标数据库初始化。
-     *
-     * @return Course的RoomDatabase对象，可以调用它的Dao方法进行数据操作。
-     */
-    fun getCourseDatabase(): CourseDatabase {
-        return this.courseDatabase
     }
 
     /**
@@ -107,7 +98,7 @@ class SchedulerApplication : Application(), CourseTable.Provider {
 
         this.nowTableID = newID
         thread(start = true) {
-            this.courseTable = getCourseDatabase().courseTableDao().getCourseTable(newID)
+            this.courseTable = this.tableDao.getCourseTable(newID)
 
             // 发送广播
             val broadcastIntent = Intent(MainActivity.COURSE_DATABASE_CHANGE_ACTION)

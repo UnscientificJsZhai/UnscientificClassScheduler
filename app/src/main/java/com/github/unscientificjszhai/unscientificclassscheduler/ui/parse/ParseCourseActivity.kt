@@ -6,9 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.github.unscientificjszhai.unscientificclassscheduler.R
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.others.CalendarOperatorActivity
 import com.github.unscientificjszhai.unscientificclassscheduler.util.setSystemUIAppearance
-import com.github.unscientificjszhai.unscientificcourseparser.core.factory.ParserFactory
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.reflect.KProperty
 
 /**
  * 从教务系统导入。
@@ -47,13 +45,5 @@ class ParseCourseActivity : CalendarOperatorActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        val fragment = supportFragmentManager.findFragmentById(R.id.SingleFragmentActivity_RootView)
-        if (fragment is WebViewFragment && fragment.webPageBack()) {
-            return
-        }
-        super.onBackPressed()
     }
 }

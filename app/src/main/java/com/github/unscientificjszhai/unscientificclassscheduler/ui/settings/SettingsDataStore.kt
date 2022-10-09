@@ -2,10 +2,15 @@ package com.github.unscientificjszhai.unscientificclassscheduler.ui.settings
 
 import android.content.Context
 import androidx.preference.PreferenceDataStore
+import com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.ClassTime
 import com.github.unscientificjszhai.unscientificclassscheduler.data.dao.CourseTableDao
 import com.github.unscientificjszhai.unscientificclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientificclassscheduler.features.calendar.EventsOperator
+import com.github.unscientificjszhai.unscientificclassscheduler.util.CourseTableNullException
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.android.scopes.ActivityRetainedScoped
+import javax.inject.Inject
 import kotlin.concurrent.thread
 import kotlin.reflect.KProperty
 
@@ -17,6 +22,7 @@ import kotlin.reflect.KProperty
  * @param context 上下文，用于更新日历。
  * @author UnscientificJsZhai
  */
+@ActivityRetainedScoped
 class SettingsDataStore(
     var nowCourseTable: CourseTable,
     private val courseTableDao: CourseTableDao,
@@ -24,6 +30,20 @@ class SettingsDataStore(
     private val eventsOperator: EventsOperator,
     private val notifyApplicationCourseTableChanged: ((Long) -> Unit)?
 ) : PreferenceDataStore() {
+
+    @Inject
+    constructor(
+        @ApplicationContext context: Context,
+        courseTableDao: CourseTableDao,
+        eventsOperator: EventsOperator
+    ) : this(
+        courseTableDao = courseTableDao,
+        context = context,
+        nowCourseTable = (context as SchedulerApplication).courseTable
+            ?: throw CourseTableNullException(),
+        eventsOperator = eventsOperator,
+        notifyApplicationCourseTableChanged = context::updateTableID
+    )
 
     /**
      * 为[SettingsDataStore]提供属性委托功能。
@@ -35,7 +55,7 @@ class SettingsDataStore(
 
     override fun putString(key: String?, value: String?) {
         when (key) {
-            //学期上课周数
+            // 学期上课周数
             SettingsFragment.MAX_WEEK_KEY -> {
                 if (value?.isEmpty() == false) {
                     val newValue = try {

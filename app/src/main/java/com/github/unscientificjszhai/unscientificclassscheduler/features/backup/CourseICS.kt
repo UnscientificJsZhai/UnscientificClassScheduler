@@ -1,25 +1,23 @@
 package com.github.unscientificjszhai.unscientificclassscheduler.features.backup
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.annotation.UiThread
 import androidx.appcompat.app.AppCompatActivity
-import com.github.unscientificjszhai.unscientificclassscheduler.R
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.ClassTime
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.Course
 import com.github.unscientificjszhai.unscientificclassscheduler.data.course.CourseWithClassTimes
 import com.github.unscientificjszhai.unscientificclassscheduler.data.tables.CourseTable
 import com.github.unscientificjszhai.unscientificclassscheduler.data.tables.FormattedTime
-import com.github.unscientificjszhai.unscientificclassscheduler.ui.others.ProgressDialog
 import com.github.unscientificjszhai.unscientificclassscheduler.util.with0
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.lang.ref.WeakReference
 import java.nio.charset.StandardCharsets
 import java.util.*
-import kotlin.concurrent.thread
 
 /**
  * 生成Course对象的ICS格式字符串的类。
@@ -281,26 +279,14 @@ class CourseICS(
      *
      * @param context 进行备份操作的上下文，因为要显示Dialog，仅接受Activity。
      * @param uri 备份文件的uri，需要可以被写入。
+     * @throws IOException 写入文件出错时抛出异常。
      */
-    @UiThread
-    fun writeToFile(context: Activity, uri: Uri) {
-        val progressDialog = ProgressDialog(context)
-        progressDialog.show()
-        thread(start = true) {
-            try {
-                val outputStream = context.contentResolver.openOutputStream(uri)
-                outputStream!!.write(this.toString().toByteArray(StandardCharsets.UTF_8))
-                outputStream.close()
-            } catch (e: IOException) {
-                context.runOnUiThread {
-                    Toast.makeText(
-                        context,
-                        R.string.activity_Settings_FailToBackup,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-            progressDialog.postDismiss()
+    @Throws(IOException::class)
+    suspend fun writeToFile(context: Context, uri: Uri) {
+        withContext(Dispatchers.IO) {
+            val outputStream = context.contentResolver.openOutputStream(uri)
+            outputStream!!.write(this.toString().toByteArray(StandardCharsets.UTF_8))
+            outputStream.close()
         }
     }
 }

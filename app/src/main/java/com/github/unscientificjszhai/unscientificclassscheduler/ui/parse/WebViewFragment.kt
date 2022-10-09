@@ -200,6 +200,7 @@ class WebViewFragment : Fragment() {
      *
      * @return WebView已经返回，返回true。如果WebView不能返回，返回false。
      */
+    @Deprecated("")
     fun webPageBack(): Boolean = if (webView.canGoBack()) {
         webView.goBack()
         true

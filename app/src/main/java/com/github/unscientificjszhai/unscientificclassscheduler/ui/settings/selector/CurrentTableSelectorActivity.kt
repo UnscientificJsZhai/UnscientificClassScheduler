@@ -125,7 +125,7 @@ class CurrentTableSelectorActivity : CalendarOperatorActivity() {
                 return true
             }
             android.R.id.home -> {
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
                 return true
             }
             else -> {

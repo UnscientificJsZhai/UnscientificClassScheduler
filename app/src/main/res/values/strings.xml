@@ -208,4 +208,6 @@
     <string name="fragment_CourseListFragment_Dialog_CompleteMessage">但是以下课程因为数据不合法无法导入，请尝试手动导入：</string>
     <string name="fragment_CourseListFragment_Dialog_FailMessage">没有解析到数据，请重新尝试</string>
 
+    <string name="slice_ActionTitle">打开应用查看</string>
+
 </resources>

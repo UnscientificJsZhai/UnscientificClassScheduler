@@ -7,18 +7,22 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.ViewModelProvider
+import androidx.activity.viewModels
 import androidx.lifecycle.viewModelScope
 import com.github.unscientificjszhai.unscientificclassscheduler.R
 import com.github.unscientificjszhai.unscientificclassscheduler.SchedulerApplication
 import com.github.unscientificjszhai.unscientificclassscheduler.features.backup.CourseICS
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.main.MainActivity
 import com.github.unscientificjszhai.unscientificclassscheduler.ui.others.CalendarOperatorActivity
+import com.github.unscientificjszhai.unscientificclassscheduler.ui.others.ProgressDialog
 import com.github.unscientificjszhai.unscientificclassscheduler.util.setSystemUIAppearance
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 /**
  * 设置Activity，设置项的初始化在SettingsFragment中。使用了JetPack库的Preference库。
@@ -31,7 +35,7 @@ class SettingsActivity : CalendarOperatorActivity() {
 
     private lateinit var schedulerApplication: SchedulerApplication
 
-    internal lateinit var viewModel: SettingsActivityViewModel
+    private val viewModel: SettingsActivityViewModel by viewModels()
 
     private lateinit var backupLauncher: ActivityResultLauncher<Intent>
     private lateinit var importLauncher: ActivityResultLauncher<Intent>
@@ -61,8 +65,6 @@ class SettingsActivity : CalendarOperatorActivity() {
 
         this.schedulerApplication = application as SchedulerApplication
         val courseTable by schedulerApplication
-
-        this.viewModel = ViewModelProvider(this)[SettingsActivityViewModel::class.java]
 
         // 替换Fragment
 
@@ -106,9 +108,20 @@ class SettingsActivity : CalendarOperatorActivity() {
                 if (it.resultCode == RESULT_OK) {
                     val uri = it.data?.data
                     if (uri != null) {
-                        viewModel.viewModelScope.launch {
+                        viewModel.viewModelScope.launch(Dispatchers.Main) {
                             val courseICS = viewModel.getCourseICS(courseTable)
-                            courseICS.writeToFile(this@SettingsActivity, uri)
+                            val progressDialog = ProgressDialog(this@SettingsActivity)
+                            progressDialog.show()
+                            try {
+                                courseICS.writeToFile(this@SettingsActivity, uri)
+                            } catch (e: IOException) {
+                                Toast.makeText(
+                                    this@SettingsActivity,
+                                    R.string.activity_Settings_FailToBackup,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            progressDialog.postDismiss()
                         }
                     }
                 }

@@ -8,6 +8,7 @@ import android.text.InputType
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewModelScope
 import androidx.preference.*
 import com.github.unscientificjszhai.unscientificclassscheduler.R
@@ -74,6 +75,8 @@ class SettingsFragment : PreferenceFragmentCompat(),
         const val REMIND_TIME_KEY = "remindTime"
     }
 
+    private val viewModel: SettingsActivityViewModel by activityViewModels()
+
     private var currentTablePreference: Preference? = null
     private var howManyWeeksPreference: EditTextPreference? = null
     private var classesPerDayPreference: EditTextPreference? = null
@@ -96,7 +99,6 @@ class SettingsFragment : PreferenceFragmentCompat(),
         this.currentTablePreference = findPreference(CURRENT_TABLE_KEY)
         currentTablePreference?.summaryProvider = this
 
-        val viewModel = (requireActivity() as SettingsActivity).viewModel
         val dataStore by viewModel
 
         // 学期周数的设置项
@@ -295,7 +297,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
      * @param courseTable 更新后的CourseTable。
      */
     fun updateCourseTable(courseTable: CourseTable) {
-        val dataStore by (requireActivity() as SettingsActivity).viewModel
+        val dataStore by viewModel
         dataStore.nowCourseTable = courseTable
         // 通过重设summaryProvider的方法更新Summary
         this.currentTablePreference?.summaryProvider = this
@@ -305,7 +307,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
     }
 
     override fun provideSummary(preference: Preference): String {
-        val dataStore by (requireActivity() as SettingsActivity).viewModel
+        val dataStore by viewModel
         return when (preference) {
             this.currentTablePreference -> dataStore.nowCourseTable.name
             this.howManyWeeksPreference -> dataStore.nowCourseTable.maxWeeks.toString() +

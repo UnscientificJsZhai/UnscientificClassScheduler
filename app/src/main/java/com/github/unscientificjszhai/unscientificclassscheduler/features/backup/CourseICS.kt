@@ -285,7 +285,7 @@ class CourseICS(
     suspend fun writeToFile(context: Context, uri: Uri) {
         withContext(Dispatchers.IO) {
             val outputStream = context.contentResolver.openOutputStream(uri)
-            outputStream!!.write(this.toString().toByteArray(StandardCharsets.UTF_8))
+            outputStream!!.write(this@CourseICS.toString().toByteArray(StandardCharsets.UTF_8))
             outputStream.close()
         }
     }
